@@ -35,3 +35,22 @@ void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentenc
        printLineBeginingAt(tmp->currentTextLine);
     }
 }
+
+struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
+    char line[maxNumberOfCharacters];
+    struct sourceCodeSentence *nextSentence = NULL;
+    while (fgets(line, sizeof(line), input)) 
+        {
+            /* TODO: note that fgets don't strip the terminating \n, checking its
+            presence would allow to handle lines longer that sizeof(line) */
+            char * copy = malloc(strlen(line) + 1); 
+            strcpy(copy, line);
+            if (nextSentence == NULL) {
+                nextSentence = initNewSourceCodeSentenceAndLinkTo(NULL);
+            } else {
+                nextSentence = initNewSourceCodeSentenceAndLinkTo(nextSentence);
+            }
+            nextSentence->currentTextLine = copy;
+        }
+    return nextSentence->head;      
+}

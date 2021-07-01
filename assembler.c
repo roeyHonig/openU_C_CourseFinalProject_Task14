@@ -3,31 +3,16 @@
 int main(int argc, char *argv[])
 {
     // enter your code here...
-    // Loop ove command line arguments  
+    // Loop ove command line arguments and read the contents of the files
     for (int i = 1; i < argc; i++)
     {
-        printf("\n");
         FILE *ifp = fopen(argv[i], "r");
-        char line[maxNumberOfCharacters];
-        struct sourceCodeSentence *nextSentence = NULL;
-        while (fgets(line, sizeof(line), ifp)) 
-        {
-            /* note that fgets don't strip the terminating \n, checking its
-            presence would allow to handle lines longer that sizeof(line) */
-            char * copy = malloc(strlen(line) + 1); 
-            strcpy(copy, line);
-            if (nextSentence == NULL) {
-                nextSentence = initNewSourceCodeSentenceAndLinkTo(NULL);
-            } else {
-                nextSentence = initNewSourceCodeSentenceAndLinkTo(nextSentence);
-            }
-            nextSentence->currentTextLine = copy;
-        }
-        outputSourceCodeSentencesBeginingAt(nextSentence->head);
+        struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
+        outputSourceCodeSentencesBeginingAt(firstSentence);
+        freeSourceCodeSentenceLinkedListBeginingAt(firstSentence);
         fclose(ifp);
-        printf("\n");
+        printf("\n\n");
     }   
-    printf("\n");
     return 0;
 }
 

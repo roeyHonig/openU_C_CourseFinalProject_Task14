@@ -33,6 +33,17 @@ void freeSourceCodeSentenceLinkedListBeginingAt(struct sourceCodeSentence *first
  */
 void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence);
 
+/*
+ * Function:  readAssemblySourceCode 
+ * --------------------
+ * Method to create a linked list of sourceCodeSentence from a file of assembly language source code text. 
+ * 
+ * input: a pointer to a FILE contaning assembly language source code text. 
+ * 
+ * * returns: pointer to 1st sentence
+ */
+struct sourceCodeSentence *readAssemblySourceCode(FILE *input);
+
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;
