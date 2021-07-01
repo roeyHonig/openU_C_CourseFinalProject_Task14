@@ -36,6 +36,7 @@ void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentenc
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;
+    struct sourceCodeSentence *head;
     struct sourceCodeSentence *next;
     struct sourceCodeSentence *previous; 
 };

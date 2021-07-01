@@ -3,10 +3,8 @@
 
 void printLineBeginingAt(char *t) {
    // Base case
-   if (*t == '\0') {
-       printf("\n");
+   if (*t == '\0') 
        return;
-   }
    printf("%c", *t);
    printLineBeginingAt(++t);
 }

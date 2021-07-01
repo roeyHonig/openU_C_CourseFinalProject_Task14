@@ -8,6 +8,9 @@ struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeS
     if (previousSentence != NULL) {
         previousSentence->next = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
         previousSentence->next = node;
+        node->head = previousSentence->head;
+    } else {
+        node->head = node;
     }
     return node;
 }
