@@ -40,21 +40,53 @@ void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentenc
 }
 
 struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
-    char line[1000]; // safe enough buffer size to make sure very long line of text (larger then the alloed max number of characters) won't get divided into multiple source code statements.
+    char line[maxNumberOfCharacters];  
+    boolean currentLineIsTooLong = false;
     struct sourceCodeSentence *nextSentence = NULL;
     while (fgets(line, sizeof(line), input)) 
         {
             char * copy = malloc(strlen(line) + 1); 
             strcpy(copy, line);
+            if (currentLineIsTooLong) {
+                // If we got here, we've encountered a very long line of text. Larger then the allowed max number of characters
+                // fgets will divide the long line to servel lines to always fit our defined array of size max number of character.
+                // we need to check if this is the last part of the long Line.
+                // If so. we need to keep back to the original execution of initializing a struct sourceCodeSentence during the next line.
+                if (strchr(copy,'\n') != NULL) {
+                    currentLineIsTooLong = false;   
+                }
+                continue;
+            }
             if (nextSentence == NULL) {
                 nextSentence = initNewSourceCodeSentenceAndLinkTo(NULL);
             } else {
                 nextSentence = initNewSourceCodeSentenceAndLinkTo(nextSentence);
             }
+            copy[maxNumberOfCharacters-1] = '\n'; // Set the last character to be 'new Line' because the last line of source code might not include it.
             nextSentence->currentTextLine = copy;
-            // fgets don't strip the terminating \n (New Line), checking its presence would allow to handle lines longer then the alloed max number of characters. We check by pointer arithmetics the difference between the start of the copy array and the location of the \n characters.
-            if (strchr(nextSentence->currentTextLine,'\n') != NULL && (strchr(nextSentence->currentTextLine,'\n') - copy) > maxNumberOfCharacters)
-                nextSentence->error = lineTooLong;      
+            // We check by pointer arithmetics the difference between the start of the copy array and the location of the \n characters. If the 1st location is the last character, which we've set ourself, this means this line is too long.
+            if ((strchr(copy,'\n') - copy == maxNumberOfCharacters - 1)) {
+                nextSentence->error = lineTooLong;   
+                nextSentence->currentTextLine[maxNumberOfCharacters-1] = '\n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-2] = 'g';
+                nextSentence->currentTextLine[maxNumberOfCharacters-3] = 'n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-4] = 'o';
+                nextSentence->currentTextLine[maxNumberOfCharacters-5] = 'L';
+                nextSentence->currentTextLine[maxNumberOfCharacters-6] = ' ';
+                nextSentence->currentTextLine[maxNumberOfCharacters-7] = 'o';
+                nextSentence->currentTextLine[maxNumberOfCharacters-8] = 'o';
+                nextSentence->currentTextLine[maxNumberOfCharacters-9] = 'T';
+                nextSentence->currentTextLine[maxNumberOfCharacters-10] = ' ';
+                nextSentence->currentTextLine[maxNumberOfCharacters-11] = 'e';
+                nextSentence->currentTextLine[maxNumberOfCharacters-12] = 'n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-13] = 'i';
+                nextSentence->currentTextLine[maxNumberOfCharacters-14] = 'L';
+                nextSentence->currentTextLine[maxNumberOfCharacters-15] = '.';
+                nextSentence->currentTextLine[maxNumberOfCharacters-16] = '.';
+                nextSentence->currentTextLine[maxNumberOfCharacters-17] = '.';
+                currentLineIsTooLong = true;   
+                continue;
+            }   
         }
     return nextSentence->head;      
 }
