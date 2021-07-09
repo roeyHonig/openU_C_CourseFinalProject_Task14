@@ -86,6 +86,21 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
                 nextSentence->currentTextLine[maxNumberOfCharacters-17] = '.';
                 currentLineIsTooLong = true;   
                 continue;
+            }
+            if (strchr(copy,';') != NULL) {
+                // A comment is source code sentence in which the 1st non ' ' character is ';'
+                // The assembler can safely ignore this line.
+                boolean isThisComment = true;
+                int i = 0;
+                while (i < strchr(copy,';') - copy)
+                {
+                    if (copy[i] != ' ')
+                        isThisComment = false;
+                    i++;
+                }
+                if (isThisComment)
+                    nextSentence->error = comment;   
+                else nextSentence->error = illegalUseOfSemiColon;     
             }   
         }
     return nextSentence->head;      

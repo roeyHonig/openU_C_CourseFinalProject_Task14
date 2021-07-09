@@ -11,6 +11,11 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
     case useOfReservedWord:
         printf("Illegal use of assembly language reserved word on line #%d.\n", lineNumber);
         break;
+    case comment:
+        break;
+    case illegalUseOfSemiColon:
+        printf("Illigeal use of ; on line #%d.\n", lineNumber);
+        break;
     default:
         printf("generic error description");
         break;
