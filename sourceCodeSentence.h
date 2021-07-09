@@ -1,6 +1,6 @@
 #include "commonHeaders.h"
+#include "parsingError.h"
 
-#define maxNumberOfCharacters 81 // max number of characters in a single line of assembly language source code text
  
 /*
  * Function:  initNewSourceCodeSentenceAndLinkTo 
@@ -26,7 +26,7 @@ void freeSourceCodeSentenceLinkedListBeginingAt(struct sourceCodeSentence *first
 /*
  * Function:  outputSourceCodeSentencesBeginingAt 
  * --------------------
- * Method to output the source code sentences 1 after the other following the first sentence.
+ * Method to output the source code sentences, 1 after the other following the first sentence.
  * 
  * firstSentence: the initial sourceCodeSentence which will be output.
  * If firstSentence->previous is NULL (The 1st element of the list) the entire list is outputted.
@@ -44,10 +44,22 @@ void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentenc
  */
 struct sourceCodeSentence *readAssemblySourceCode(FILE *input);
 
+/* 
+ * Function:  outputSourceCodeSentencesErrorsBeginingAt 
+ * --------------------
+ * Method to output the simple description of the error in each source code sentences, 1 after the other.
+ * 
+ * firstSentence: the initial sourceCodeSentence which will be checked (and output) for error.
+ * If firstSentence->previous is NULL (The 1st element of the list) the entire list is outputted.
+ */
+void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstSentence);
+
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;
+    int currentTextLineNumber;
     struct sourceCodeSentence *head;
     struct sourceCodeSentence *next;
     struct sourceCodeSentence *previous; 
+    enum parsingError error;
 };

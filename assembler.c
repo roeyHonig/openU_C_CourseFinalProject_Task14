@@ -2,18 +2,20 @@
 
 int main(int argc, char *argv[])
 {
-    // enter your code here...
+    // enter your code here... 
     initOperationsHashTable();
-    outputOperationsHashTable();
     // Loop ove command line arguments and read the contents of the files
     for (int i = 1; i < argc; i++)
     {
+        errorsFound = false;
         FILE *ifp = fopen(argv[i], "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         outputSourceCodeSentencesBeginingAt(firstSentence);
-        freeSourceCodeSentenceLinkedListBeginingAt(firstSentence);
         fclose(ifp);
         printf("\n\n");
+        printf("These are the errors found:\n");
+        outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
+        freeSourceCodeSentenceLinkedListBeginingAt(firstSentence);
     }   
     return 0;
 }
