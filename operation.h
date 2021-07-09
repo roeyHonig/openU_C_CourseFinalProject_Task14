@@ -43,17 +43,6 @@ void initOperationsHashTable();
 struct operation *getOperationWithOpName(char *name);
 
 /*
- * Function:  toString 
- * --------------------
- * Method to print a short description of the operation. 
- * 
- * op: operation structure.
- *
- * returns: a String representation of the struct operation. 
- */
-char *toString(struct operation *op);
-
-/*
  * Function:  outputOperationsHashTable 
  * --------------------
  * Method to print a short description of all the operations inside the OperationsHashTable. 

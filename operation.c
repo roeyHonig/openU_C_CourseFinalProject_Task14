@@ -122,10 +122,9 @@ struct operation *getOperationWithOpName(char *name) {
     } else {
         return NULL;
     }
-
 }
 
-char *toString(struct operation *op) {
+void toString(struct operation *op) {
     if (op != NULL && op->base10Funct > 0) 
         printf("This is an Assembly language operation with Name: %s, Type: %c, functCode: %d and opCode: %d\n", op->opName, op->opType, op->base10Funct, op->base10opCode);
     if (op != NULL && op->base10Funct <= 0) 
@@ -146,6 +145,4 @@ void outputOperationsHashTable() {
             } while (existingElement != NULL);
         }
     }
-    
-    
 }

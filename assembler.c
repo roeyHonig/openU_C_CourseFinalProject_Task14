@@ -4,9 +4,21 @@ int main(int argc, char *argv[])
 {
     // enter your code here... 
     initOperationsHashTable();
+    outputOperationsHashTable();
     // Loop ove command line arguments and read the contents of the files
     for (int i = 1; i < argc; i++)
     {
+        if (i == 1) {
+            setSymbol(initSymbol("testroey", directiveStatement, 5));
+            setSymbol(initSymbol("testido", instructionStatement, 10));
+            setSymbol(initSymbol("testmayyan", directiveStatement, 15));
+        } else {
+            // change to someting else
+            setSymbol(initSymbol("testEfrat", directiveStatement, 5));
+            setSymbol(initSymbol("testLiat", instructionStatement, 10));
+            setSymbol(initSymbol("testmaria", directiveStatement, 15));
+        }
+        outputSymbolsHashTable();
         errorsFound = false;
         FILE *ifp = fopen(argv[i], "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
@@ -16,6 +28,7 @@ int main(int argc, char *argv[])
         printf("These are the errors found:\n");
         outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
         freeSourceCodeSentenceLinkedListBeginingAt(firstSentence);
+        nullifySymbolsHashTable();
     }   
     return 0;
 }
