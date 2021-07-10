@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
         FILE *ifp = fopen(argv[i], "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         outputSourceCodeSentencesBeginingAt(firstSentence);
+        parseSourceCodeSentencesBeginingAt(firstSentence);
         fclose(ifp);
         printf("\n\n");
         printf("These are the errors found:\n");

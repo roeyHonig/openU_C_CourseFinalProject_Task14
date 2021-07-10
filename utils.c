@@ -28,3 +28,91 @@ boolean isOneOfTheAssemblyLanguageReservedWordsEqualsTo(char *str) {
             return true;
     return false;
 }
+
+boolean isRTypeKeywordsPresentInFollowingTextLine(char *str) {
+    // init array with location of the reserved word sub string inside the str string
+    char *locationOfReservedWords[numOfReservedWords] = { NULL };
+    // iterate over the reserved words array and find the 1st occurrence, if any, of the reserved word 
+    for (int i = 0; i < numOfReservedWords; i++)
+        locationOfReservedWords[i] = strstr(str, reservedWords[i]);
+    // make sure, we did find at least 1 reserved word!!!
+    boolean noReservedWordsFound = true;
+    for (i = 0; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[i] != NULL) noReservedWordsFound = false;
+    if (noReservedWordsFound)
+        return false;
+    // iterate over the location array to find the 1st reserved word 
+    int min = 0;
+    for (i = 1; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[min] > locationOfReservedWords[i]) 
+            min = i;
+    if (min < 8) 
+        return true;
+    else return false;    
+}
+
+boolean isITypeKeywordsPresentInFollowingTextLine(char *str) {
+    // init array with location of the reserved word sub string inside the str string
+    char *locationOfReservedWords[numOfReservedWords] = { NULL };
+    // iterate over the reserved words array and find the 1st occurrence, if any, of the reserved word 
+    for (int i = 0; i < numOfReservedWords; i++)
+        locationOfReservedWords[i] = strstr(str, reservedWords[i]);
+    // make sure, we did find at least 1 reserved word!!!
+    boolean noReservedWordsFound = true;
+    for (i = 0; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[i] != NULL) noReservedWordsFound = false;
+    if (noReservedWordsFound)
+        return false;
+    // iterate over the location array to find the 1st reserved word 
+    int min = 0;
+    for (i = 1; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[min] > locationOfReservedWords[i]) 
+            min = i;
+    if (min > 7 && min < 23) 
+        return true;
+    else return false;    
+}
+
+boolean isJTypeKeywordsPresentInFollowingTextLine(char *str) {
+    // init array with location of the reserved word sub string inside the str string
+    char *locationOfReservedWords[numOfReservedWords] = { NULL };
+    // iterate over the reserved words array and find the 1st occurrence, if any, of the reserved word 
+    for (int i = 0; i < numOfReservedWords; i++)
+        locationOfReservedWords[i] = strstr(str, reservedWords[i]);
+    // make sure, we did find at least 1 reserved word!!!
+    boolean noReservedWordsFound = true;
+    for (i = 0; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[i] != NULL) noReservedWordsFound = false;
+    if (noReservedWordsFound)
+        return false;
+    // iterate over the location array to find the 1st reserved word 
+    int min = 0;
+    for (i = 1; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[min] > locationOfReservedWords[i]) 
+            min = i;
+    if (min > 22 && min < 27) 
+        return true;
+    else return false;    
+}
+
+boolean isDirectiveTypeKeywordsPresentInFollowingTextLine(char *str) {
+    // init array with location of the reserved word sub string inside the str string
+    char *locationOfReservedWords[numOfReservedWords] = { NULL };
+    // iterate over the reserved words array and find the 1st occurrence, if any, of the reserved word 
+    for (int i = 0; i < numOfReservedWords; i++)
+        locationOfReservedWords[i] = strstr(str, reservedWords[i]);
+    // make sure, we did find at least 1 reserved word!!!
+    boolean noReservedWordsFound = true;
+    for (i = 0; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[i] != NULL) noReservedWordsFound = false;
+    if (noReservedWordsFound)
+        return false;
+    // iterate over the location array to find the 1st reserved word 
+    int min = 0;
+    for (i = 1; i < numOfReservedWords; i++)
+        if (locationOfReservedWords[min] > locationOfReservedWords[i]) 
+            min = i;
+    if (min > 26) 
+        return true;
+    else return false;    
+}

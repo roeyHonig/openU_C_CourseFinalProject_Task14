@@ -15,6 +15,8 @@ struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeS
         node->currentTextLineNumber = 1;
     }
     node->error = noErrorsFound;
+    node->rInstruction = (struct type_R_Instruction*) malloc(1 * sizeof(struct type_R_Instruction));
+    node->rInstruction = NULL;
     return node;
 }
 
@@ -113,5 +115,31 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
        tmp = firstSentence;
        firstSentence = firstSentence->next;
        printErrorDescriptionFor(tmp->currentTextLineNumber, tmp->error);
+    }
+}
+
+void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence) {
+    struct sourceCodeSentence* tmp;
+   while (firstSentence != NULL)
+    {
+       tmp = firstSentence;
+       firstSentence = firstSentence->next;
+       if (tmp->error != NULL) 
+            continue;
+       boolean isRInstruction = isRTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
+       boolean isIInstruction = isITypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
+       boolean isJInstruction = isJTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
+       boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine);
+       if (isRInstruction) {
+           // TODO: parse R instruction
+       } else if (isIInstruction) {
+           // TODO: parse I instruction
+       } else if (isJInstruction) {
+           // TODO: parse J instruction
+       } else if (isDirectiveStatement) {
+           // TODO: parse Directive
+       } else {
+           tmp->error = notRecognizableAssemblyLanguageStatement;
+       }
     }
 }

@@ -1,7 +1,7 @@
 #define maxNumberOfCharacters 81 // TODO: bring back to 81 max number of characters in a single line of assembly language source code text
 
-// a comment in the assembly language source code is not technically an error but we use it to flag the assembler to ignore this line
-enum parsingError {noErrorsFound = 0, lineTooLong, useOfReservedWord, comment, illegalUseOfSemiColon};
+// a comment in the assembly language source code is not technically an error but we use it to flag the assembler to ignore this line 
+enum parsingError {noErrorsFound = 0, lineTooLong, useOfReservedWord, comment, illegalUseOfSemiColon, notRecognizableAssemblyLanguageStatement};
  
 
 /* 

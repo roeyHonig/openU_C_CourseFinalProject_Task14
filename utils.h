@@ -36,3 +36,47 @@ unsigned int hash(char *key, unsigned int hSize);
  * returns: true or false.
  */
 boolean isOneOfTheAssemblyLanguageReservedWordsEqualsTo(char *str);
+
+/* 
+ * Function:  isRTypeKeywordsPresentInFollowingTextLine 
+ * --------------------
+ * This is a simple function to check if one of the assembly language, R type, reserved words is present in a string.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isRTypeKeywordsPresentInFollowingTextLine(char *str);
+
+/* 
+ * Function:  isITypeKeywordsPresentInFollowingTextLine 
+ * --------------------
+ * This is a simple function to check if one of the assembly language, I type, reserved words is present in a string.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isITypeKeywordsPresentInFollowingTextLine(char *str);
+
+/* 
+ * Function:  isJTypeKeywordsPresentInFollowingTextLine 
+ * --------------------
+ * This is a simple function to check if one of the assembly language, J type, reserved words is present in a string.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isJTypeKeywordsPresentInFollowingTextLine(char *str);
+
+/* 
+ * Function:  isDirectiveTypeKeywordsPresentInFollowingTextLine 
+ * --------------------
+ * This is a simple function to check if one of the assembly language, directive type, reserved words is present in a string.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isDirectiveTypeKeywordsPresentInFollowingTextLine(char *str);
