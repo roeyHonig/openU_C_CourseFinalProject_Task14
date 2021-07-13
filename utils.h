@@ -38,7 +38,7 @@ unsigned int hash(char *key, unsigned int hSize);
 boolean isOneOfTheAssemblyLanguageReservedWordsEqualsTo(char *str);
 
 /* 
- * Function:  isRTypeKeywordsPresentInFollowingTextLine 
+ * Function:  isRTypeKeywordsPresentInFollowingText 
  * --------------------
  * This is a simple function to check if one of the assembly language, R type, reserved words is present in a string.   
  * 
@@ -46,10 +46,10 @@ boolean isOneOfTheAssemblyLanguageReservedWordsEqualsTo(char *str);
  * 
  * returns: true or false.
  */
-boolean isRTypeKeywordsPresentInFollowingTextLine(char *str);
+boolean isRTypeKeywordsPresentInFollowingText(char *str);
 
 /* 
- * Function:  isITypeKeywordsPresentInFollowingTextLine 
+ * Function:  isITypeKeywordsPresentInFollowingText 
  * --------------------
  * This is a simple function to check if one of the assembly language, I type, reserved words is present in a string.   
  * 
@@ -57,10 +57,10 @@ boolean isRTypeKeywordsPresentInFollowingTextLine(char *str);
  * 
  * returns: true or false.
  */
-boolean isITypeKeywordsPresentInFollowingTextLine(char *str);
+boolean isITypeKeywordsPresentInFollowingText(char *str);
 
 /* 
- * Function:  isJTypeKeywordsPresentInFollowingTextLine 
+ * Function:  isJTypeKeywordsPresentInFollowingText 
  * --------------------
  * This is a simple function to check if one of the assembly language, J type, reserved words is present in a string.   
  * 
@@ -68,10 +68,10 @@ boolean isITypeKeywordsPresentInFollowingTextLine(char *str);
  * 
  * returns: true or false.
  */
-boolean isJTypeKeywordsPresentInFollowingTextLine(char *str);
+boolean isJTypeKeywordsPresentInFollowingText(char *str);
 
 /* 
- * Function:  isDirectiveTypeKeywordsPresentInFollowingTextLine 
+ * Function:  isDirectiveTypeKeywordsPresentInFollowingText 
  * --------------------
  * This is a simple function to check if one of the assembly language, directive type, reserved words is present in a string.   
  * 
@@ -79,4 +79,27 @@ boolean isJTypeKeywordsPresentInFollowingTextLine(char *str);
  * 
  * returns: true or false.
  */
-boolean isDirectiveTypeKeywordsPresentInFollowingTextLine(char *str);
+boolean isDirectiveTypeKeywordsPresentInFollowingText(char *str);
+
+/* 
+ * Function:  isThereLabelInFollowingTextLine 
+ * --------------------
+ * This is a simple function to check if the character ':' is present in a string.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isThereLabelInFollowingTextLine(char *str);
+
+/* 
+ * Function:  getLabelInto 
+ * --------------------
+ * This is a function to extract the label from a string.   
+ * 
+ * label: pointer to a string in which the function will insert the label name.
+ * str: a string to look for the label in.  
+ * 
+ * returns: true if the function was able to extract correct format label or false otherwise, in which case, the label shouldn't be used!.
+ */
+boolean getLabelInto(char *label, char* str);

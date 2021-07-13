@@ -1,4 +1,5 @@
 #include "sourceCodeSentence.h"
+#include "symbols.h"
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -122,22 +123,90 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
     struct sourceCodeSentence* tmp;
    while (firstSentence != NULL)
     {
+       boolean shouldSetLabel = false; 
+       char *currentLabel = malloc(32); 
        tmp = firstSentence;
        firstSentence = firstSentence->next;
        if (tmp->error != NULL) 
             continue;
-       boolean isRInstruction = isRTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
-       boolean isIInstruction = isITypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
-       boolean isJInstruction = isJTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine); 
-       boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingTextLine(tmp->currentTextLine);
+
+       // get labels
+       if (isThereLabelInFollowingTextLine(tmp->currentTextLine)) {
+           if (getLabelInto(currentLabel, tmp->currentTextLine)) {
+               shouldSetLabel = true;
+           } else {
+               shouldSetLabel = false;
+               tmp->error = badLabelFormat;
+           }
+       } 
+       // if we have a label we should check if it matches a reserved word 
+       if (shouldSetLabel && isOneOfTheAssemblyLanguageReservedWordsEqualsTo(currentLabel)){
+            tmp->error = useOfReservedWord;
+        } 
+        if (tmp->error != NULL) 
+            continue; 
+
+       // reserved word - max 7 characters - ".extern"
+       char *rWord = malloc(8);
+       boolean passedFirstNonWhiteCharacter = false;
+       int i = (strstr(tmp->currentTextLine, ":") == NULL) ? 0 : strstr(tmp->currentTextLine, ":") - tmp->currentTextLine + 1; 
+       int j = 0;
+       while (j < 7 && *(tmp->currentTextLine + i) != '\n')
+       {
+           if (!(*(tmp->currentTextLine + i) == ' ' || *(tmp->currentTextLine + i) == '\t') && !passedFirstNonWhiteCharacter) {
+               passedFirstNonWhiteCharacter = true;
+           }
+           if (passedFirstNonWhiteCharacter) {
+               if ((*(tmp->currentTextLine + i) == ' ' || *(tmp->currentTextLine + i) == '\t')) {
+                    break;
+               }
+               *(rWord + j) = *(tmp->currentTextLine + i);
+               j++;
+           }
+           i++;
+       }
+       if (strcmp(rWord, "") == 0) {
+            tmp->error = notRecognizableAssemblyLanguageStatement;
+       }
+       if (tmp->error != NULL) 
+            continue;
+       // check which kind of statement this is 
+       boolean isRInstruction = isRTypeKeywordsPresentInFollowingText(rWord); 
+       boolean isIInstruction = isITypeKeywordsPresentInFollowingText(rWord); 
+       boolean isJInstruction = isJTypeKeywordsPresentInFollowingText(rWord); 
+       boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingText(rWord);
        if (isRInstruction) {
            // TODO: parse R instruction
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
+           if (shouldSetLabel){
+               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+           }
+
        } else if (isIInstruction) {
            // TODO: parse I instruction
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an I type\n", tmp->currentTextLineNumber ,rWord);
+           if (shouldSetLabel){
+               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+           }
+                
        } else if (isJInstruction) {
            // TODO: parse J instruction
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an J type\n", tmp->currentTextLineNumber ,rWord);
+           if (shouldSetLabel){
+               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+           }
+
        } else if (isDirectiveStatement) {
            // TODO: parse Directive
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
+           if (shouldSetLabel){
+               setSymbol(initSymbol(currentLabel, directiveStatement, 100)); // TODO: value should be the counter
+           }
+
        } else {
            tmp->error = notRecognizableAssemblyLanguageStatement;
        }

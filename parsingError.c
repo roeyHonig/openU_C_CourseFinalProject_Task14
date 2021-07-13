@@ -18,6 +18,9 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         break;
     case notRecognizableAssemblyLanguageStatement:
         printf("Line #%d doesn't contain any assembly language source code reserved words.\n", lineNumber);
+        break; 
+    case badLabelFormat:
+        printf("Bad format for label on line #%d.\n", lineNumber);
         break;
     default:
         printf("generic error description");
