@@ -49,10 +49,25 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
     char line[maxNumberOfCharacters];  
     boolean currentLineIsTooLong = false;
     struct sourceCodeSentence *nextSentence = NULL;
+    /*
+    The C library function char *fgets(char *str, int n, FILE *stream) reads a line from the specified stream and stores it into the string pointed to by str. It stops when either (n-1) characters are read, the newline character is read, or the end-of-file is reached, whichever comes first.
+    */
     while (fgets(line, sizeof(line), input)) 
         {
-            char * copy = malloc(strlen(line) + 1); 
+            char *copy = initAnEmptyStringOfSize(strlen(line));
+            if (strlen(line) == 0) {
+                // empty line
+                *copy = '\n';
+                continue;
+            }
             strcpy(copy, line);
+            
+            if (strlen(line) < maxNumberOfCharacters - 1 && strchr(line,'\n') == NULL) {
+                // this is the last line with no \n 
+                // we need to manually set \n for the last line
+                // otherwise it might be flagged as being too long. since it won't have a \n
+                *(copy + strlen(line)) = '\n';
+            }
             if (currentLineIsTooLong) {
                 // If we got here, we've encountered a very long line of text. Larger then the allowed max number of characters
                 // fgets will divide the long line to servel lines to always fit our defined array of size max number of character.
@@ -62,37 +77,36 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
                     currentLineIsTooLong = false;   
                 }
                 continue;
-            }
+            } 
             if (nextSentence == NULL) {
                 nextSentence = initNewSourceCodeSentenceAndLinkTo(NULL);
             } else {
                 nextSentence = initNewSourceCodeSentenceAndLinkTo(nextSentence);
             }
-            copy[maxNumberOfCharacters-1] = '\n'; // Set the last character to be 'new Line' because the last line of source code might not include it.
             nextSentence->currentTextLine = copy;
             // We check by pointer arithmetics the difference between the start of the copy array and the location of the \n characters. If the 1st location is the last character, which we've set ourself, this means this line is too long.
-            if ((strchr(copy,'\n') - copy == maxNumberOfCharacters - 1)) {
+            if (strchr(copy,'\n') == NULL) {
                 nextSentence->error = lineTooLong;   
-                nextSentence->currentTextLine[maxNumberOfCharacters] = '\n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-1] = 'g';
-                nextSentence->currentTextLine[maxNumberOfCharacters-2] = 'n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-3] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-4] = 'L';
-                nextSentence->currentTextLine[maxNumberOfCharacters-5] = ' ';
-                nextSentence->currentTextLine[maxNumberOfCharacters-6] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-7] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-8] = 'T';
-                nextSentence->currentTextLine[maxNumberOfCharacters-9] = ' ';
-                nextSentence->currentTextLine[maxNumberOfCharacters-10] = 'e';
-                nextSentence->currentTextLine[maxNumberOfCharacters-11] = 'n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-12] = 'i';
-                nextSentence->currentTextLine[maxNumberOfCharacters-13] = 'L';
-                nextSentence->currentTextLine[maxNumberOfCharacters-14] = '.';
-                nextSentence->currentTextLine[maxNumberOfCharacters-15] = '.';
-                nextSentence->currentTextLine[maxNumberOfCharacters-16] = '.';
+                *(nextSentence->currentTextLine + strlen(line)) = '\n';
+                *(nextSentence->currentTextLine + strlen(line) -1) = 'g';
+                *(nextSentence->currentTextLine + strlen(line) -2) = 'n';
+                *(nextSentence->currentTextLine + strlen(line) -3) = 'o';
+                *(nextSentence->currentTextLine + strlen(line) -4) = 'L';
+                *(nextSentence->currentTextLine + strlen(line) -5) = ' ';
+                *(nextSentence->currentTextLine + strlen(line) -6) = 'o';
+                *(nextSentence->currentTextLine + strlen(line) -7) = 'o';
+                *(nextSentence->currentTextLine + strlen(line) -8) = 'T';
+                *(nextSentence->currentTextLine + strlen(line) -9) = ' ';
+                *(nextSentence->currentTextLine + strlen(line) -10) = 'e';
+                *(nextSentence->currentTextLine + strlen(line) -11) = 'n';
+                *(nextSentence->currentTextLine + strlen(line) -12) = 'i';
+                *(nextSentence->currentTextLine + strlen(line) -13) = 'L';
+                *(nextSentence->currentTextLine + strlen(line) -14) = '.';
+                *(nextSentence->currentTextLine + strlen(line) -15) = '.';
+                *(nextSentence->currentTextLine + strlen(line) -16) = '.';
                 currentLineIsTooLong = true;   
                 continue;
-            }
+            } 
             if (strchr(copy,';') != NULL) {
                 // A comment is source code sentence in which the 1st non ' ' character is ';'
                 // The assembler can safely ignore this line.
@@ -100,7 +114,7 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
                 int i = 0;
                 while (i < strchr(copy,';') - copy)
                 {
-                    if (copy[i] != ' ')
+                    if (*(copy + i) != ' ')
                         isThisComment = false;
                     i++;
                 }
