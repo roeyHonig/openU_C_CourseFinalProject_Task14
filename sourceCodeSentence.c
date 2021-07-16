@@ -1,6 +1,9 @@
 #include "sourceCodeSentence.h"
 #include "symbols.h"
 
+#define maxNumberOfCharactersForLabel 31
+#define maxNumberOfCharactersForInstructionName 7 // reserved word - max 7 characters - ".extern"
+
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
     node->currentTextLine = (char*)calloc(maxNumberOfCharacters, sizeof(char));
@@ -70,23 +73,23 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
             // We check by pointer arithmetics the difference between the start of the copy array and the location of the \n characters. If the 1st location is the last character, which we've set ourself, this means this line is too long.
             if ((strchr(copy,'\n') - copy == maxNumberOfCharacters - 1)) {
                 nextSentence->error = lineTooLong;   
-                nextSentence->currentTextLine[maxNumberOfCharacters-1] = '\n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-2] = 'g';
-                nextSentence->currentTextLine[maxNumberOfCharacters-3] = 'n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-4] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-5] = 'L';
-                nextSentence->currentTextLine[maxNumberOfCharacters-6] = ' ';
+                nextSentence->currentTextLine[maxNumberOfCharacters] = '\n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-1] = 'g';
+                nextSentence->currentTextLine[maxNumberOfCharacters-2] = 'n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-3] = 'o';
+                nextSentence->currentTextLine[maxNumberOfCharacters-4] = 'L';
+                nextSentence->currentTextLine[maxNumberOfCharacters-5] = ' ';
+                nextSentence->currentTextLine[maxNumberOfCharacters-6] = 'o';
                 nextSentence->currentTextLine[maxNumberOfCharacters-7] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-8] = 'o';
-                nextSentence->currentTextLine[maxNumberOfCharacters-9] = 'T';
-                nextSentence->currentTextLine[maxNumberOfCharacters-10] = ' ';
-                nextSentence->currentTextLine[maxNumberOfCharacters-11] = 'e';
-                nextSentence->currentTextLine[maxNumberOfCharacters-12] = 'n';
-                nextSentence->currentTextLine[maxNumberOfCharacters-13] = 'i';
-                nextSentence->currentTextLine[maxNumberOfCharacters-14] = 'L';
+                nextSentence->currentTextLine[maxNumberOfCharacters-8] = 'T';
+                nextSentence->currentTextLine[maxNumberOfCharacters-9] = ' ';
+                nextSentence->currentTextLine[maxNumberOfCharacters-10] = 'e';
+                nextSentence->currentTextLine[maxNumberOfCharacters-11] = 'n';
+                nextSentence->currentTextLine[maxNumberOfCharacters-12] = 'i';
+                nextSentence->currentTextLine[maxNumberOfCharacters-13] = 'L';
+                nextSentence->currentTextLine[maxNumberOfCharacters-14] = '.';
                 nextSentence->currentTextLine[maxNumberOfCharacters-15] = '.';
                 nextSentence->currentTextLine[maxNumberOfCharacters-16] = '.';
-                nextSentence->currentTextLine[maxNumberOfCharacters-17] = '.';
                 currentLineIsTooLong = true;   
                 continue;
             }
@@ -124,10 +127,10 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
    while (firstSentence != NULL)
     {
        boolean shouldSetLabel = false; 
-       char *currentLabel = malloc(32); 
+       char *currentLabel = initAnEmptyStringOfSize(maxNumberOfCharactersForLabel);
        tmp = firstSentence;
        firstSentence = firstSentence->next;
-       if (tmp->error != NULL) 
+       if (tmp->error != noErrorsFound) 
             continue;
 
        // get labels
@@ -143,11 +146,9 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
        if (shouldSetLabel && isOneOfTheAssemblyLanguageReservedWordsEqualsTo(currentLabel)){
             tmp->error = useOfReservedWord;
         } 
-        if (tmp->error != NULL) 
+        if (tmp->error != noErrorsFound) 
             continue; 
-
-       // reserved word - max 7 characters - ".extern"
-       char *rWord = malloc(8);
+       char *rWord = initAnEmptyStringOfSize(maxNumberOfCharactersForInstructionName);
        boolean passedFirstNonWhiteCharacter = false;
        int i = (strstr(tmp->currentTextLine, ":") == NULL) ? 0 : strstr(tmp->currentTextLine, ":") - tmp->currentTextLine + 1; 
        int j = 0;
@@ -168,13 +169,14 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
        if (strcmp(rWord, "") == 0) {
             tmp->error = notRecognizableAssemblyLanguageStatement;
        }
-       if (tmp->error != NULL) 
+       if (tmp->error != noErrorsFound) 
             continue;
        // check which kind of statement this is 
        boolean isRInstruction = isRTypeKeywordsPresentInFollowingText(rWord); 
        boolean isIInstruction = isITypeKeywordsPresentInFollowingText(rWord); 
        boolean isJInstruction = isJTypeKeywordsPresentInFollowingText(rWord); 
        boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingText(rWord);
+
        if (isRInstruction) {
            // TODO: parse R instruction
            printf("\n");

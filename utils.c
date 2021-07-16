@@ -82,7 +82,7 @@ boolean getLabelInto(char *label, char* str) {
         *(label + i) = *(str + i);
     }
     boolean areThereIllegalCharactersInTheLabel = false;
-    for (i = 0; i < (locationOfColon - str); i++)
+    for (int i = 0; i < (locationOfColon - str); i++)
     {
         if ((*(label + i) >= 'a' && *(label + i) <= 'z') || (*(label + i) >= 'A' && *(label + i) <= 'Z') || (*(label + i) >= '0' && *(label + i) <= '9')) {
             continue;
@@ -98,4 +98,13 @@ boolean getLabelInto(char *label, char* str) {
         return false;
     }
     return true;
+}
+
+char *initAnEmptyStringOfSize(int size) {
+    char *pointer = malloc(sizeof(char) * (size + 1));
+       for (int k = 0; k < 32; k++)
+       {
+           *(pointer + k) = '\0';
+       }
+    return pointer;
 }

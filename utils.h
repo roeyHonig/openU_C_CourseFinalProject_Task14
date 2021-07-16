@@ -103,3 +103,15 @@ boolean isThereLabelInFollowingTextLine(char *str);
  * returns: true if the function was able to extract correct format label or false otherwise, in which case, the label shouldn't be used!.
  */
 boolean getLabelInto(char *label, char* str);
+
+/* 
+ * Function:  initAnEmptyStringOfSize 
+ * --------------------
+ * This is a function to init a char array of certain size + 1 space for the nul character.
+ * The function sets all the characters to be, initally, the nul character.   
+ * 
+ * size: the number of characters.
+ * 
+ * returns: pointer to the start of the array.
+ */
+char *initAnEmptyStringOfSize(int size);

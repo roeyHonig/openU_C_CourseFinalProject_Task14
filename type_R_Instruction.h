@@ -1,4 +1,6 @@
 
+#include "operation.h"
+#include "commonHeaders.h"
 /* 
  * Function:  initNewType_R_InstructionWith 
  * --------------------
