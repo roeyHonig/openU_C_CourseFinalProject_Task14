@@ -278,7 +278,6 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            }    
            struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(firstRegister, secondRegister, thirdRegister, ope);
             tmp->rInstruction = r_Instruction;
-            //printf("1st reg %d second reg %d amd third reg %d", firstRegister, secondRegister, thirdRegister);
             outputType_R_Instruction(tmp->rInstruction);
            if (shouldSetLabel){
                setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
