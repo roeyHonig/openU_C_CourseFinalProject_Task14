@@ -202,79 +202,136 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
-               tmp->error = notRecognizableAssemblyLanguageStatement;
+               tmp->error = wrongRegisterNumber;
                continue;
            }
+           scsCh++;
            char firstRegisterString[3] = {0};
-           if (isDigit(scsCh + 1))
-                firstRegisterString[0] = *(scsCh + 1);
-           if (isDigit(scsCh + 2))
-                firstRegisterString[1] = *(scsCh + 2);
-           int firstRegister = atoi(firstRegisterString);
-           if (firstRegister < 0 || firstRegister > 31) {
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
                tmp->error = wrongRegisterNumber;
                continue;
-           } 
-           if (isCharacterNotEqualsOrCondition(scsCh + 3, ' ', '\t') && isCharacterNotEquals(scsCh + 3, ',')) {
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
                tmp->error = wrongRegisterNumber;
                continue;
-           } 
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
 
            // get 2nd register
-           scsCh = scsCh + 1;
-            while (*scsCh == ' ' || *scsCh == '\t' || isDigit(scsCh)) {
-                scsCh = scsCh + 1;
-           }
-           if (*scsCh != ',') {
-               
-               tmp->error = notRecognizableAssemblyLanguageStatement;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               tmp->error = wrongRegisterNumber;
                continue;
            }
-           scsCh = scsCh + 1;
-            while (*scsCh == ' ' || *scsCh == '\t') {
-                scsCh = scsCh + 1;
-           }
-           if (*scsCh != '$') {
-               tmp->error = notRecognizableAssemblyLanguageStatement;
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               tmp->error = wrongRegisterNumber;
                continue;
            }
+           scsCh++;
            char secondRegisterString[3] = {0};
-           if (isDigit(scsCh + 1))
-                secondRegisterString[0] = *(scsCh + 1);
-           if (isDigit(scsCh + 2))
-                secondRegisterString[1] = *(scsCh + 2);
-           int secondRegister = atoi(secondRegisterString);
-           if (secondRegister < 0 || secondRegister > 31) {
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
                tmp->error = wrongRegisterNumber;
                continue;
            }
-           // get 3rd register
-           scsCh = scsCh + 1;
-            while (*scsCh == ' ' || *scsCh == '\t' || isDigit(scsCh)) {
-                scsCh = scsCh + 1;
-           }
-           if (*scsCh != ',') {
-               tmp->error = notRecognizableAssemblyLanguageStatement;
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
+               tmp->error = wrongRegisterNumber;
                continue;
            }
-           scsCh = scsCh + 1;
-            while (*scsCh == ' ' || *scsCh == '\t') {
-                scsCh = scsCh + 1;
-           }
-           if (*scsCh != '$') {
-               tmp->error = notRecognizableAssemblyLanguageStatement;
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               tmp->error = wrongRegisterNumber;
                continue;
            }
+
+           // get 3nd register
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           scsCh++;
            char thirdRegisterString[3] = {0};
-           if (isDigit(scsCh + 1))
-                thirdRegisterString[0] = *(scsCh + 1);
-           if (isDigit(scsCh + 2))
-                thirdRegisterString[1] = *(scsCh + 2);
-           int thirdRegister = atoi(thirdRegisterString);
-           if (thirdRegister < 0 || thirdRegister > 31) {
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               thirdRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
                tmp->error = wrongRegisterNumber;
                continue;
            }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               thirdRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                // No need to do anything
+           } else {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    tmp->error = wrongRegisterNumber;
+               }
+               scsCh++;
+           }
+           if (tmp->error != noErrorsFound) {
+               continue;
+           }
+
+          int firstRegister = atoi(firstRegisterString);
+          int secondRegister = atoi(secondRegisterString);
+          int thirdRegister = atoi(thirdRegisterString);
+          if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(firstRegister, secondRegister, thirdRegister)) {
+              tmp->error = wrongRegisterNumber;
+               continue;
+          }
+          
            struct operation *ope = getOperationWithOpName(rWord);
            if (ope == NULL) {
                tmp->error = notRecognizableAssemblyLanguageStatement;

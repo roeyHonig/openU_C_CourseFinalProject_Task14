@@ -176,3 +176,55 @@ boolean isCharacterNotEquals(char *ch, char eq);
  * returns: true or false
  */
 boolean isCharacterNotEqualsOrCondition(char *ch, char eq, char eq2);
+
+/* 
+ * Function:  isNotDigit 
+ * --------------------
+ * This is a function to check if a char is not between '0' and '9'.   
+ * 
+ * ch: a char pointer to check.  
+ * 
+ * returns: true or false
+ */
+boolean isNotDigit(char *ch);
+
+/* 
+ * Function:  isCharacterEqualsTrippleOrCondition 
+ * --------------------
+ * This is a function to check if a char is equal a specific character or a 2nd specific character or a 3rd specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * eq2: a second char to chaeck against.
+ * eq3: a third char to check against.
+ * 
+ * returns: true or false
+ */
+boolean isCharacterEqualsTrippleOrCondition(char *ch, char eq, char eq2, char eq3);
+
+/* 
+ * Function:  isCharacterNotEqualsTrippleOrCondition 
+ * --------------------
+ * This is a function to check if a char is not equal to a specific character or a 2nd specific character or a 3rd specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * eq2: a second char to chaeck against.
+ * eq3: a third char to check against
+ * 
+ * returns: true or false
+ */
+boolean isCharacterNotEqualsTrippleOrCondition(char *ch, char eq, char eq2, char eq3);
+
+/* 
+ * Function:  isThereOutOfBoundsRegisterNumberInOneOfTheFollowing 
+ * --------------------
+ * This is a function to check if one of the 3 registers isn't between 0 - 31
+ * 
+ * reg1: int representing 1st register.
+ * reg2: int representing 2nd register.
+ * reg3: int representing 3rd register.
+ * 
+ * returns: true or false
+ */
+boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, int reg3);

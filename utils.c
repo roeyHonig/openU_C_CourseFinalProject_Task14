@@ -134,3 +134,19 @@ boolean isCharacterNotEquals(char *ch, char eq) {
 boolean isCharacterNotEqualsOrCondition(char *ch, char eq, char eq2) {
     return !isCharacterEqualsOrCondition(ch, eq, eq2);
 }
+
+boolean isNotDigit(char *ch) {
+    return !isDigit(ch);
+}
+
+boolean isCharacterEqualsTrippleOrCondition(char *ch, char eq, char eq2, char eq3) {
+    return (isCharacterEqualsOrCondition(ch, eq, eq2) || isCharacterEquals(ch, eq3));
+}
+
+boolean isCharacterNotEqualsTrippleOrCondition(char *ch, char eq, char eq2, char eq3) {
+    return !isCharacterEqualsTrippleOrCondition(ch, eq, eq2, eq3);
+}
+
+boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, int reg3) {
+    return !((reg1 >=0 && reg1 <= 31) && (reg2 >=0 && reg2 <= 31) && (reg3 >=0 && reg3 <= 31));
+}
