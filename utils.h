@@ -115,3 +115,14 @@ boolean getLabelInto(char *label, char* str);
  * returns: pointer to the start of the array.
  */
 char *initAnEmptyStringOfSize(int size);
+
+/* 
+ * Function:  isDigit 
+ * --------------------
+ * This is a function to check if a char is between '0' and '9'.   
+ * 
+ * ch: a char pointer to check.  
+ * 
+ * returns: true or false
+ */
+boolean isDigit(char *ch);

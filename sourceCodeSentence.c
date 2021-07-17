@@ -162,11 +162,12 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
         } 
         if (tmp->error != noErrorsFound) 
             continue; 
+        // get instruction name
        char *rWord = initAnEmptyStringOfSize(maxNumberOfCharactersForInstructionName);
        boolean passedFirstNonWhiteCharacter = false;
        int i = (strstr(tmp->currentTextLine, ":") == NULL) ? 0 : strstr(tmp->currentTextLine, ":") - tmp->currentTextLine + 1; 
        int j = 0;
-       while (j < 7 && *(tmp->currentTextLine + i) != '\n')
+       while (j < maxNumberOfCharactersForInstructionName && *(tmp->currentTextLine + i) != '\n')
        {
            if (!(*(tmp->currentTextLine + i) == ' ' || *(tmp->currentTextLine + i) == '\t') && !passedFirstNonWhiteCharacter) {
                passedFirstNonWhiteCharacter = true;
@@ -195,6 +196,90 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            // TODO: parse R instruction
            printf("\n");
            printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
+           // get 1st register
+           char *chatIterator = (strstr(tmp->currentTextLine, rWord) + strlen(rWord)); // init to 1st character after the name
+           
+           while (*chatIterator == ' ' || *chatIterator == '\t') {
+                chatIterator = chatIterator + 1;
+           }
+           if (*chatIterator != '$') {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }
+           char firstRegisterString[3] = {0};
+           if (isDigit(chatIterator + 1))
+                firstRegisterString[0] = *(chatIterator + 1);
+           if (isDigit(chatIterator + 2))
+                firstRegisterString[1] = *(chatIterator + 2);
+           int firstRegister = atoi(firstRegisterString);
+           if (firstRegister < 0 && firstRegister > 31) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           // get 2nd register
+           chatIterator = chatIterator + 1;
+            while (*chatIterator == ' ' || *chatIterator == '\t' || isDigit(chatIterator)) {
+                chatIterator = chatIterator + 1;
+           }
+           if (*chatIterator != ',') {
+               
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }
+           chatIterator = chatIterator + 1;
+            while (*chatIterator == ' ' || *chatIterator == '\t') {
+                chatIterator = chatIterator + 1;
+           }
+           if (*chatIterator != '$') {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }
+           char secondRegisterString[3] = {0};
+           if (isDigit(chatIterator + 1))
+                secondRegisterString[0] = *(chatIterator + 1);
+           if (isDigit(chatIterator + 2))
+                secondRegisterString[1] = *(chatIterator + 2);
+           int secondRegister = atoi(secondRegisterString);
+           if (secondRegister < 0 && secondRegister > 31) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           // get 3rd register
+           chatIterator = chatIterator + 1;
+            while (*chatIterator == ' ' || *chatIterator == '\t' || isDigit(chatIterator)) {
+                chatIterator = chatIterator + 1;
+           }
+           if (*chatIterator != ',') {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }
+           chatIterator = chatIterator + 1;
+            while (*chatIterator == ' ' || *chatIterator == '\t') {
+                chatIterator = chatIterator + 1;
+           }
+           if (*chatIterator != '$') {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }
+           char thirdRegisterString[3] = {0};
+           if (isDigit(chatIterator + 1))
+                thirdRegisterString[0] = *(chatIterator + 1);
+           if (isDigit(chatIterator + 2))
+                thirdRegisterString[1] = *(chatIterator + 2);
+           int thirdRegister = atoi(thirdRegisterString);
+           if (thirdRegister < 0 && thirdRegister > 31) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           }
+           struct operation *ope = getOperationWithOpName(rWord);
+           if (ope == NULL) {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               continue;
+           }    
+           struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(firstRegister, secondRegister, thirdRegister, ope);
+            tmp->rInstruction = r_Instruction;
+            //printf("1st reg %d second reg %d amd third reg %d", firstRegister, secondRegister, thirdRegister);
+            outputType_R_Instruction(tmp->rInstruction);
            if (shouldSetLabel){
                setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
            }

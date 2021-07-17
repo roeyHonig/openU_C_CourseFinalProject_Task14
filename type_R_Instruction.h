@@ -13,7 +13,18 @@
  * 
  * returns: pointer to struct type_R_Instruction
  */
-struct type_R_Instruction *initNewType_R_InstructionWith(int rt, int rd, int rs, struct operation *aInstruction);
+struct type_R_Instruction *initNewType_R_InstructionWith(int rs, int rt, int rd, struct operation *aInstruction);
+
+/* 
+ * Function:  outputType_R_Instruction 
+ * --------------------
+ * outputs to the standared output a short description of the instruction
+ * 
+ * instruction: a pointer to a R type instruction.
+ * 
+ * returns: void
+ */
+void outputType_R_Instruction(struct type_R_Instruction *instruction);
 
 /* Declare the struct type_R_Instruction. */
 struct type_R_Instruction {

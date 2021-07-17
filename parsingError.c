@@ -21,7 +21,10 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         break; 
     case badLabelFormat:
         printf("Bad format for label on line #%d.\n", lineNumber);
-        break;
+        break; 
+    case wrongRegisterNumber:
+        printf("Wrong register number on line #%d.\n", lineNumber);
+        break; 
     default:
         printf("generic error description");
         break;

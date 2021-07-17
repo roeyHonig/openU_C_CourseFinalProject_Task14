@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
         printf("These are the errors found:\n");
         outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
         freeSourceCodeSentenceLinkedListBeginingAt(firstSentence);
+        printf("---------------------\n");
         outputSymbolsHashTable();
         nullifySymbolsHashTable();
     }   
