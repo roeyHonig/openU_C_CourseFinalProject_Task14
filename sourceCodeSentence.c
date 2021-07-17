@@ -197,75 +197,79 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            printf("\n");
            printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
            // get 1st register
-           char *chatIterator = (strstr(tmp->currentTextLine, rWord) + strlen(rWord)); // init to 1st character after the name
-           
-           while (*chatIterator == ' ' || *chatIterator == '\t') {
-                chatIterator = chatIterator + 1;
-           }
-           if (*chatIterator != '$') {
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(tmp->currentTextLine, rWord) + strlen(rWord)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
            }
            char firstRegisterString[3] = {0};
-           if (isDigit(chatIterator + 1))
-                firstRegisterString[0] = *(chatIterator + 1);
-           if (isDigit(chatIterator + 2))
-                firstRegisterString[1] = *(chatIterator + 2);
+           if (isDigit(scsCh + 1))
+                firstRegisterString[0] = *(scsCh + 1);
+           if (isDigit(scsCh + 2))
+                firstRegisterString[1] = *(scsCh + 2);
            int firstRegister = atoi(firstRegisterString);
            if (firstRegister < 0 || firstRegister > 31) {
                tmp->error = wrongRegisterNumber;
                continue;
-           }
+           } 
+           if (isCharacterNotEqualsOrCondition(scsCh + 3, ' ', '\t') && isCharacterNotEquals(scsCh + 3, ',')) {
+               tmp->error = wrongRegisterNumber;
+               continue;
+           } 
+
            // get 2nd register
-           chatIterator = chatIterator + 1;
-            while (*chatIterator == ' ' || *chatIterator == '\t' || isDigit(chatIterator)) {
-                chatIterator = chatIterator + 1;
+           scsCh = scsCh + 1;
+            while (*scsCh == ' ' || *scsCh == '\t' || isDigit(scsCh)) {
+                scsCh = scsCh + 1;
            }
-           if (*chatIterator != ',') {
+           if (*scsCh != ',') {
                
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
            }
-           chatIterator = chatIterator + 1;
-            while (*chatIterator == ' ' || *chatIterator == '\t') {
-                chatIterator = chatIterator + 1;
+           scsCh = scsCh + 1;
+            while (*scsCh == ' ' || *scsCh == '\t') {
+                scsCh = scsCh + 1;
            }
-           if (*chatIterator != '$') {
+           if (*scsCh != '$') {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
            }
            char secondRegisterString[3] = {0};
-           if (isDigit(chatIterator + 1))
-                secondRegisterString[0] = *(chatIterator + 1);
-           if (isDigit(chatIterator + 2))
-                secondRegisterString[1] = *(chatIterator + 2);
+           if (isDigit(scsCh + 1))
+                secondRegisterString[0] = *(scsCh + 1);
+           if (isDigit(scsCh + 2))
+                secondRegisterString[1] = *(scsCh + 2);
            int secondRegister = atoi(secondRegisterString);
            if (secondRegister < 0 || secondRegister > 31) {
                tmp->error = wrongRegisterNumber;
                continue;
            }
            // get 3rd register
-           chatIterator = chatIterator + 1;
-            while (*chatIterator == ' ' || *chatIterator == '\t' || isDigit(chatIterator)) {
-                chatIterator = chatIterator + 1;
+           scsCh = scsCh + 1;
+            while (*scsCh == ' ' || *scsCh == '\t' || isDigit(scsCh)) {
+                scsCh = scsCh + 1;
            }
-           if (*chatIterator != ',') {
+           if (*scsCh != ',') {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
            }
-           chatIterator = chatIterator + 1;
-            while (*chatIterator == ' ' || *chatIterator == '\t') {
-                chatIterator = chatIterator + 1;
+           scsCh = scsCh + 1;
+            while (*scsCh == ' ' || *scsCh == '\t') {
+                scsCh = scsCh + 1;
            }
-           if (*chatIterator != '$') {
+           if (*scsCh != '$') {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
            }
            char thirdRegisterString[3] = {0};
-           if (isDigit(chatIterator + 1))
-                thirdRegisterString[0] = *(chatIterator + 1);
-           if (isDigit(chatIterator + 2))
-                thirdRegisterString[1] = *(chatIterator + 2);
+           if (isDigit(scsCh + 1))
+                thirdRegisterString[0] = *(scsCh + 1);
+           if (isDigit(scsCh + 2))
+                thirdRegisterString[1] = *(scsCh + 2);
            int thirdRegister = atoi(thirdRegisterString);
            if (thirdRegister < 0 || thirdRegister > 31) {
                tmp->error = wrongRegisterNumber;

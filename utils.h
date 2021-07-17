@@ -126,3 +126,53 @@ char *initAnEmptyStringOfSize(int size);
  * returns: true or false
  */
 boolean isDigit(char *ch);
+
+/* 
+ * Function:  isCharacterEquals 
+ * --------------------
+ * This is a function to check if a char is equal a specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * 
+ * returns: true or false
+ */
+boolean isCharacterEquals(char *ch, char eq);
+
+/* 
+ * Function:  isCharacterEqualsOrCondition 
+ * --------------------
+ * This is a function to check if a char is equal a specific character or a 2nd specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * eq2: a second char to chaeck against.
+ * 
+ * returns: true or false
+ */
+boolean isCharacterEqualsOrCondition(char *ch, char eq, char eq2);
+
+/* 
+ * Function:  isCharacterNotEquals 
+ * --------------------
+ * This is a function to check if a char is not equal a specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * 
+ * returns: true or false
+ */
+boolean isCharacterNotEquals(char *ch, char eq);
+
+/* 
+ * Function:  isCharacterNotEqualsOrCondition 
+ * --------------------
+ * This is a function to check if a char is not equal to a specific character or a 2nd specific character.   
+ * 
+ * ch: a char pointer to check.  
+ * eq: a char to chaeck against.
+ * eq2: a second char to chaeck against.
+ * 
+ * returns: true or false
+ */
+boolean isCharacterNotEqualsOrCondition(char *ch, char eq, char eq2);

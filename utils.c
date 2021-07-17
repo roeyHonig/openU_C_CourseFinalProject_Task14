@@ -114,3 +114,23 @@ boolean isDigit(char *ch) {
         return true;
     return false;    
 }
+
+boolean isCharacterEquals(char *ch, char eq) {
+    if (*ch == eq)
+        return true;
+    return false;    
+}
+
+boolean isCharacterEqualsOrCondition(char *ch, char eq, char eq2) {
+    if (isCharacterEquals(ch,eq) || isCharacterEquals(ch,eq2))
+        return true;
+    return false; 
+}
+
+boolean isCharacterNotEquals(char *ch, char eq) {
+    return !isCharacterEquals(ch, eq);
+}
+
+boolean isCharacterNotEqualsOrCondition(char *ch, char eq, char eq2) {
+    return !isCharacterEqualsOrCondition(ch, eq, eq2);
+}
