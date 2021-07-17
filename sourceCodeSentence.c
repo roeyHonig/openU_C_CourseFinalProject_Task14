@@ -212,7 +212,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            if (isDigit(chatIterator + 2))
                 firstRegisterString[1] = *(chatIterator + 2);
            int firstRegister = atoi(firstRegisterString);
-           if (firstRegister < 0 && firstRegister > 31) {
+           if (firstRegister < 0 || firstRegister > 31) {
                tmp->error = wrongRegisterNumber;
                continue;
            }
@@ -240,7 +240,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            if (isDigit(chatIterator + 2))
                 secondRegisterString[1] = *(chatIterator + 2);
            int secondRegister = atoi(secondRegisterString);
-           if (secondRegister < 0 && secondRegister > 31) {
+           if (secondRegister < 0 || secondRegister > 31) {
                tmp->error = wrongRegisterNumber;
                continue;
            }
@@ -267,7 +267,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            if (isDigit(chatIterator + 2))
                 thirdRegisterString[1] = *(chatIterator + 2);
            int thirdRegister = atoi(thirdRegisterString);
-           if (thirdRegister < 0 && thirdRegister > 31) {
+           if (thirdRegister < 0 || thirdRegister > 31) {
                tmp->error = wrongRegisterNumber;
                continue;
            }
