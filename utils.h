@@ -230,16 +230,16 @@ boolean isCharacterNotEqualsTrippleOrCondition(char *ch, char eq, char eq2, char
 boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, int reg3);
 
 /* 
- * Function:  parseRegistersForRType 
+ * Function:  parseRegistersAndImmediateForIType 
  * --------------------
- * This is a function to get the numeric values of 3 registers from the source code sentence text.
+ * This is a function to get the numeric values of 2 registers and an immidate value from the source code sentence text.
  * 
  * scTextLine: The source code text.
  * name: the name of the instruction.
  * firstRegister: int representing 1st register.
  * secondRegister: int representing 2nd register.
- * thirdRegister: int representing 3rd register.
+ * immed: short representing immediate value.
  * 
- * returns: true if valid registers numeric values or false otherwise, in which case, the values shouldn't be used!!!
+ * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
-boolean parseRegistersForRType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
+int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed);

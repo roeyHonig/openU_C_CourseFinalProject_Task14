@@ -1,6 +1,6 @@
 #include "utils.h"
 #include "commonHeaders.h"
-
+#include "parsingError.h"
 #define numOfReservedWords 33
 
 boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
@@ -366,4 +366,14 @@ boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegis
               return false;
           }
           return true;
+}
+
+int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
+    if (strcmp(name, "addi") == 0 || strcmp(name, "subi") == 0 || strcmp(name, "andi") == 0 || strcmp(name, "ori") == 0 || strcmp(name, "nori") == 0) {
+        return immediateOverflow; 
+    } else if (strcmp(name, "beq") == 0 || strcmp(name, "bne") == 0 || strcmp(name, "blt") == 0 || strcmp(name, "bgt") == 0) {
+        return immediateOverflow;
+
+    } else return immediateOverflow;
+
 }

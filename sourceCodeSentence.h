@@ -1,6 +1,7 @@
 #include "commonHeaders.h"
 #include "parsingError.h"
 #include "type_R_Instruction.h"
+#include "type_I_Instruction.h"
 
 /*
  * Function:  initNewSourceCodeSentenceAndLinkTo 
@@ -73,4 +74,5 @@ struct sourceCodeSentence {
     struct sourceCodeSentence *previous; 
     enum parsingError error;
     struct type_R_Instruction *rInstruction;
+    struct type_I_Instruction *iInstruction;
 };

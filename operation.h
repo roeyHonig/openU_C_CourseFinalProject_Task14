@@ -1,3 +1,9 @@
+/* Use this wrapper #ifndef encapsulation method to prevent duplicate redefinition errors of operation due to multiple files importing this header  */
+#ifndef FILE_OPERATION_SEEN
+#define FILE_OPERATION_SEEN
+// --------------------------------------------
+// code goes here
+// --------------------------------------------
 #include "commonHeaders.h"
 
 /*
@@ -59,3 +65,10 @@ struct operation {
     int base10Funct; // Example: 1
     int base10opCode; // Example: 0
 };
+// --------------------------------------------
+// code ends here
+// --------------------------------------------
+#endif 
+
+
+

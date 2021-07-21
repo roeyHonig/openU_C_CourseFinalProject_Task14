@@ -4,6 +4,9 @@
 #define maxNumberOfCharactersForLabel 31
 #define maxNumberOfCharactersForInstructionName 7 // reserved word - max 7 characters - ".extern"
 
+void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
+void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
+
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
     node->currentTextLine = (char*)calloc(maxNumberOfCharacters, sizeof(char));
@@ -21,6 +24,8 @@ struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeS
     node->error = noErrorsFound;
     node->rInstruction = (struct type_R_Instruction*) malloc(1 * sizeof(struct type_R_Instruction));
     node->rInstruction = NULL;
+    node->iInstruction = (struct type_I_Instruction*) malloc(1 * sizeof(struct type_I_Instruction));
+    node->iInstruction = NULL;
     return node;
 }
 
@@ -193,35 +198,13 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
        boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingText(rWord);
 
        if (isRInstruction) {
-           // TODO: parse R instruction
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
-           int firstRegister, secondRegister, thirdRegister; 
-           boolean errorsFoundDuringParsingRegisters = !parseRegistersForRType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &thirdRegister);
-           if (errorsFoundDuringParsingRegisters) {
-               tmp->error = wrongRegisterNumber;
-               continue;
-           } 
-           struct operation *ope = getOperationWithOpName(rWord);
-           if (ope == NULL) {
-               tmp->error = notRecognizableAssemblyLanguageStatement;
-               continue;
-           }  
-           boolean isRTypeCopyInstruction = (strcmp(rWord, "move") == 0 || strcmp(rWord, "mvhi") == 0 || strcmp(rWord, "mvlo") == 0);
-           int rs = isRTypeCopyInstruction ? secondRegister : firstRegister;
-           int rt = isRTypeCopyInstruction ? 0 : secondRegister;
-           int rd = isRTypeCopyInstruction ? firstRegister : thirdRegister; 
-           struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(rs, rt, rd, ope);
-            tmp->rInstruction = r_Instruction;
-            outputType_R_Instruction(tmp->rInstruction);
+           parseRInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
                setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
            }
 
        } else if (isIInstruction) {
-           // TODO: parse I instruction
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an I type\n", tmp->currentTextLineNumber ,rWord);
+           parseIInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
                setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
            }
@@ -246,4 +229,46 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            tmp->error = notRecognizableAssemblyLanguageStatement;
        }
     }
+}
+
+void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
+           int firstRegister, secondRegister, thirdRegister; 
+           boolean errorsFoundDuringParsingRegisters = !parseRegistersForRType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &thirdRegister);
+           if (errorsFoundDuringParsingRegisters) {
+               tmp->error = wrongRegisterNumber;
+               return;
+           } 
+           struct operation *ope = getOperationWithOpName(rWord);
+           if (ope == NULL) {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               return;
+           }  
+           boolean isRTypeCopyInstruction = (strcmp(rWord, "move") == 0 || strcmp(rWord, "mvhi") == 0 || strcmp(rWord, "mvlo") == 0);
+           int rs = isRTypeCopyInstruction ? secondRegister : firstRegister;
+           int rt = isRTypeCopyInstruction ? 0 : secondRegister;
+           int rd = isRTypeCopyInstruction ? firstRegister : thirdRegister; 
+           struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(rs, rt, rd, ope);
+           tmp->rInstruction = r_Instruction;
+           outputType_R_Instruction(tmp->rInstruction);
+}
+
+void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an I type\n", tmp->currentTextLineNumber ,rWord);
+           int firstRegister, secondRegister; 
+           short immediate;
+           tmp->error = parseRegistersAndImmediateForIType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &immediate);
+           if (tmp->error != noErrorsFound) {
+               return;
+           } 
+           struct operation *ope = getOperationWithOpName(rWord);
+           if (ope == NULL) {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               return;
+           }  
+           struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
+           tmp->iInstruction = i_Instruction;
+           outputType_I_Instruction(tmp->iInstruction);
 }
