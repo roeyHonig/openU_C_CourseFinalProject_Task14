@@ -23,7 +23,10 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         printf("Bad format for label on line #%d.\n", lineNumber);
         break; 
     case wrongRegisterNumber:
-        printf("Wrong register number on line #%d.\n", lineNumber);
+        printf("Wrong register number on line #%d.\n", lineNumber); 
+        break; 
+    case immediateOverflow:
+        printf("On line #%d, immediate value too big or too small. Should be between %d and %d.\n", lineNumber, INT16_MIN, INT16_MAX); 
         break; 
     default:
         printf("generic error description");
