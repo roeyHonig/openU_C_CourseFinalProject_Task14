@@ -206,8 +206,12 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            if (ope == NULL) {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                continue;
-           }    
-           struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(firstRegister, secondRegister, thirdRegister, ope);
+           }  
+           boolean isRTypeCopyInstruction = (strcmp(rWord, "move") == 0 || strcmp(rWord, "mvhi") == 0 || strcmp(rWord, "mvlo") == 0);
+           int rs = isRTypeCopyInstruction ? secondRegister : firstRegister;
+           int rt = isRTypeCopyInstruction ? 0 : secondRegister;
+           int rd = isRTypeCopyInstruction ? firstRegister : thirdRegister; 
+           struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(rs, rt, rd, ope);
             tmp->rInstruction = r_Instruction;
             outputType_R_Instruction(tmp->rInstruction);
            if (shouldSetLabel){

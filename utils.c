@@ -3,6 +3,9 @@
 
 #define numOfReservedWords 33
 
+boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
+boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
+
 char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dd", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
 void printLineBeginingAt(char *t) {
@@ -152,7 +155,14 @@ boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, 
 }
 
 boolean parseRegistersForRType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister) {
-            // get 1st register
+    if (strcmp(name, "move") == 0 || strcmp(name, "mvhi") == 0 || strcmp(name, "mvlo") == 0) {
+        return parseRegistersForRTypeCopy(scTextLine, name, firstRegister, secondRegister, thirdRegister); 
+    } else return parseRegistersForRTypeArithmetic(scTextLine, name, firstRegister, secondRegister, thirdRegister);
+           
+}
+
+boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister) {
+           // get 1st register
            // scsCh === source code sentence character 
            char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
@@ -243,7 +253,7 @@ boolean parseRegistersForRType(char *scTextLine, char *name, int *firstRegister,
            if (isDigit(scsCh)) {
                thirdRegisterString[1] = *scsCh;
                scsCh++;
-           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+           } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
                // No need to do anything
            } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
                 // No need to do anything
@@ -266,6 +276,92 @@ boolean parseRegistersForRType(char *scTextLine, char *name, int *firstRegister,
           *firstRegister = atoi(firstRegisterString);
           *secondRegister = atoi(secondRegisterString);
           *thirdRegister = atoi(thirdRegisterString);
+          if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*firstRegister, *secondRegister, *thirdRegister)) {
+              return false;
+          }
+          return true;
+}
+
+boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister) {
+           // get 1st register
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return false;
+           }
+           scsCh++;
+           char firstRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return false;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
+               return false;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               return false;
+           }
+
+           // get 2nd register
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               return false;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return false;
+           }
+           scsCh++;
+           char secondRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return false;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+               // No need to do anything
+           } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                // No need to do anything
+           } else {
+               return false;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               return false;
+           }
+           
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    return false;
+               }
+               scsCh++;
+           }
+           
+          *firstRegister = atoi(firstRegisterString);
+          *secondRegister = atoi(secondRegisterString);
+          *thirdRegister = 0;
           if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*firstRegister, *secondRegister, *thirdRegister)) {
               return false;
           }
