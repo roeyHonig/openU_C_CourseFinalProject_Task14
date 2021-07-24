@@ -394,10 +394,10 @@ int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstR
         return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed); 
     } else if (strcmp(name, "beq") == 0 || strcmp(name, "bne") == 0 || strcmp(name, "blt") == 0 || strcmp(name, "bgt") == 0) {
         return parseRegistersForITypeBranching(scTextLine, name, firstRegister, secondRegister, immed, labelWithinTheInstruction);
-    } else return immediateOverflow;
+    } else return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed);
 
 }
-
+// This is also valid for I Type loading and saving in memory
 int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
            // get 1st register
            // scsCh === source code sentence character 
@@ -643,4 +643,13 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
           }
           return noErrorsFound;
 
+}
+
+void convertDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size) {
+    for(int i=0;n>0;i++)    
+    {    
+        *(a+i) = n%2;    
+        n=n/2;    
+    }    
+    return;  
 }

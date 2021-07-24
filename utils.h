@@ -279,3 +279,16 @@ boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, 
  * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
 int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char* labelWithinTheInstruction);
+
+/* 
+ * Function:  convertDecimalNumberIntoBitBinaryArrayOfSize 
+ * --------------------
+ * This is a function to convert a decimal number to its binary notation in the form of an integer array with only 0 and 1. 
+ * Make sure to init the array first to all 0 -> int array[] = {0}  
+ * 
+ * n: int decimal number.
+ * a: an  array of integers to be filled with 0 and 1
+ * size: int the size of the array
+ * 
+ */
+void convertDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size);

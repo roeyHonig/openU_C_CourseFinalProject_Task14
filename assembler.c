@@ -21,5 +21,16 @@ int main(int argc, char *argv[])
         outputSymbolsHashTable();
         nullifySymbolsHashTable();
     }   
+    /*
+    // example for converstion from decimal to binary
+    printf("\n");
+    int adress[10] = {0};
+    convertDecimalNumberIntoBitBinaryArrayOfSize(17,adress, 10);
+    for (int j = 9; j >= 0; j--)
+    {
+        printf("%d", adress[j]);
+    }
+    printf("\n");
+    */
     return 0;
 }
