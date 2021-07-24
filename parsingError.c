@@ -28,6 +28,9 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
     case immediateOverflow:
         printf("On line #%d, immediate value too big or too small. Should be between %d and %d.\n", lineNumber, INT16_MIN, INT16_MAX); 
         break; 
+    case badImmediateFormat:
+        printf("Bad format for immediate on line #%d.\n", lineNumber);
+        break; 
     default:
         printf("generic error description");
         break;
