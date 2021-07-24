@@ -200,7 +200,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
        if (isRInstruction) {
            parseRInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+               setSymbol(initSymbol(currentLabel, instructionStatement, tmp->currentTextLineNumber == 1 ? 86:100)); // TODO: value should be the counter
            }
 
        } else if (isIInstruction) {
@@ -272,7 +272,12 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            // check if this is an I instruction with a label as the 3rd argument
            if (*labelInTheInstruction != '0') {
                // We need to calculate the immediate based on the distance between label value and the current value of the instruction in the instructino counter
-               printf("\nTODO: we need to calculate the immediate\n");
+               struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
+               if (branchingLabel == NULL) {
+                   immediate = 0; // This is the 1st attemp, so maybe the label will be present in the table after the assembler will read the all code.
+               } else {
+                   immediate = branchingLabel->value - 108; // TODO: this should be the current counter 
+               }
            } 
            struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
            tmp->iInstruction = i_Instruction;

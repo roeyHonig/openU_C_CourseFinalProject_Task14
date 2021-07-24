@@ -128,6 +128,17 @@ boolean isDigit(char *ch) {
     return false;    
 }
 
+boolean isAlphabeticCharacter(char *ch) {
+    if ((*ch >= 'a' && *ch <= 'z') || (*ch >= 'A' && *ch <= 'Z'))
+        return true;
+    return false;    
+
+}
+
+boolean isNotAlphabeticCharacter(char *ch) {
+    return !isAlphabeticCharacter(ch);
+}
+
 boolean isCharacterEquals(char *ch, char eq) {
     if (*ch == eq)
         return true;
@@ -382,8 +393,7 @@ int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstR
     if (strcmp(name, "addi") == 0 || strcmp(name, "subi") == 0 || strcmp(name, "andi") == 0 || strcmp(name, "ori") == 0 || strcmp(name, "nori") == 0) {
         return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed); 
     } else if (strcmp(name, "beq") == 0 || strcmp(name, "bne") == 0 || strcmp(name, "blt") == 0 || strcmp(name, "bgt") == 0) {
-        return immediateOverflow;
-
+        return parseRegistersForITypeBranching(scTextLine, name, firstRegister, secondRegister, immed, labelWithinTheInstruction);
     } else return immediateOverflow;
 
 }
@@ -510,4 +520,127 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
           else return immediateOverflow;
 
           return noErrorsFound;
+}
+
+int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char *labelWithinTheInstruction) {
+           // get 1st register
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           char firstRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return wrongRegisterNumber;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
+               return wrongRegisterNumber;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               return wrongRegisterNumber;
+           }
+
+           // get 2nd register
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           char secondRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return wrongRegisterNumber;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               secondRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
+               return wrongRegisterNumber;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               return wrongRegisterNumber;
+           }
+
+           // get The label
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isNotAlphabeticCharacter(scsCh)) {
+               return badLabelFormat;
+           }
+           int labelIndex = 0;
+           while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isNotDigit(scsCh) && isNotAlphabeticCharacter(scsCh)) {
+                   // label can't have characters except digits and letters;
+                   return badLabelFormat;
+               }
+               if (*(labelWithinTheInstruction+labelIndex) == '\0') {
+                   // label in the instruction is too long
+                   return badLabelFormat;
+               }
+               *(labelWithinTheInstruction+labelIndex) = *scsCh;
+               scsCh++;
+               labelIndex++;
+           }
+           // fill in the rest of the label array with '\0'
+           while (*(labelWithinTheInstruction+labelIndex) != '\0')
+           {
+               *(labelWithinTheInstruction+labelIndex) = '\0';
+               labelIndex++;
+           }
+
+           // Any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               return badLabelFormat;
+           }
+           scsCh++;
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    return badLabelFormat;
+               }
+               scsCh++;
+           }
+           
+          *firstRegister = atoi(firstRegisterString);
+          *secondRegister = atoi(secondRegisterString);
+          if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*firstRegister, *secondRegister, 1)) {
+              return wrongRegisterNumber;
+          }
+          return noErrorsFound;
+
 }

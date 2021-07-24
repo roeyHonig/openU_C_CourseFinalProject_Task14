@@ -141,6 +141,28 @@ char *initAnEmptyStringOfSizeAndFillWithChacter(int size, char ch);
 boolean isDigit(char *ch);
 
 /* 
+ * Function:  isAlphabeticCharacter 
+ * --------------------
+ * This is a function to check if a char is between 'a' and 'z' or between 'A' and 'Z'.   
+ * 
+ * ch: a char pointer to check.  
+ * 
+ * returns: true or false
+ */
+boolean isAlphabeticCharacter(char *ch);
+
+/* 
+ * Function:  isNotAlphabeticCharacter 
+ * --------------------
+ * This is a function to check if a char is NOT between 'a' and 'z' or between 'A' and 'Z'.   
+ * 
+ * ch: a char pointer to check.  
+ * 
+ * returns: true or false
+ */
+boolean isNotAlphabeticCharacter(char *ch);
+
+/* 
  * Function:  isCharacterEquals 
  * --------------------
  * This is a function to check if a char is equal a specific character.   

@@ -22,12 +22,12 @@ void setSymbol(struct symbol *sm) {
     } else {
         // loop over all elements in existing position until you reach the last one
         // Append sm to the last element
-        // If any elements name is similar to sm.name we don't append!
+        // If any elements name is similar to sm.name and they have the same location (meaning they're both labels or both data variables) we don't append!
         struct symbol *tmp;
         do
         {
             tmp = existingElement;
-            if (strcmp(tmp->name, sm->name) == 0)
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == tmp->location)
                 return; // Duplicate record
             existingElement = existingElement->next;
         } while (existingElement != NULL);
@@ -49,6 +49,26 @@ struct symbol *getSymbolWithName(char *symbolName) {
         {
             tmp = existingElement;
             if (strcmp(tmp->name, symbolName) == 0)
+                return tmp;
+            existingElement = existingElement->next;
+        } while (existingElement != NULL);
+        return NULL;
+    } else {
+        return NULL;
+    }
+}
+
+struct symbol *getSymbolWithNameAndLocation(char *symbolName, enum labelLocationInSourceCode location) {
+    unsigned int index = hash(symbolName, HASHSIZE);
+    struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
+    if (existingElement != NULL)
+    {
+        // loop over all elements in existing position until you reach an element with same name or the last one.
+        struct symbol *tmp;
+        do
+        {
+            tmp = existingElement;
+            if (strcmp(tmp->name, symbolName) == 0 && tmp->location == location)
                 return tmp;
             existingElement = existingElement->next;
         } while (existingElement != NULL);

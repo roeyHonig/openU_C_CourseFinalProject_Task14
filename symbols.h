@@ -36,6 +36,19 @@ void setSymbol(struct symbol *sm);
 struct symbol *getSymbolWithName(char *symbolName);
 
 /* 
+ * Function:  getSymbolWithNameAndLocation 
+ * --------------------
+ * Getter method to retrive a symbol structure out of the symbolsHashTable, based on the name of the symbol and location 
+ * 
+ * symbolName: symbol name.
+ * location = enum labelLocationInSourceCode
+ *
+ * returns: pointer to struct symbol or NULL if a symbol with the desired key (name) and location doesn't exist. 
+ */
+struct symbol *getSymbolWithNameAndLocation(char *symbolName, enum labelLocationInSourceCode location);
+
+
+/* 
  * Function:  outputSymbolsHashTable 
  * --------------------
  * Method to print a short description of all the symbols inside the symbolsHashTable. 
