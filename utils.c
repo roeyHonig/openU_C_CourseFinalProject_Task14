@@ -370,10 +370,134 @@ boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegis
 
 int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
     if (strcmp(name, "addi") == 0 || strcmp(name, "subi") == 0 || strcmp(name, "andi") == 0 || strcmp(name, "ori") == 0 || strcmp(name, "nori") == 0) {
-        return immediateOverflow; 
+        return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed); 
     } else if (strcmp(name, "beq") == 0 || strcmp(name, "bne") == 0 || strcmp(name, "blt") == 0 || strcmp(name, "bgt") == 0) {
         return immediateOverflow;
 
     } else return immediateOverflow;
 
+}
+
+int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
+           // get 1st register
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           char firstRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return wrongRegisterNumber;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               // No need to do anything
+           } else {
+               return wrongRegisterNumber;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               return wrongRegisterNumber;
+           }
+
+           // get the immediate 
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEqualsOrCondition(scsCh, '-', '+')) {
+               return badImmediateFormat;
+           }
+           int immediateStringLength = 0;
+           scsCh++;
+           immediateStringLength++;
+           if (isNotDigit(scsCh)) {
+               return badImmediateFormat;
+           }
+           while (isDigit(scsCh)) {
+               scsCh++; 
+               immediateStringLength++;
+           }
+           // Any other character except these is not allowed!
+           if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
+               return badImmediateFormat;
+           }
+           char immeidateAsString[/*immediateStringLength + 1*/100] = {0};
+           for (int j = 0; j < /*immediateStringLength*/99; j++)
+           {
+               if (j >= immediateStringLength) 
+                    break;
+               immeidateAsString[j] = *(scsCh-immediateStringLength+j);
+           }
+           
+           // get 3nd register
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, ',')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           char thirdRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               thirdRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return wrongRegisterNumber;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               thirdRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+               // No need to do anything
+           } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                // No need to do anything
+           } else {
+               return wrongRegisterNumber;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               return wrongRegisterNumber;
+           }
+           
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    return wrongRegisterNumber;
+               }
+               scsCh++;
+           }
+           
+          *firstRegister = atoi(firstRegisterString);
+          int immediateAsInt = atoi(immeidateAsString);
+          *secondRegister = atoi(thirdRegisterString);
+          if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*firstRegister, *secondRegister, 1)) {
+              return wrongRegisterNumber;
+          }
+          if (immediateAsInt >= INT16_MIN && immediateAsInt <= INT16_MAX) 
+                *immed = (short)immediateAsInt;
+          else return immediateOverflow;
+
+          return noErrorsFound;
 }
