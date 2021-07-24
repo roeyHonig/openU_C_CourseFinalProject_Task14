@@ -1,4 +1,5 @@
 #include "assembler.h"
+//#define binarryArraySize 5
 
 int main(int argc, char *argv[])
 {
@@ -24,9 +25,9 @@ int main(int argc, char *argv[])
     /*
     // example for converstion from decimal to binary
     printf("\n");
-    int adress[10] = {0};
-    convertDecimalNumberIntoBitBinaryArrayOfSize(17,adress, 10);
-    for (int j = 9; j >= 0; j--)
+    int adress[binarryArraySize] = {0};
+    convertDecimalNumberIntoBitBinaryArrayOfSize(8,adress, binarryArraySize);
+    for (int j = binarryArraySize-1; j >= 0; j--)
     {
         printf("%d", adress[j]);
     }

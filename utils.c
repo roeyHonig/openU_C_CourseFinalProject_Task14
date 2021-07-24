@@ -646,7 +646,7 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
 }
 
 void convertDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size) {
-    for(int i=0;n>0;i++)    
+    for(int i=0;n>0, i < size;i++)    
     {    
         *(a+i) = n%2;    
         n=n/2;    
