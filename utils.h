@@ -281,14 +281,37 @@ boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, 
 int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char* labelWithinTheInstruction);
 
 /* 
- * Function:  convertDecimalNumberIntoBitBinaryArrayOfSize 
+ * Function:  convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize 
  * --------------------
  * This is a function to convert a decimal number to its binary notation in the form of an integer array with only 0 and 1. 
  * Make sure to init the array first to all 0 -> int array[] = {0}  
  * 
  * n: int decimal number.
  * a: an  array of integers to be filled with 0 and 1
- * size: int the size of the array
+ * size: int the size of the array  
  * 
  */
-void convertDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size);
+void convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size);
+
+/* 
+ * Function:  convertUnsignedBinaryNumberArrayOfBitSize 
+ * --------------------
+ * This is a function to convert an array of ints, with size of bits, representing an unsigned decimal number to an array of size + 1 bits representing the same number but in a 2 compliment notation.  
+ * 
+ * a: an  array filled with 0 and 1
+ * size: int the size of the array a
+ * b: an array larger then array a by 1 most significant bit
+ * 
+ */
+void convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(int *a, int size, int *b);
+
+/* 
+ * Function:  negateSignedBitArrayOfSize 
+ * --------------------
+ * This is a function to convert an array of ints, representing a signed binary number to an array representing the negation of that number
+ * 
+ * a: an  array filled with 0 and 1
+ * size: int the size of the array a
+ * 
+ */
+void negateSignedBitArrayOfSize(int *a, int size);

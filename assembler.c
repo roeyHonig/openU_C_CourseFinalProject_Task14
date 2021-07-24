@@ -1,5 +1,6 @@
 #include "assembler.h"
-//#define binarryArraySize 5
+#define binarryArraySize 31
+#define decimalNumberUnsignedExample 2147483646
 
 int main(int argc, char *argv[])
 {
@@ -26,12 +27,37 @@ int main(int argc, char *argv[])
     // example for converstion from decimal to binary
     printf("\n");
     int adress[binarryArraySize] = {0};
-    convertDecimalNumberIntoBitBinaryArrayOfSize(8,adress, binarryArraySize);
+    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(decimalNumberUnsignedExample,adress, binarryArraySize);
+    printf("decimal unsugned number %d is in binary unsigned notation of %d bits :\n", decimalNumberUnsignedExample, binarryArraySize);
     for (int j = binarryArraySize-1; j >= 0; j--)
     {
         printf("%d", adress[j]);
     }
     printf("\n");
+    // example of representing a x bit signed number in an x+! bits signed complement 2
+    printf("same number in binary signed notation of %d bits :\n", binarryArraySize+1);
+    printf("\n");
+    int adressIn2Complement[binarryArraySize+1] = {0};
+    convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(adress, binarryArraySize, adressIn2Complement);
+    for (j = binarryArraySize; j >= 0; j--)
+    {
+        printf("%d", adressIn2Complement[j]);
+    }
+    printf("\n");
+    // example of negating the num 
+    printf("\n");
+    negateSignedBitArrayOfSize(adressIn2Complement, binarryArraySize+1);
+    printf("the inverse number is:\n");
+    for (j = binarryArraySize; j >= 0; j--)
+    {
+        printf("%d", adressIn2Complement[j]);
+    }
+    printf("\n");
+    // example of computing the maximum and minumum an x amount of bits can represent signed decimal
+   int numberOfBits = 24;
+   int minNum = (pow(2, numberOfBits) / 2) * -1;
+    int maxNum = ((pow(2, numberOfBits) / 2)-1);
+    printf("\nmin:%d\nmax:%d\n", minNum, maxNum);
     */
     return 0;
 }
