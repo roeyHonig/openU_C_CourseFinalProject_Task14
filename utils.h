@@ -117,6 +117,19 @@ boolean getLabelInto(char *label, char* str);
 char *initAnEmptyStringOfSize(int size);
 
 /* 
+ * Function:  initAnEmptyStringOfSizeAndFillWithChacter 
+ * --------------------
+ * This is a function to init a char array of certain size + 1 space for the nul character.
+ * The function sets all the characters to be, initally, a specific character as passed to the function arguments.   
+ * 
+ * size: the number of characters.
+ * ch: this is the character the entire array will be filled with, except the last character, the nul character. 
+ * 
+ * returns: pointer to the start of the array.
+ */
+char *initAnEmptyStringOfSizeAndFillWithChacter(int size, char ch);
+
+/* 
  * Function:  isDigit 
  * --------------------
  * This is a function to check if a char is between '0' and '9'.   
@@ -232,14 +245,15 @@ boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, 
 /* 
  * Function:  parseRegistersAndImmediateForIType 
  * --------------------
- * This is a function to get the numeric values of 2 registers and an immidate value from the source code sentence text.
+ * This is a function to get the numeric values of 2 registers and an immidate value from the source code sentence text. If the instruction doesn't have numeric value but a label name, the label name will be copied
  * 
  * scTextLine: The source code text.
  * name: the name of the instruction.
  * firstRegister: int representing 1st register.
  * secondRegister: int representing 2nd register.
  * immed: short representing immediate value.
+ * labelWithinTheInstruction: branching I instructions have a label as the 3rd field of the instruction. The immeduate value is the distance between the label value and the currect instruction value
  * 
  * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
-int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed);
+int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char* labelWithinTheInstruction);

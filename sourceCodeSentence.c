@@ -259,7 +259,8 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            printf("Line#%d, the statement name:%s it is an I type\n", tmp->currentTextLineNumber ,rWord);
            int firstRegister, secondRegister; 
            short immediate;
-           tmp->error = parseRegistersAndImmediateForIType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &immediate);
+           char *labelInTheInstruction = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharactersForLabel,'0');
+           tmp->error = parseRegistersAndImmediateForIType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &immediate, labelInTheInstruction);
            if (tmp->error != noErrorsFound) {
                return;
            } 
@@ -267,7 +268,12 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            if (ope == NULL) {
                tmp->error = notRecognizableAssemblyLanguageStatement;
                return;
-           }  
+           } 
+           // check if this is an I instruction with a label as the 3rd argument
+           if (*labelInTheInstruction != '0') {
+               // We need to calculate the immediate based on the distance between label value and the current value of the instruction in the instructino counter
+               printf("\nTODO: we need to calculate the immediate\n");
+           } 
            struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
            tmp->iInstruction = i_Instruction;
            outputType_I_Instruction(tmp->iInstruction);

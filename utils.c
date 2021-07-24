@@ -105,10 +105,20 @@ boolean getLabelInto(char *label, char* str) {
 
 char *initAnEmptyStringOfSize(int size) {
     char *pointer = malloc(sizeof(char) * (size + 1));
-       for (int k = 0; k < 32; k++)
+       for (int k = 0; k < size + 1; k++)
        {
            *(pointer + k) = '\0';
        }
+    return pointer;
+}
+
+char *initAnEmptyStringOfSizeAndFillWithChacter(int size, char ch) {
+    char *pointer = malloc(sizeof(char) * (size + 1));
+       for (int k = 0; k < size; k++)
+       {
+           *(pointer + k) = ch;
+       }
+       *(pointer + size) = '\0';
     return pointer;
 }
 
@@ -368,7 +378,7 @@ boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegis
           return true;
 }
 
-int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
+int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char* labelWithinTheInstruction) {
     if (strcmp(name, "addi") == 0 || strcmp(name, "subi") == 0 || strcmp(name, "andi") == 0 || strcmp(name, "ori") == 0 || strcmp(name, "nori") == 0) {
         return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed); 
     } else if (strcmp(name, "beq") == 0 || strcmp(name, "bne") == 0 || strcmp(name, "blt") == 0 || strcmp(name, "bgt") == 0) {
