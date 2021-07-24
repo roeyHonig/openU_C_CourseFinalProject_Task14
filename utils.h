@@ -82,6 +82,17 @@ boolean isJTypeKeywordsPresentInFollowingText(char *str);
 boolean isDirectiveTypeKeywordsPresentInFollowingText(char *str);
 
 /* 
+ * Function:  isLabelSupportedForDirectiveTypeKeywords 
+ * --------------------
+ * This is a simple function to check if one of the assembly language, directive type, reserved words is present in a string and if it is one of the directives which supports labels at the begining of the statement.   
+ * 
+ * str: a string.  
+ * 
+ * returns: true or false.
+ */
+boolean isLabelSupportedForDirectiveTypeKeywords(char *str);
+
+/* 
  * Function:  isThereLabelInFollowingTextLine 
  * --------------------
  * This is a simple function to check if the character ':' is present in a string.   

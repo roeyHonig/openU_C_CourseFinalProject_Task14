@@ -221,7 +221,8 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            // TODO: parse Directive
            printf("\n");
            printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
-           if (shouldSetLabel){
+           boolean isDirectiveStatementSupportsSettingLabel = isLabelSupportedForDirectiveTypeKeywords(rWord);
+           if (shouldSetLabel && isDirectiveStatementSupportsSettingLabel){
                setSymbol(initSymbol(currentLabel, directiveStatement, 100)); // TODO: value should be the counter
            }
 
