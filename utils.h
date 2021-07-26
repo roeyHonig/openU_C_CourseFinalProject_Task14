@@ -292,6 +292,21 @@ boolean isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(int reg1, int reg2, 
 int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char* labelWithinTheInstruction);
 
 /* 
+ * Function:  parseRegistersOrLabelForJType 
+ * --------------------
+ * This is a function to parse a J type instruction. It should set the flag for the use of registers or set the label. 
+ * 
+ * scTextLine: The source code text.
+ * name: the name of the instruction.
+ * registerFlag: int representing if the instruction is relative to register or label.
+ * address - an int representing register number [0:31] or an address in memory of the label [0:(pow(2,25)-1)]
+ * labelWithinTheInstruction:  J instructions can have a label. 
+ * 
+ * returns: 0 if valid registers numeric values or valid label is present. If error is found, returns non zero int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
+ */
+int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction);
+
+/* 
  * Function:  convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize 
  * --------------------
  * This is a function to convert a decimal number to its binary notation in the form of an integer array with only 0 and 1. 

@@ -6,6 +6,7 @@
 
 void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
 void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -26,6 +27,8 @@ struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeS
     node->rInstruction = NULL;
     node->iInstruction = (struct type_I_Instruction*) malloc(1 * sizeof(struct type_I_Instruction));
     node->iInstruction = NULL;
+    node->jInstruction = (struct type_J_Instruction*) malloc(1 * sizeof(struct type_J_Instruction));
+    node->jInstruction = NULL;
     return node;
 }
 
@@ -154,6 +157,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
 
        // get labels
        if (isThereLabelInFollowingTextLine(tmp->currentTextLine)) {
+           // TODO: i think i'm not checking for duplicate label names!. should be an error
            if (getLabelInto(currentLabel, tmp->currentTextLine)) {
                shouldSetLabel = true;
            } else {
@@ -210,9 +214,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            }
                 
        } else if (isJInstruction) {
-           // TODO: parse J instruction
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an J type\n", tmp->currentTextLineNumber ,rWord);
+           parseJInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
                setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
            }
@@ -283,4 +285,45 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
            tmp->iInstruction = i_Instruction;
            outputType_I_Instruction(tmp->iInstruction);
+}
+
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
+           printf("\n");
+           printf("Line#%d, the statement name:%s it is an J type\n", tmp->currentTextLineNumber ,rWord);
+           int registerFlag; 
+           int address;
+           char *labelInTheInstruction = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharactersForLabel,'0');
+           tmp->error = parseRegistersOrLabelForJType(tmp->currentTextLine, rWord, &registerFlag, &address, labelInTheInstruction);
+           if (tmp->error != noErrorsFound) {
+               return;
+           } 
+           struct operation *ope = getOperationWithOpName(rWord);
+           if (ope == NULL) {
+               tmp->error = notRecognizableAssemblyLanguageStatement;
+               return;
+           } 
+           // check if this is a J instruction with a label
+           if (*labelInTheInstruction != '0') {
+               struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
+               struct symbol *internalLabel = getSymbolWithNameAndLocation(labelInTheInstruction, directiveStatement);
+               // TODO we need to add more enum to represent external for example
+               if (branchingLabel != NULL) {
+                   address = branchingLabel->value;
+               } else if (internalLabel != NULL) {
+                   address = internalLabel->value;
+               } else {
+                   address = 0;
+               }
+               // todo: we need to make sure the external exsists, because if nothing is present we need to show an error but only if this is the 2nd pass
+               /*
+               if (no symbol was found) {
+                    tmp->error = no matching label;
+                    return;
+                } 
+               
+               */
+           } 
+           struct type_J_Instruction *j_Instruction = initNewType_J_InstructionWith(address, registerFlag, ope);
+           tmp->jInstruction = j_Instruction;
+           outputType_J_Instruction(tmp->jInstruction);
 }

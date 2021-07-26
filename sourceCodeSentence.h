@@ -2,6 +2,7 @@
 #include "parsingError.h"
 #include "type_R_Instruction.h"
 #include "type_I_Instruction.h"
+#include "type_J_Instruction.h"
 
 /*
  * Function:  initNewSourceCodeSentenceAndLinkTo 
@@ -75,4 +76,5 @@ struct sourceCodeSentence {
     enum parsingError error;
     struct type_R_Instruction *rInstruction;
     struct type_I_Instruction *iInstruction;
+    struct type_J_Instruction *jInstruction;
 };

@@ -693,3 +693,7 @@ void negateSignedBitArrayOfSize(int *a, int size) {
     }
     
 }
+
+int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
+    return wrongRegisterNumber;
+}
