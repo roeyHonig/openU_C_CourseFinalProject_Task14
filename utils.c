@@ -695,5 +695,67 @@ void negateSignedBitArrayOfSize(int *a, int size) {
 }
 
 int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
-    return wrongRegisterNumber;
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+            if (isCharacterEquals(scsCh, '$')) {
+                return parseRegistersForJType(scTextLine, name, registerFlag, address, labelWithinTheInstruction);
+            } else {
+                // we seem to have a label
+                return notRecognizableAssemblyLanguageStatement;
+            }
+}
+
+int parseRegistersForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
+            if (strcmp(name, "jmp") != 0) {
+                // only jmp instruction can use register
+                return notRecognizableAssemblyLanguageStatement;
+            }
+           // get 1st register
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isCharacterNotEquals(scsCh, '$')) {
+               return wrongRegisterNumber;
+           }
+           scsCh++;
+           char firstRegisterString[3] = {0};
+           // did we reached 1st digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[0] = *scsCh;
+               scsCh++;
+           } else {
+               return wrongRegisterNumber;
+           }
+           // did we reached 2nd digit?
+           if (isDigit(scsCh)) {
+               firstRegisterString[1] = *scsCh;
+               scsCh++;
+           } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+               // No need to do anything
+           } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+               // No need to do anything
+           } else {
+               return wrongRegisterNumber;
+           }
+           // a third digit or any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               return wrongRegisterNumber;
+           }
+           
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    return wrongRegisterNumber;
+               }
+               scsCh++;
+           }
+
+          *address = atoi(firstRegisterString);
+          if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*address, 1, 1)) {
+              return wrongRegisterNumber;
+          }
+          *registerFlag = 1;
+          return noErrorsFound;
 }
