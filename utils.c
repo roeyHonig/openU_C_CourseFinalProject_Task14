@@ -696,9 +696,23 @@ void negateSignedBitArrayOfSize(int *a, int size) {
 
 int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
            char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
-           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
-                scsCh++; 
-            if (isCharacterEquals(scsCh, '$')) {
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {               
+               scsCh++; 
+           }
+           if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                   if (strcmp(name, "stop") == 0) {
+                       // stop instruction is simple to code
+                       *registerFlag = 0;
+                       *address = 0;
+                        return noErrorsFound;
+                   } else {
+                       // only stop instruction should have no arguments
+                       return notRecognizableAssemblyLanguageStatement;
+                   }
+               }
+           if (strcmp(name, "stop") == 0) {
+               return notRecognizableAssemblyLanguageStatement;
+           } else if (isCharacterEquals(scsCh, '$')) {
                 return parseRegistersForJType(scTextLine, name, registerFlag, address, labelWithinTheInstruction);
             } else {
                 return parseLabelForJType(scTextLine, name, registerFlag, address, labelWithinTheInstruction);
