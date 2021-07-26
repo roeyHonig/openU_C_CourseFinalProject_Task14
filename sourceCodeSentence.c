@@ -74,6 +74,10 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
                 // this is the last line with no \n 
                 // we need to manually set \n for the last line
                 // otherwise it might be flagged as being too long. since it won't have a \n
+                // the line doesn't have a \n but it does have a \0 ofcourse, so we have to instantate a new copy array, 1 place larger then before, so we can fit all the letters and the \n and the \0
+                copy = NULL;
+                copy = initAnEmptyStringOfSize(strlen(line)+1);
+                strcpy(copy, line);
                 *(copy + strlen(line)) = '\n';
             }
             if (currentLineIsTooLong) {

@@ -701,8 +701,7 @@ int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFla
             if (isCharacterEquals(scsCh, '$')) {
                 return parseRegistersForJType(scTextLine, name, registerFlag, address, labelWithinTheInstruction);
             } else {
-                // we seem to have a label
-                return notRecognizableAssemblyLanguageStatement;
+                return parseLabelForJType(scTextLine, name, registerFlag, address, labelWithinTheInstruction);
             }
 }
 
@@ -758,4 +757,53 @@ int parseRegistersForJType(char *scTextLine, char *name, int *registerFlag, int 
           }
           *registerFlag = 1;
           return noErrorsFound;
+}
+
+int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
+           // scsCh === source code sentence character 
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           // get The label
+           while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+                scsCh++; 
+           if (isNotAlphabeticCharacter(scsCh)) {
+               return badLabelFormat;
+           }
+           int labelIndex = 0;
+           while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isNotDigit(scsCh) && isNotAlphabeticCharacter(scsCh)) {
+                   // label can't have characters except digits and letters;
+                   return badLabelFormat;
+               }
+               if (*(labelWithinTheInstruction+labelIndex) == '\0') {
+                   // label in the instruction is too long
+                   return badLabelFormat;
+               }
+               *(labelWithinTheInstruction+labelIndex) = *scsCh;
+               scsCh++;
+               labelIndex++;
+           }
+           // fill in the rest of the label array with '\0'
+           while (*(labelWithinTheInstruction+labelIndex) != '\0')
+           {
+               *(labelWithinTheInstruction+labelIndex) = '\0';
+               labelIndex++;
+           }
+
+           // Any other character except these is not allowed!
+           if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+               return badLabelFormat;
+           }
+           scsCh++;
+           while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+           {
+               if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                    return badLabelFormat;
+               }
+               scsCh++;
+           }
+           
+          *registerFlag = 0;
+          return noErrorsFound;
+            
 }
