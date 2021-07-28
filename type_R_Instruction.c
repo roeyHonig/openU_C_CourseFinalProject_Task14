@@ -24,46 +24,47 @@ void outputType_R_Instruction(struct type_R_Instruction *instruction) {
 }
 
 void setTheBinaryRepresentationOfInstruction(struct type_R_Instruction *instruction) {
-    // bit 0 : 5
-    int i;
-    for (i = 0; i < 6; i++)
-    {
-        instruction->binary32BitCode[i] = 0;
-    }
-    // bit 6 : 10
-    int funct[5];
-    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10Funct,funct, 5);
-    for (i =6; i < 11; i++)
-    {
-        instruction->binary32BitCode[i] = funct[i-6];
-    }  
-    // bit 11 : 15
-    int rd[5];
-    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRd,rd, 5);
-    for (i =11; i < 16; i++)
-    {
-        instruction->binary32BitCode[i] = rd[i-11];
-    }  
-    // bit 16 : 20
-    int rt[5];
-    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRt,rt, 5);
-    for (i =16; i < 21; i++)
-    {
-        instruction->binary32BitCode[i] = rt[i-16];
-    }  
-    // bit 21 : 25
-    int rs[5];
-    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRs,rs, 5);
-    for (i =21; i < 26; i++)
-    {
-        instruction->binary32BitCode[i] = rs[i-21];
-    }  
-    // bit 26 : 31
-    int opcode[6];
-    convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10opCode,opcode, 6);
-    for (i =26; i < 32; i++)
-    {
-        instruction->binary32BitCode[i] = opcode[i-26];
-    }  
+        // bit 0 : 5
+        int i;
+        for (i = 0; i < 6; i++)
+        {
+            instruction->binary32BitCode[i] = 0;
+        }
+        // bit 6 : 10
+        int funct[5];
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10Funct,funct, 5);
+        for (i =6; i < 11; i++)
+        {
+            instruction->binary32BitCode[i] = funct[i-6];
+        }  
+        // bit 11 : 15
+        int rd[5];
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRd,rd, 5);
+        for (i =11; i < 16; i++)
+        {
+            instruction->binary32BitCode[i] = rd[i-11];
+        }  
+        // bit 16 : 20
+        int rt[5];
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRt,rt, 5);
+        for (i =16; i < 21; i++)
+        {
+            instruction->binary32BitCode[i] = rt[i-16];
+        }  
+        // bit 21 : 25
+        int rs[5];
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRs,rs, 5);
+        for (i =21; i < 26; i++)
+        {
+            instruction->binary32BitCode[i] = rs[i-21];
+        }  
+        // bit 26 : 31
+        int opcode[6];
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10opCode,opcode, 6);
+        for (i =26; i < 32; i++)
+        {
+            instruction->binary32BitCode[i] = opcode[i-26];
+        } 
+     
 }
 
