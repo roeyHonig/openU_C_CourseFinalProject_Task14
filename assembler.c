@@ -59,5 +59,10 @@ int main(int argc, char *argv[])
     int maxNum = ((pow(2, numberOfBits) / 2)-1);
     printf("\nmin:%d\nmax:%d\n", minNum, maxNum);
     */
+   /*
+   // greate way to print a string representing the hexdecimal notation of a decimal number.
+   // we will do it byte by byte, so we'll be feedinmg this a decimal number between 0 and 255 at a time
+   printf("\n%d is %02X\n",247, 247);
+   */
     return 0;
 }
