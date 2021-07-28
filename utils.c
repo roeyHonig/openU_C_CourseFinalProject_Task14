@@ -453,12 +453,14 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
            scsCh++;
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
-           if (isCharacterNotEqualsOrCondition(scsCh, '-', '+')) {
+           if (isCharacterNotEqualsOrCondition(scsCh, '-', '+') && isNotDigit(scsCh)) {
                return badImmediateFormat;
            }
            int immediateStringLength = 0;
-           scsCh++;
-           immediateStringLength++;
+           if (isCharacterEqualsOrCondition(scsCh, '-', '+')) {
+                scsCh++;
+                immediateStringLength++;
+           }
            if (isNotDigit(scsCh)) {
                return badImmediateFormat;
            }

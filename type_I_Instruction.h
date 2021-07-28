@@ -34,4 +34,5 @@ struct type_I_Instruction {
     short immed;
     int registerRs;
     struct operation *assemblyInstruction;
+    int binary32BitCode[32];
 };
