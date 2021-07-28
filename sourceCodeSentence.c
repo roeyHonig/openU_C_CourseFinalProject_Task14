@@ -208,19 +208,19 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
        if (isRInstruction) {
            parseRInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, tmp->currentTextLineNumber == 1 ? 86:100)); // TODO: value should be the counter
+               setSymbol(initSymbol(currentLabel, instructionStatement, tmp->currentTextLineNumber == 1 ? 86:116)); // TODO: value should be the counter
            }
 
        } else if (isIInstruction) {
            parseIInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+               setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
            }
                 
        } else if (isJInstruction) {
            parseJInstructionForTheFollowing(tmp, rWord);
            if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, 100)); // TODO: value should be the counter
+               setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
            }
 
        } else if (isDirectiveStatement) {

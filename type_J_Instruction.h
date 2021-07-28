@@ -34,4 +34,5 @@ struct type_J_Instruction {
     int address;
     int reg;
     struct operation *assemblyInstruction;
+    int binary32BitCode[32];
 };
