@@ -1,12 +1,12 @@
 #include "utils.h"
 #include "commonHeaders.h"
 #include "parsingError.h"
-#define numOfReservedWords 34
+#define numOfReservedWords 33
 
 boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 
-char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dd", ".dw", ".db", ".asciz", ".entry", ".extern", ".dh"};
+char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
 void printLineBeginingAt(char *t) {
    // Base case
@@ -68,8 +68,6 @@ boolean isLabelSupportedForDirectiveTypeKeywords(char *str) {
     if (strcmp(reservedWords[29], str) == 0) 
         return true;
     if (strcmp(reservedWords[30], str) == 0) 
-        return true;
-    if (strcmp(reservedWords[33], str) == 0) 
         return true;
     return false;
 }
