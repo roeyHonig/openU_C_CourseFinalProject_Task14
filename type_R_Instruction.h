@@ -33,4 +33,5 @@ struct type_R_Instruction {
     int registerRd;
     int registerRs;
     struct operation *assemblyInstruction;
+    int binary32BitCode[32];
 };
