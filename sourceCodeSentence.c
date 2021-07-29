@@ -7,6 +7,7 @@
 void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
 void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
 void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
+void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -29,6 +30,8 @@ struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeS
     node->iInstruction = NULL;
     node->jInstruction = (struct type_J_Instruction*) malloc(1 * sizeof(struct type_J_Instruction));
     node->jInstruction = NULL;
+    node->dStatement = (struct directiveStatement*) malloc(1 * sizeof(struct directiveStatement));
+    node->dStatement = NULL;
     return node;
 }
 
@@ -224,9 +227,7 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
            }
 
        } else if (isDirectiveStatement) {
-           // TODO: parse Directive
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
+           parseDirectiveStatementForTheFollowing(tmp, rWord);           
            boolean isDirectiveStatementSupportsSettingLabel = isLabelSupportedForDirectiveTypeKeywords(rWord);
            if (shouldSetLabel && isDirectiveStatementSupportsSettingLabel){
                setSymbol(initSymbol(currentLabel, directiveStatement, 100)); // TODO: value should be the counter
@@ -330,4 +331,16 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_J_Instruction *j_Instruction = initNewType_J_InstructionWith(address, registerFlag, ope);
            tmp->jInstruction = j_Instruction;
            outputType_J_Instruction(tmp->jInstruction);
+}
+
+void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
+    printf("\n");
+    printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
+    struct directiveStatementParameter *p1 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(7, 1, NULL);
+    struct directiveStatementParameter *p2 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(-57, 1, p1);
+    struct directiveStatementParameter *p3 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(17, 1, p2);
+    struct directiveStatementParameter *p4 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(9, 1, p3);
+    struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(p1, rWord, NULL, NULL);
+    tmp->dStatement = d_Statement;
+    outputDirectiveStatement(tmp->dStatement);
 }

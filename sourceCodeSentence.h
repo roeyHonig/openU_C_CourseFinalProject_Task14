@@ -3,6 +3,7 @@
 #include "type_R_Instruction.h"
 #include "type_I_Instruction.h"
 #include "type_J_Instruction.h"
+#import "directiveStatement.h"
 
 /*
  * Function:  initNewSourceCodeSentenceAndLinkTo 
@@ -77,4 +78,5 @@ struct sourceCodeSentence {
     struct type_R_Instruction *rInstruction;
     struct type_I_Instruction *iInstruction;
     struct type_J_Instruction *jInstruction;
+    struct directiveStatement *dStatement;
 };
