@@ -6,6 +6,7 @@
 boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter);
+int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name, char *str);
 
 char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
@@ -823,11 +824,11 @@ int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *add
             
 }
 
-int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter) {
+int parseParametersOrAsciiStringForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str) {
     if (strcmp(name, ".db") == 0 || strcmp(name, ".dh") == 0 || strcmp(name, ".dw") == 0) {
         return parseParametersForDirectiveStatementOfTypeD(scTextLine, name, firstPa, indexOfParametersArray, byteSizeOfEachParameter); 
     } else if (strcmp(name, ".asciz") == 0) {
-        return noErrorsFound;
+        return parseParametersForDirectiveStatementOfTypeAnsii(scTextLine, name, str);
     } else return immediateOverflow;
 
 }
@@ -927,5 +928,18 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
 
         }
     }
+    return noErrorsFound;
+}
+
+int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name, char *str) {
+    *(str+0) = 'h';
+    *(str+1) = 'i';
+    *(str+2) = ' ';
+    *(str+3) = 'T';
+    *(str+4) = 'h';
+    *(str+5) = 'e';
+    *(str+6) = 'r';
+    *(str+7) = 'e';
+    *(str+8) = '!';
     return noErrorsFound;
 }

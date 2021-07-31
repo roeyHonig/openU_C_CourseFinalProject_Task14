@@ -356,4 +356,4 @@ void negateSignedBitArrayOfSize(int *a, int size);
  * 
  * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
-int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter);
+int parseParametersOrAsciiStringForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str);

@@ -336,10 +336,11 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
 void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
     printf("\n");
     printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
+    char *parsedString = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
     int parameters[maxNumberOfCharacters];
     int parametersArrayIndex = -1; // this will have to change by the parsing functino
     int byteSizeOfParameter = 0; // this will have to change by the parsing function
-    tmp->error = parseParametersForDirectiveStatement(tmp->currentTextLine, rWord, parameters, &parametersArrayIndex, &byteSizeOfParameter);
+    tmp->error = parseParametersOrAsciiStringForDirectiveStatement(tmp->currentTextLine, rWord, parameters, &parametersArrayIndex, &byteSizeOfParameter, parsedString);
     if (tmp->error != noErrorsFound) {
         return;
     }
@@ -354,7 +355,7 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
         struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(p->head, rWord, NULL, NULL);
         tmp->dStatement = d_Statement;
     } else if (strcmp(rWord, ".asciz") == 0) {
-        struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(NULL, rWord, "hhello world", NULL);
+        struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(NULL, rWord, parsedString, NULL);
         tmp->dStatement = d_Statement;
     } else {
 
