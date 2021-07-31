@@ -6,7 +6,7 @@ jdi: blt $5, $24, MAIN
    sw $0,4,$10
    jmp NEXT
 ido:     .db    8   ,   -56   ,   99   ,   +3  
-ido1:     .asciz    "hello world"     
+ido1:     .asciz    ""  
       jmp MAIN
       jmp $4
       stop

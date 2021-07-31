@@ -932,14 +932,40 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
 }
 
 int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name, char *str) {
-    *(str+0) = 'h';
-    *(str+1) = 'i';
-    *(str+2) = ' ';
-    *(str+3) = 'T';
-    *(str+4) = 'h';
-    *(str+5) = 'e';
-    *(str+6) = 'r';
-    *(str+7) = 'e';
-    *(str+8) = '!';
+    // scsCh === source code sentence character 
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    int iteratingIndex = -1;
+    if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                return noParametersInDirectiveStatement;
+    }
+    while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+        scsCh++; 
+        if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+            return noParametersInDirectiveStatement;
+        }
+    }
+    if (isCharacterNotEquals(scsCh, '\"')) {
+        return badDirectiveStatementAscizFormat;
+    }
+    scsCh++;
+    iteratingIndex++;
+    if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+        // No 2nd "
+        return badDirectiveStatementAscizFormat;
+    }
+    while (isCharacterNotEquals(scsCh, '\"'))
+    {
+        *(str+iteratingIndex) = *scsCh;
+        scsCh++;
+        iteratingIndex++;
+    }
+    while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+    {
+        scsCh++;
+        if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+            // after the closing " , no other character is allowed
+            return badDirectiveStatementAscizFormat;
+        }
+    }
     return noErrorsFound;
 }

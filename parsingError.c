@@ -39,6 +39,9 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         break; 
     case parameterOverflow:
         printf("parameter is out of range for directive statement on line #%d.\n", lineNumber);
+        break; 
+    case badDirectiveStatementAscizFormat:
+        printf("Bad format for asciz statement on line #%d.\n", lineNumber);
         break;
     default:
         printf("generic error description");
