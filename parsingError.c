@@ -31,6 +31,15 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
     case badImmediateFormat:
         printf("Bad format for immediate on line #%d.\n", lineNumber);
         break; 
+    case badDirectiveStatementParameterFormat:
+        printf("Bad format for parameter on line #%d.\n", lineNumber);
+        break; 
+    case noParametersInDirectiveStatement:
+        printf("No parameter on line #%d.\n", lineNumber);
+        break; 
+    case parameterOverflow:
+        printf("parameter is out of range for directive statement on line #%d.\n", lineNumber);
+        break;
     default:
         printf("generic error description");
         break;

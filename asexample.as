@@ -5,7 +5,7 @@ loopr: ori $9,-5, $2
 jdi: blt $5, $24, MAIN
    sw $0,4,$10
    jmp NEXT
-ido:     .db 7, -57, 17, +9
+ido:     .db    8   ,   -56   ,   99   ,   +3     
       jmp MAIN
       jmp $4
       stop

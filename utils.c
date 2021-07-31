@@ -833,14 +833,6 @@ int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firs
 }
 
 int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter) {
-    *firstPa = atoi("7");
-    *indexOfParametersArray = 0;
-    *(firstPa+1) = atoi("-57");
-    *indexOfParametersArray = 1;
-    *(firstPa+2) = atoi("17");
-    *indexOfParametersArray = 2;
-    *(firstPa+3) = atoi("+91");
-    *indexOfParametersArray = 3;
     if (strcmp(name, ".db") == 0) {
         *byteSizeOfEachParameter = 1;
     } else if (strcmp(name, ".dh") == 0) {
@@ -848,8 +840,92 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
     } else {
         *byteSizeOfEachParameter = 4;
     }
-    // TODO: make sure all numbers are whithin alooable range otherise ommit an error
-    // make sure at least 1 parameter otherwise omit an error
-    
+    // scsCh === source code sentence character 
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                return noParametersInDirectiveStatement;
+    }
+    boolean moreParametersToExtract = true;
+    char *parametersAsString[maxNumberOfCharacters];
+    int extractingParmeterLoopIndex = -1;
+
+    do
+    {
+        extractingParmeterLoopIndex++;
+        while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+            scsCh++; 
+            if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                return noParametersInDirectiveStatement;
+            }
+        }
+        if (extractingParmeterLoopIndex > 0) {
+            // 1st parameter don't need to have a ',' before it
+            if (isCharacterNotEquals(scsCh, ',')) {
+                return badDirectiveStatementParameterFormat;
+            }
+            scsCh++;
+        }        
+        while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
+            scsCh++; 
+        if (isCharacterNotEqualsOrCondition(scsCh, '-', '+') && isNotDigit(scsCh)) {
+            return badDirectiveStatementParameterFormat;
+        }
+        int immediateStringLength = 0;
+        if (isCharacterEqualsOrCondition(scsCh, '-', '+')) {
+            scsCh++;
+            immediateStringLength++;
+        }
+        if (isNotDigit(scsCh)) {
+            return badDirectiveStatementParameterFormat;
+        }
+        while (isDigit(scsCh)) {
+            scsCh++; 
+            immediateStringLength++;
+        }
+        // Any other character except these is not allowed!
+        if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+            return badDirectiveStatementParameterFormat;
+        }
+        char *currentParameterAsString = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
+        for (int j = 0; j < maxNumberOfCharacters; j++)
+        {
+            if (j >= immediateStringLength) 
+                break;
+            *(currentParameterAsString+j) = *(scsCh-immediateStringLength+j);
+        }
+        parametersAsString[extractingParmeterLoopIndex] = currentParameterAsString;
+        // check if this was the last parmeter
+        char *tmp = scsCh;
+        boolean seemsWeHave1MoreParameterToExtract = false;
+        while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+        {
+            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
+                if (isCharacterEquals(scsCh, ',')) {
+                    // seems we have 1 more parameter
+                    scsCh = tmp;
+                    //printf("we got here");
+                    //printf("before %c and current %c", *(scsCh-1), *scsCh);
+                    seemsWeHave1MoreParameterToExtract = true;
+                    break;
+                }
+                return badDirectiveStatementParameterFormat;
+            }
+            scsCh++;
+        }
+        moreParametersToExtract = seemsWeHave1MoreParameterToExtract;
+    } while (moreParametersToExtract);
+
+    for (int k = 0; k <= extractingParmeterLoopIndex; k++)
+    {
+        *(firstPa+k) = atoi(parametersAsString[k]);
+        *indexOfParametersArray = k;
+        int numberOfBits = 8 * (*byteSizeOfEachParameter);
+        int minNum = (pow(2, numberOfBits) / 2) * -1;
+        int maxNum = ((pow(2, numberOfBits) / 2)-1);
+        if ((*(firstPa+k)) <  minNum || (*(firstPa+k)) >  maxNum) {
+            return parameterOverflow;
+
+        }
+    }
     return noErrorsFound;
 }
