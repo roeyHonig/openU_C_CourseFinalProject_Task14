@@ -22,5 +22,8 @@ void outputDirectiveStatement(struct directiveStatement *statement) {
             printf("%d ", tmp->number);
         }
         printf("\n");
+    } else if (strcmp(statement->name, ".asciz") == 0) {
+        int consequentialBytes = strlen(statement->stringInDirective) + 1;
+        printf("Directive Statement Name %s allocates %d consequential bytes, %d bytes representing the ascii string \"%s\" + 1 more byte representing the NUL character", statement->name, consequentialBytes, consequentialBytes-1, statement->stringInDirective);
     }
 }

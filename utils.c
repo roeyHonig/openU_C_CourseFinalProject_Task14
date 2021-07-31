@@ -827,7 +827,7 @@ int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firs
     if (strcmp(name, ".db") == 0 || strcmp(name, ".dh") == 0 || strcmp(name, ".dw") == 0) {
         return parseParametersForDirectiveStatementOfTypeD(scTextLine, name, firstPa, indexOfParametersArray, byteSizeOfEachParameter); 
     } else if (strcmp(name, ".asciz") == 0) {
-        return immediateOverflow;
+        return noErrorsFound;
     } else return immediateOverflow;
 
 }
