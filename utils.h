@@ -341,3 +341,19 @@ void convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(int *a, int size, int *
  * 
  */
 void negateSignedBitArrayOfSize(int *a, int size);
+
+/* 
+ * Function:  parseRegistersAndImmediateForIType  TODO: change this!!!!!!!!!!
+ * --------------------
+ * This is a function to get the numeric values of 2 registers and an immidate value from the source code sentence text. If the instruction doesn't have numeric value but a label name, the label name will be copied
+ * 
+ * scTextLine: The source code text.
+ * name: the name of the instruction.
+ * firstRegister: int representing 1st register.
+ * secondRegister: int representing 2nd register.
+ * immed: short representing immediate value.
+ * labelWithinTheInstruction: branching I instructions have a label as the 3rd field of the instruction. The immeduate value is the distance between the label value and the currect instruction value
+ * 
+ * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
+ */
+int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter);

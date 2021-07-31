@@ -5,6 +5,7 @@
 
 boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
+int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter);
 
 char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
@@ -820,4 +821,35 @@ int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *add
           *registerFlag = 0;
           return noErrorsFound;
             
+}
+
+int parseParametersForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter) {
+    if (strcmp(name, ".db") == 0 || strcmp(name, ".dh") == 0 || strcmp(name, ".dw") == 0) {
+        return parseParametersForDirectiveStatementOfTypeD(scTextLine, name, firstPa, indexOfParametersArray, byteSizeOfEachParameter); 
+    } else if (strcmp(name, ".asciz") == 0) {
+        return immediateOverflow;
+    } else return immediateOverflow;
+
+}
+
+int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter) {
+    *firstPa = atoi("7");
+    *indexOfParametersArray = 0;
+    *(firstPa+1) = atoi("-57");
+    *indexOfParametersArray = 1;
+    *(firstPa+2) = atoi("17");
+    *indexOfParametersArray = 2;
+    *(firstPa+3) = atoi("+91");
+    *indexOfParametersArray = 3;
+    if (strcmp(name, ".db") == 0) {
+        *byteSizeOfEachParameter = 1;
+    } else if (strcmp(name, ".dh") == 0) {
+        *byteSizeOfEachParameter = 2;
+    } else {
+        *byteSizeOfEachParameter = 4;
+    }
+    // TODO: make sure all numbers are whithin alooable range otherise ommit an error
+    // make sure at least 1 parameter otherwise omit an error
+    
+    return noErrorsFound;
 }

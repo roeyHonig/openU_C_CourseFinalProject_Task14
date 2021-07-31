@@ -336,11 +336,21 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
 void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
     printf("\n");
     printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
-    struct directiveStatementParameter *p1 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(7, 1, NULL);
-    struct directiveStatementParameter *p2 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(-57, 1, p1);
-    struct directiveStatementParameter *p3 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(17, 1, p2);
-    struct directiveStatementParameter *p4 = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(9, 1, p3);
-    struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(p1, rWord, NULL, NULL);
+    int parameters[maxNumberOfCharacters];
+    int parametersArrayIndex = -1; // this will have to change by the parsing functino
+    int byteSizeOfParameter = 0; // this will have to change by the parsing function
+    tmp->error = parseParametersForDirectiveStatement(tmp->currentTextLine, rWord, parameters, &parametersArrayIndex, &byteSizeOfParameter);
+    if (tmp->error != noErrorsFound) {
+        return;
+    }
+    struct directiveStatementParameter *p = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(parameters[0], byteSizeOfParameter, NULL);
+    struct directiveStatementParameter *tmpParameter;
+    for (int i = 1; i <= parametersArrayIndex; i++)
+    {
+        tmpParameter = p;
+        p = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(parameters[i], byteSizeOfParameter, tmpParameter);
+    }
+    struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(p->head, rWord, NULL, NULL);
     tmp->dStatement = d_Statement;
     outputDirectiveStatement(tmp->dStatement);
 }
