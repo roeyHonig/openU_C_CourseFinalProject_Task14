@@ -42,7 +42,10 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         break; 
     case badDirectiveStatementAscizFormat:
         printf("Bad format for asciz statement on line #%d.\n", lineNumber);
-        break;
+        break; 
+    case badDirectiveStatementLabelFormat:
+        printf("Bad format for label on line #%d.\n", lineNumber);
+        break; 
     default:
         printf("generic error description");
         break;

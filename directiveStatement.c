@@ -10,7 +10,6 @@ struct directiveStatement *initNewDirectiveStatementWithHeadParameterAndNameAndS
 }
 
 void outputDirectiveStatement(struct directiveStatement *statement) {
-    // ".dh", ".dw", ".db"
     if (strcmp(statement->name, ".dh") == 0 || strcmp(statement->name, ".dw") == 0 || strcmp(statement->name, ".db") == 0) {
         printf("Directive Statement Name %s has the following %d byte size parameters: ", statement->name, statement->parameter->byteSize);
         struct directiveStatementParameter* tmp;
@@ -25,5 +24,7 @@ void outputDirectiveStatement(struct directiveStatement *statement) {
     } else if (strcmp(statement->name, ".asciz") == 0) {
         int consequentialBytes = strlen(statement->stringInDirective) + 1;
         printf("Directive Statement Name %s allocates %d consequential bytes, %d bytes representing the ascii string \"%s\" + 1 more byte representing the NUL character", statement->name, consequentialBytes, consequentialBytes-1, statement->stringInDirective);
+    } else {
+        printf("Directive Statement Name %s has the following label %s", statement->name, statement->labelInDirective);
     }
 }

@@ -7,6 +7,7 @@ boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firs
 boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister);
 int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter);
 int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name, char *str);
+int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, char *name, char *label);
 
 char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
@@ -824,12 +825,12 @@ int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *add
             
 }
 
-int parseParametersOrAsciiStringForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str) {
+int parseParametersOrAsciiStringOrLabelForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str, char *label) {
     if (strcmp(name, ".db") == 0 || strcmp(name, ".dh") == 0 || strcmp(name, ".dw") == 0) {
         return parseParametersForDirectiveStatementOfTypeD(scTextLine, name, firstPa, indexOfParametersArray, byteSizeOfEachParameter); 
     } else if (strcmp(name, ".asciz") == 0) {
         return parseParametersForDirectiveStatementOfTypeAnsii(scTextLine, name, str);
-    } else return immediateOverflow;
+    } else return parseParametersForDirectiveStatementOfTypeEnteryOrExtern(scTextLine, name, label);
 
 }
 
@@ -965,6 +966,41 @@ int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name
         if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
             // after the closing " , no other character is allowed
             return badDirectiveStatementAscizFormat;
+        }
+    }
+    return noErrorsFound;
+}
+
+int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, char *name, char *label) {
+    // scsCh === source code sentence character
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    int iteratingIndex = -1;
+    if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+                return noParametersInDirectiveStatement;
+    }
+    while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
+        scsCh++; 
+        if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+            return noParametersInDirectiveStatement;
+        }
+    }
+    iteratingIndex++;
+    if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
+        // No label
+        return noParametersInDirectiveStatement;
+    }
+    while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+    {
+        *(label+iteratingIndex) = *scsCh;
+        scsCh++;
+        iteratingIndex++;
+    }
+    while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
+    {
+        scsCh++;
+        if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
+            // after the label, no other character is allowed
+            return badDirectiveStatementLabelFormat;
         }
     }
     return noErrorsFound;

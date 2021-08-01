@@ -337,10 +337,11 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
     printf("\n");
     printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
     char *parsedString = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
+    char *labelInTheDirective = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
     int parameters[maxNumberOfCharacters];
     int parametersArrayIndex = -1; // this will have to change by the parsing functino
     int byteSizeOfParameter = 0; // this will have to change by the parsing function
-    tmp->error = parseParametersOrAsciiStringForDirectiveStatement(tmp->currentTextLine, rWord, parameters, &parametersArrayIndex, &byteSizeOfParameter, parsedString);
+    tmp->error = parseParametersOrAsciiStringOrLabelForDirectiveStatement(tmp->currentTextLine, rWord, parameters, &parametersArrayIndex, &byteSizeOfParameter, parsedString, labelInTheDirective);
     if (tmp->error != noErrorsFound) {
         return;
     }
@@ -358,7 +359,8 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
         struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(NULL, rWord, parsedString, NULL);
         tmp->dStatement = d_Statement;
     } else {
-
+        struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(NULL, rWord, NULL, labelInTheDirective);
+        tmp->dStatement = d_Statement;
     }
     outputDirectiveStatement(tmp->dStatement);
 }

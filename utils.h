@@ -343,17 +343,18 @@ void convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(int *a, int size, int *
 void negateSignedBitArrayOfSize(int *a, int size);
 
 /* 
- * Function:  parseRegistersAndImmediateForIType  TODO: change this!!!!!!!!!!
+ * Function:  parseParametersOrAsciiStringOrLabelForDirectiveStatement  
  * --------------------
- * This is a function to get the numeric values of 2 registers and an immidate value from the source code sentence text. If the instruction doesn't have numeric value but a label name, the label name will be copied
+ * This is a function to get parameters of a directive statement, which can be an array of integers, or single ascii string between quatition marks or a simple label
  * 
  * scTextLine: The source code text.
  * name: the name of the instruction.
- * firstRegister: int representing 1st register.
- * secondRegister: int representing 2nd register.
- * immed: short representing immediate value.
- * labelWithinTheInstruction: branching I instructions have a label as the 3rd field of the instruction. The immeduate value is the distance between the label value and the currect instruction value
+ * firstPa: a pointer to the start of an integer array which will hold the integers od directive statement type .db, d.h, .dw
+ * indexOfParametersArray: The parsing function fills the integer array with numbers based on the parsed statement, so this index keeps track of how many parameters we actually have. Will be needed to accurately init the statement later
+ * byteSizeOfEachParameter: 1 byte , 2 bytes or 4 bytes.
+ * str: the string in a .asciz statement
+ * label: the string in an .extern \ .entry statements 
  * 
- * returns: 0 if valid registers numeric values and immediate or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
+ * returns: 0 if successful parsing or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
-int parseParametersOrAsciiStringForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str);
+int parseParametersOrAsciiStringOrLabelForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str, char *label);
