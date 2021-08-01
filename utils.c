@@ -1003,5 +1003,34 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
             return badDirectiveStatementLabelFormat;
         }
     }
+    // validate the label
+    // too long label, more then 31 charcters
+    int k = 0;
+    while (isCharacterNotEqualsOrCondition(label+k, '\n', '\0'))
+    {
+        k++;
+        if (k >= 31) {
+            return badDirectiveStatementLabelFormat;
+        }
+    }
+    k = 0;
+    // first letter doesn't start with letter
+    boolean isFirstCharacterInTheLabelNotLetter = !((*label >= 'a' && *label <= 'z') || (*label >= 'A' && *label <= 'Z'));
+    if (isFirstCharacterInTheLabelNotLetter) {
+        return badDirectiveStatementLabelFormat;
+    }
+    boolean areThereIllegalCharactersInTheLabel = false;
+    while (isCharacterNotEqualsOrCondition(label+k, '\n', '\0'))
+    {
+        if ((*(label + k) >= 'a' && *(label + k) <= 'z') || (*(label + k) >= 'A' && *(label + k) <= 'Z') || (*(label + k) >= '0' && *(label + k) <= '9')) {
+            k++;
+            continue;
+        } 
+        areThereIllegalCharactersInTheLabel = true;
+        break;
+    }
+    if (areThereIllegalCharactersInTheLabel) {
+        return badDirectiveStatementLabelFormat;
+    }
     return noErrorsFound;
 }
