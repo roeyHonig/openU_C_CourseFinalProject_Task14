@@ -1,5 +1,5 @@
 #include "commonHeaders.h"
-enum labelLocationInSourceCode {directiveStatement = 0, instructionStatement};
+enum labelLocationInSourceCode {directiveStatement = 0, instructionStatement, entry, external};
 
 /* 
  * Function:  initSymbol 
@@ -21,8 +21,10 @@ struct symbol *initSymbol(char *nameOfSymbol, enum labelLocationInSourceCode loc
  * Method to set an symbol inside the symbolsHashTable.
  * 
  * sm: symbol structure to store at the symbolsHashTable.
+ * 
+ * returns: 0 if we've successfully set the symbol or an error code if we have a duplicate
  */
-void setSymbol(struct symbol *sm);
+int setSymbol(struct symbol *sm);
 
 /* 
  * Function:  getSymbolWithName 

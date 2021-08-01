@@ -1,4 +1,5 @@
 #include "symbols.h"
+#include "parsingError.h"
 
 struct symbol *symbolHashTable[HASHSIZE] = { NULL };
 
@@ -12,13 +13,14 @@ struct symbol *initSymbol(char *nameOfSymbol, enum labelLocationInSourceCode loc
     return node;
 }
 
-void setSymbol(struct symbol *sm) {
+int setSymbol(struct symbol *sm) {
     unsigned int index = hash(sm->name, HASHSIZE);
     struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
     // check if position is free
     if (existingElement == NULL)
     {
         symbolHashTable[index] = sm;
+        return noErrorsFound;
     } else {
         // loop over all elements in existing position until you reach the last one
         // Append sm to the last element
@@ -28,13 +30,35 @@ void setSymbol(struct symbol *sm) {
         {
             tmp = existingElement;
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == tmp->location)
-                return; // Duplicate record
+                return duplicateLabel; // Duplicate record
+
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == instructionStatement)
+                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == directiveStatement)
+                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == instructionStatement && tmp->location == external)
+                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == directiveStatement && tmp->location == external)
+                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == directiveStatement && tmp->location == instructionStatement)
+                return duplicateLabel; // Duplicate record. cann't have same label at the begining of directive statement and instruction statement
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == instructionStatement && tmp->location == directiveStatement)
+                return duplicateLabel; // Duplicate record. cann't have same label at the begining of directive statement and instruction statement
+
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == entry && tmp->location == external)
+                return duplicateLabel; // Duplicate record, entry labels can't be the same as external labels
+            if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == entry)
+                return duplicateLabel; // Duplicate record, entry labels can't be the same as external labels
+
             existingElement = existingElement->next;
         } while (existingElement != NULL);
         tmp->next = (struct symbol*) malloc(1 * sizeof(struct symbol));
         tmp->next = sm;
         sm->previous = (struct symbol*) malloc(1 * sizeof(struct symbol));
         sm->previous = tmp;
+        return noErrorsFound;
     }
 }
 
@@ -84,6 +108,15 @@ void symbolToString(struct symbol *sm) {
     {
     case directiveStatement:
         loc = "located in a directive type statement";
+        break;
+    case instructionStatement:
+        loc = "located in a instruction type statement";
+        break;
+    case entry:
+        loc = "located as an entry directive statement";
+        break;
+    case external:
+        loc = "is an external directive statement";
         break;
     default:
          loc = "located in an instruction type statement";

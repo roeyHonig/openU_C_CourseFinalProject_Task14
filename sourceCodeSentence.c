@@ -210,29 +210,36 @@ void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence
 
        if (isRInstruction) {
            parseRInstructionForTheFollowing(tmp, rWord);
-           if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, tmp->currentTextLineNumber == 1 ? 86:116)); // TODO: value should be the counter
+           if (shouldSetLabel && tmp->error == noErrorsFound){
+               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, tmp->currentTextLineNumber == 1 ? 86:116)); // TODO: value should be the counter
            }
 
        } else if (isIInstruction) {
            parseIInstructionForTheFollowing(tmp, rWord);
-           if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
+           if (shouldSetLabel && tmp->error == noErrorsFound){
+               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
            }
                 
        } else if (isJInstruction) {
            parseJInstructionForTheFollowing(tmp, rWord);
-           if (shouldSetLabel){
-               setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
+           if (shouldSetLabel && tmp->error == noErrorsFound){
+               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, 116)); // TODO: value should be the counter
            }
 
        } else if (isDirectiveStatement) {
            parseDirectiveStatementForTheFollowing(tmp, rWord);           
            boolean isDirectiveStatementSupportsSettingLabel = isLabelSupportedForDirectiveTypeKeywords(rWord);
-           if (shouldSetLabel && isDirectiveStatementSupportsSettingLabel){
-               setSymbol(initSymbol(currentLabel, directiveStatement, 100)); // TODO: value should be the counter
+           if (shouldSetLabel && isDirectiveStatementSupportsSettingLabel && tmp->error == noErrorsFound){
+               tmp->error = setSymbol(initSymbol(currentLabel, directiveStatement, 100)); // TODO: value should be the counter
            }
-
+           if (tmp->error == noErrorsFound && tmp->dStatement->labelInDirective != NULL) {
+               if (strcmp(rWord, ".entry") == 0) {
+                   tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, entry, 100)); // TODO: value should be the counter
+               }
+               if (strcmp(rWord, ".extern") == 0) {
+                   tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, external, 100)); // TODO: value should be the counter
+               }
+           }
        } else {
            tmp->error = notRecognizableAssemblyLanguageStatement;
        }

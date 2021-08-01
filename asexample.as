@@ -8,7 +8,7 @@ jdi: blt $5, $24, MAIN
 ido:     .db    8   ,   -56   ,   99   ,   +3  
 ido1:     .asciz    ""  
    .entry NEXT
-   .extern willow
+   .extern MAINor
       jmp MAIN
       jmp $4
       stop
