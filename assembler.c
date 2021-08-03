@@ -14,7 +14,8 @@ int main(int argc, char *argv[])
         FILE *ifp = fopen(argv[i], "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         outputSourceCodeSentencesBeginingAt(firstSentence);
-        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, 100);
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, 100, 1);
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, 100, 2);
         fclose(ifp);
         printf("\n\n");
         printf("These are the errors found:\n");

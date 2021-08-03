@@ -145,3 +145,48 @@ void nullifySymbolsHashTable() {
     for (int index = 0; index < HASHSIZE; index++)
         symbolHashTable[index] = NULL;
 }
+
+void incrementDirectiveTypeSymbolsValueBy(int increment) {
+    for (int index = 0; index < HASHSIZE; index++)
+    {
+        struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
+        if (existingElement != NULL) {
+            struct symbol *tmp;
+            do
+            {
+                tmp = existingElement;
+                existingElement = existingElement->next;
+                if (tmp->location == directiveStatement) {
+                    tmp->value = tmp->value + increment;
+                } 
+            } while (existingElement != NULL);
+        }
+    }
+}
+
+void updateEntryTypeSymbolsValueBy() {
+    for (int index = 0; index < HASHSIZE; index++)
+    {
+        struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
+        if (existingElement != NULL) {
+            struct symbol *tmp;
+            do
+            {
+                tmp = existingElement;
+                existingElement = existingElement->next;
+                if (tmp->location == entry) {
+                    struct symbol *instructionTypeSymbol = getSymbolWithNameAndLocation(tmp->name, instructionStatement);
+                    struct symbol *directiveTypeSymbol = getSymbolWithNameAndLocation(tmp->name, directiveStatement);
+                    if (instructionTypeSymbol != NULL) {
+                        tmp->value = instructionTypeSymbol->value;
+                    } else if (directiveTypeSymbol != NULL) {
+                        tmp->value = directiveTypeSymbol->value;
+                    } else {
+                        return;
+                    }
+                } 
+            } while (existingElement != NULL);
+        }
+    }
+
+}

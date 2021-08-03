@@ -5,11 +5,13 @@
 #define maxNumberOfCharactersForInstructionName 7 // reserved word - max 7 characters - ".extern"
 
 int ic;
+int dc = 0;
 
-void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
-void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
-void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
-void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord);
+void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
+void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
+void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
+int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSentence *sentence);
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -153,9 +155,11 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
     }
 }
 
-void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter) {
+void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass) {
     extern int ic;
+    extern int dc;
     ic = instructionCounter;
+    dc = 0;
     struct sourceCodeSentence* tmp;
    while (firstSentence != NULL)
     {
@@ -168,7 +172,6 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
 
        // get labels
        if (isThereLabelInFollowingTextLine(tmp->currentTextLine)) {
-           // TODO: i think i'm not checking for duplicate label names!. should be an error
            if (getLabelInto(currentLabel, tmp->currentTextLine)) {
                shouldSetLabel = true;
            } else {
@@ -213,52 +216,79 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
        boolean isDirectiveStatement = isDirectiveTypeKeywordsPresentInFollowingText(rWord);
 
        if (isRInstruction) {
-           parseRInstructionForTheFollowing(tmp, rWord);
+           parseRInstructionForTheFollowing(tmp, rWord, pass);
            if (shouldSetLabel && tmp->error == noErrorsFound){
-               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               if (pass == 1) {
+                   tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               }
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
            }
        } else if (isIInstruction) {
-           parseIInstructionForTheFollowing(tmp, rWord);
+           parseIInstructionForTheFollowing(tmp, rWord, pass);
            if (shouldSetLabel && tmp->error == noErrorsFound){
-               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               if (pass == 1) {
+                   tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               }
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
            }    
        } else if (isJInstruction) {
-           parseJInstructionForTheFollowing(tmp, rWord);
+           parseJInstructionForTheFollowing(tmp, rWord, pass);
            if (shouldSetLabel && tmp->error == noErrorsFound){
-               tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               if (pass == 1) {
+                   tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
+               }
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
            }
        } else if (isDirectiveStatement) {
-           parseDirectiveStatementForTheFollowing(tmp, rWord);           
+           parseDirectiveStatementForTheFollowing(tmp, rWord, pass);           
            boolean isDirectiveStatementSupportsSettingLabel = isLabelSupportedForDirectiveTypeKeywords(rWord);
            if (shouldSetLabel && isDirectiveStatementSupportsSettingLabel && tmp->error == noErrorsFound){
-               tmp->error = setSymbol(initSymbol(currentLabel, directiveStatement, 500)); // TODO: should be the data counter 
+               // this a data \ asciz directive
+               if (pass == 1) {
+                   tmp->error = setSymbol(initSymbol(currentLabel, directiveStatement, dc)); 
+               }
            }
+           if (tmp->error == noErrorsFound) {
+                   dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
+            }
+           
            if (tmp->error == noErrorsFound && tmp->dStatement->labelInDirective != NULL) {
+               // this an entry or external directive
                if (strcmp(rWord, ".entry") == 0) {
-                   tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, entry, 100)); // TODO: value should be the instruction counter or data counter + instruction counter depends if the label is at the begining of an instrucion statment or the begining of a data directive statment
+                   if (pass == 1) {
+                       tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, entry, 1)); // Dammy Value. Real value will be updated after the 2nd pass by calling 'updateEntryTypeSymbolsValueBy()'
+                   }
+                   if (pass == 2) {
+                       if (getSymbolWithNameAndLocation(tmp->dStatement->labelInDirective, instructionStatement) == NULL && getSymbolWithNameAndLocation(tmp->dStatement->labelInDirective, directiveStatement) == NULL) {
+                           tmp->error = missingLabel;
+                       }
+                   }
                }
                if (strcmp(rWord, ".extern") == 0) {
-                   tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, external, 0)); 
+                   if (pass == 1) {
+                       tmp->error = setSymbol(initSymbol(tmp->dStatement->labelInDirective, external, 0)); 
+                   } 
                }
            }
        } else {
            tmp->error = notRecognizableAssemblyLanguageStatement;
        }
     }
+    if (pass == 1) {
+        incrementDirectiveTypeSymbolsValueBy(getCurrentInstructionCounter());
+    }
+    if (pass ==2) {
+        updateEntryTypeSymbolsValueBy();
+    }
 }
 
-void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an R type\n", tmp->currentTextLineNumber ,rWord);
+void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass) {
            int firstRegister, secondRegister, thirdRegister; 
            boolean errorsFoundDuringParsingRegisters = !parseRegistersForRType(tmp->currentTextLine, rWord, &firstRegister, &secondRegister, &thirdRegister);
            if (errorsFoundDuringParsingRegisters) {
@@ -276,13 +306,13 @@ void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            int rd = isRTypeCopyInstruction ? firstRegister : thirdRegister; 
            struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(rs, rt, rd, ope);
            tmp->rInstruction = r_Instruction;
-           outputType_R_Instruction(tmp->rInstruction);
+           if (pass == 2) {
+               outputType_R_Instruction(tmp->rInstruction);
+           }
 }
 
-void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
+void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass) {
            extern int ic;
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an I type\n", tmp->currentTextLineNumber ,rWord);
            int firstRegister, secondRegister; 
            short immediate;
            char *labelInTheInstruction = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharactersForLabel,'0');
@@ -299,20 +329,27 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            if (*labelInTheInstruction != '0') {
                // We need to calculate the immediate based on the distance between label value and the current value of the instruction in the instructino counter
                struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
-               if (branchingLabel == NULL) {
-                   immediate = 0; // This is the 1st attemp, so maybe the label will be present in the table after the assembler will read the all code.
-               } else {
-                   immediate = branchingLabel->value - ic;  
-               }
+               struct symbol *directiveLabel = getSymbolWithNameAndLocation(labelInTheInstruction, directiveStatement);
+                if (branchingLabel != NULL) {
+                    immediate = branchingLabel->value - ic;  
+                } else if (directiveLabel != NULL) {
+                    immediate = directiveLabel->value - ic;  
+                } else {
+                    if (pass == 2) {
+                       tmp->error = missingLabel;
+                   } else {
+                       immediate = 0; 
+                   }
+                }
            } 
            struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
            tmp->iInstruction = i_Instruction;
-           outputType_I_Instruction(tmp->iInstruction);
+           if (pass == 2) {
+               outputType_I_Instruction(tmp->iInstruction);
+           }
 }
 
-void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
-           printf("\n");
-           printf("Line#%d, the statement name:%s it is an J type\n", tmp->currentTextLineNumber ,rWord);
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass) {
            int registerFlag; 
            int address;
            char *labelInTheInstruction = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharactersForLabel,'0');
@@ -329,30 +366,29 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            if (*labelInTheInstruction != '0') {
                struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
                struct symbol *externalLabel = getSymbolWithNameAndLocation(labelInTheInstruction, external);
+               struct symbol *directiveLabel = getSymbolWithNameAndLocation(labelInTheInstruction, directiveStatement);
                if (branchingLabel != NULL) {
                    address = branchingLabel->value;
                } else if (externalLabel != NULL) {
                    address = externalLabel->value;
+               } else if (directiveLabel != NULL) {
+                   address = directiveLabel->value;
                } else {
-                   address = 0;
+                   if (pass == 2) {
+                       tmp->error = missingLabel;
+                   } else {
+                       address = 0;
+                   }
                }
-               // todo: we need to make sure the external exsists, because if nothing is present we need to show an error but only if this is the 2nd pass
-               /*
-               if (no symbol was found) {
-                    tmp->error = no matching label;
-                    return;
-                } 
-               
-               */
            } 
            struct type_J_Instruction *j_Instruction = initNewType_J_InstructionWith(address, registerFlag, ope);
            tmp->jInstruction = j_Instruction;
-           outputType_J_Instruction(tmp->jInstruction);
+           if (pass == 2) {
+               outputType_J_Instruction(tmp->jInstruction);
+           }
 }
 
-void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord) {
-    printf("\n");
-    printf("Line#%d, the statement name:%s it is an Directive type\n", tmp->currentTextLineNumber ,rWord);
+void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass) {
     char *parsedString = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
     char *labelInTheDirective = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
     int parameters[maxNumberOfCharacters];
@@ -379,10 +415,30 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
         struct directiveStatement *d_Statement = initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(NULL, rWord, NULL, labelInTheDirective);
         tmp->dStatement = d_Statement;
     }
-    outputDirectiveStatement(tmp->dStatement);
+    if (pass == 2) {
+        outputDirectiveStatement(tmp->dStatement);
+    }
 }
 
 int getCurrentInstructionCounter() {
     extern int ic;
     return ic;
+}
+
+int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSentence *sentence) {
+    // data
+    int dataIncrement = 0;
+    struct directiveStatementParameter* firstParmater = sentence->dStatement->parameter;
+    struct directiveStatementParameter* tmp;
+    while (firstParmater != NULL)
+    {
+        tmp = firstParmater;
+        firstParmater = firstParmater->next;
+        dataIncrement= dataIncrement + tmp->byteSize;
+    }
+    // asciz
+    if (sentence->dStatement->stringInDirective != NULL) {
+        dataIncrement = strlen(sentence->dStatement->stringInDirective) + 1;
+    }
+    return dataIncrement;
 }

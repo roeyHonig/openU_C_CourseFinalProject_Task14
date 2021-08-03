@@ -64,6 +64,22 @@ void outputSymbolsHashTable();
  */
 void nullifySymbolsHashTable();
 
+/* 
+ * Function:  incrementDirectiveTypeSymbolsValueBy 
+ * --------------------
+ * Method to increment the directive type statments with the instruction counter after the 1st pass.
+ * 
+ * increment: integer should be the mac instruction counter.
+ */
+void incrementDirectiveTypeSymbolsValueBy(int increment);
+
+/* 
+ * Function:  updateEntryTypeSymbolsValueBy 
+ * --------------------
+ * Method to set the correct values in the entery statments.
+ * Warning: should only call this function after the 2nd pass 
+ */
+void updateEntryTypeSymbolsValueBy();
 
 /* Declare the struct symbol which holds 1 record of a symbol. such as a label and is part of a linked List. */
 struct symbol {

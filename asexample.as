@@ -1,14 +1,18 @@
 MAIN: add $3  ,  $5  , $9
-LOOP: add $9,-5,$2
-NEXT:  move $20   , $4
-loopr: ori $9,-5, $2
-jdi: blt $5, $24, NEXT
-   sw $0,4,$10
-   jmp NEXT
-ido:     .db    8   ,   -56   ,   99   ,   +3  
-ido1:     .asciz    ""  
-   .entry NEXT
-   .extern MAINor
-      jmp MAIN
+LOOP: ori $9,-5,$2
+      la  vall
+      jmp Next
+Next:  move $20   , $4
+      bgt $4,$2,END
+      la  K
+      sw $0,4,$10
+      bne $31,$9,LOOP
+      call vall
       jmp $4
-      stop
+END: stop
+STR: .asciz "aBcd"
+LIST: .db 6,-9
+      .dh 27056
+.entry K
+K:   .dw  31, -12
+.extern  vall

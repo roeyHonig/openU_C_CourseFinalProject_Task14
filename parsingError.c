@@ -49,6 +49,9 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
     case duplicateLabel:
         printf("Duplicate label on line #%d.\n", lineNumber);
         break; 
+    case missingLabel:
+        printf("Missing label on line #%d.\n", lineNumber);
+        break; 
     default:
         printf("generic error description");
         break;
