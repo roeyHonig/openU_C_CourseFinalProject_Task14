@@ -58,14 +58,24 @@ struct sourceCodeSentence *readAssemblySourceCode(FILE *input);
 void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstSentence);
 
 /* 
- * Function:  parseSourceCodeSentencesBeginingAt 
+ * Function:  parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter 
  * --------------------
  * Method to parse the source code sentences, 1 after the other following the first sentence.
  * 
  * firstSentence: the initial sourceCodeSentence which will be output.
  * If firstSentence->previous is NULL (The 1st element of the list) the entire list is parsed.
+ * instructionCounter: integer representing the 1st available space in memory for the code output
  */
-void parseSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentence);
+void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter);
+
+/* 
+ * Function:  getCurrentInstructionCounter 
+ * --------------------
+ * Getter method to get the current instructions counter.
+ * 
+ * retruns: integer representing the current instructions counter 
+ */
+int getCurrentInstructionCounter();
 
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
