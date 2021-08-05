@@ -33,7 +33,7 @@ void outputcodeBytesBeginingAt(struct codeByte *firstCodeByte);
  */
 void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte);
 
-/* Declare the struct codeByte which represents a 1 part of the instruction statement in assembly language. */
+/* Declare the struct codeByte which represents a 1/4 part of the instruction statement in assembly language. */
 struct codeByte {
     struct codeByte *head;
     struct codeByte *next;

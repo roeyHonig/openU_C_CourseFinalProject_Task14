@@ -8,6 +8,7 @@
 int ic;
 int dc = 0;
 struct codeByte *previousCodeByte;
+struct codeByte *previousDataByte;
 
 void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
@@ -163,6 +164,8 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
     extern int dc;
     extern struct codeByte *previousCodeByte;
     previousCodeByte = NULL;
+    extern struct codeByte *previousDataByte;
+    previousDataByte = NULL;
     ic = instructionCounter;
     dc = 0;
     struct sourceCodeSentence* tmp;
@@ -270,6 +273,37 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                    dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
+                   if (pass == 2) {
+                        // append to the dataByte
+                        int binary32BitRepresentation[32];
+                        if (strcmp(rWord, ".asciz") == 0) {
+                            // append String bytes
+                            for (int strIndex = 0; strIndex < strlen(tmp->dStatement->stringInDirective); strIndex++)
+                            {
+                                convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(*(tmp->dStatement->stringInDirective+strIndex), binary32BitRepresentation);
+                                previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
+                            }
+                            // append nul character '\n'
+                            convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray('\0', binary32BitRepresentation);
+                            previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
+                        } else if (strcmp(rWord, ".db") == 0 || strcmp(rWord, ".dh") == 0 || strcmp(rWord, ".dw") == 0) {
+                            struct directiveStatementParameter* tmpParameter;
+                            struct directiveStatementParameter* first = tmp->dStatement->parameter;
+                            while (first != NULL)
+                            {
+                                tmpParameter = first;
+                                first = first->next;
+                                for (int parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
+                                {
+                                    convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
+                                    previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);
+                                }
+                                
+                                //printf("%d%c  ", tmp->currentTextLineNumber, '.');
+                                //printLineBeginingAt(tmp->currentTextLine);
+                            }
+                        }
+                    }
             }
            
            if (tmp->error == noErrorsFound && tmp->dStatement->labelInDirective != NULL) {
@@ -301,6 +335,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
         updateEntryTypeSymbolsValueBy();
         printf("\ncode bytes:\n");
         outputcodeBytesInHexadecimalBeginingAt(previousCodeByte->head);
+        printf("\n-----------\n");
+        printf("\ndata bytes:\n");
+        outputcodeBytesBeginingAt(previousDataByte->head);
         printf("\n-----------\n");
     }
 }
