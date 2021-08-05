@@ -312,6 +312,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
         printf("\ndata bytes:\n");
         outputcodeBytesBeginingAt(previousDataByte->head);
         printf("\n-----------\n");
+        printf("\n---object file----\n");
+        outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(100, previousCodeByte->head, previousDataByte->head);
+        printf("\n-------------\n");
     }
 }
 
