@@ -1034,3 +1034,23 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
     }
     return noErrorsFound;
 }
+
+void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int number, int arr[32]) {
+    for (int i = 0; i < 32; i++)
+    {
+        arr[i] = 0;
+    }
+    if (number >= 0) {
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(number, arr, 32);
+    } else {
+        int unInt = number * -1;
+        int unSignedArray[31];
+        for (int j = 0; j < 31; j++)
+        {
+            unSignedArray[j] = 0;
+        }
+        convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(unInt, unSignedArray, 31);
+        convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(unSignedArray, 32, arr);
+        negateSignedBitArrayOfSize(arr, 32);
+    }
+}

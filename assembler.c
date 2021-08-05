@@ -65,5 +65,38 @@ int main(int argc, char *argv[])
    // we will do it byte by byte, so we'll be feedinmg this a decimal number between 0 and 255 at a time
    printf("\n%d is %02X\n",247, 247);
    */
+
+
+/*
+
+  printf("\n");
+  int bitNUmber = 32;
+  int sint = -73;
+  int unint = sint * -1;
+  int roey[bitNUmber];
+  convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(unint, roey, bitNUmber);
+  int ido[bitNUmber];
+  convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(roey, bitNUmber, ido);
+  negateSignedBitArrayOfSize(ido, bitNUmber);
+  printf("\n");
+  for (int k = bitNUmber-1; k >= 0; k--)
+  {
+      printf("%d", ido[k]);
+  }
+  printf("\n");
+  
+*/
+// example to how to represent a signed decimal number in 32 bit array using 2 complement method
+/*
+printf("\n");
+int array[32];
+convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(-8197, array);
+for (int g = 31; g >= 0; g--)
+{
+    printf("%d", array[g]);
+}
+printf("\n");
+*/
+
     return 0;
 }

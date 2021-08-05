@@ -358,3 +358,14 @@ void negateSignedBitArrayOfSize(int *a, int size);
  * returns: 0 if successful parsing or int value corresponding to the appropriate error code, in which case, the values shouldn't be used!!!
  */
 int parseParametersOrAsciiStringOrLabelForDirectiveStatement(char *scTextLine, char *name, int *firstPa, int *indexOfParametersArray, int *byteSizeOfEachParameter, char *str, char *label);
+
+/* 
+ * Function:  convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray 
+ * --------------------
+ * This is a function to convert a signed decimal number into a 32 bit integer array which represents the number in the 2 compliment method
+ * 
+ * number: an  integer between MIN_OF(uint32_t) and MAX_OF(uint32_t)
+ * arr: an int array of 32 size to store the values of the number in 32 bit format.
+ * 
+ */
+void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int number, int arr[32]);
