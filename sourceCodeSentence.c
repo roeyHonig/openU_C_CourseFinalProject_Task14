@@ -16,6 +16,7 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
 void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSentence *sentence);
 void appendInstructionCodeBytesFromBinaryRepresantation(int binary32BitRepresentation[]);
+void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(struct sourceCodeSentence *tmp, char *rWord);
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -273,36 +274,8 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                    dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
-                   if (pass == 2) {
-                        // append to the dataByte
-                        int binary32BitRepresentation[32];
-                        if (strcmp(rWord, ".asciz") == 0) {
-                            // append String bytes
-                            for (int strIndex = 0; strIndex < strlen(tmp->dStatement->stringInDirective); strIndex++)
-                            {
-                                convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(*(tmp->dStatement->stringInDirective+strIndex), binary32BitRepresentation);
-                                previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
-                            }
-                            // append nul character '\n'
-                            convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray('\0', binary32BitRepresentation);
-                            previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
-                        } else if (strcmp(rWord, ".db") == 0 || strcmp(rWord, ".dh") == 0 || strcmp(rWord, ".dw") == 0) {
-                            struct directiveStatementParameter* tmpParameter;
-                            struct directiveStatementParameter* first = tmp->dStatement->parameter;
-                            while (first != NULL)
-                            {
-                                tmpParameter = first;
-                                first = first->next;
-                                for (int parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
-                                {
-                                    convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
-                                    previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);
-                                }
-                                
-                                //printf("%d%c  ", tmp->currentTextLineNumber, '.');
-                                //printLineBeginingAt(tmp->currentTextLine);
-                            }
-                        }
+                   if (pass == 2) {;
+                        appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(tmp, rWord);
                     }
             }
            
@@ -503,4 +476,33 @@ void appendInstructionCodeBytesFromBinaryRepresantation(int binary32BitRepresent
     previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 2, previousCodeByte);
     previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 3, previousCodeByte);
     previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 4, previousCodeByte);
+}
+
+void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(struct sourceCodeSentence *tmp, char *rWord) {
+    extern struct codeByte *previousDataByte;
+    int binary32BitRepresentation[32];
+        if (strcmp(rWord, ".asciz") == 0) {
+            // append String bytes
+            for (int strIndex = 0; strIndex < strlen(tmp->dStatement->stringInDirective); strIndex++)
+            {
+                convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(*(tmp->dStatement->stringInDirective+strIndex), binary32BitRepresentation);
+                previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
+            }
+            // append nul character '\n'
+            convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray('\0', binary32BitRepresentation);
+            previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
+        } else if (strcmp(rWord, ".db") == 0 || strcmp(rWord, ".dh") == 0 || strcmp(rWord, ".dw") == 0) {
+            struct directiveStatementParameter* tmpParameter;
+            struct directiveStatementParameter* first = tmp->dStatement->parameter;
+            while (first != NULL)
+            {
+                tmpParameter = first;
+                first = first->next;
+                for (int parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
+                {
+                    convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
+                    previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);
+                }
+            }
+        }
 }
