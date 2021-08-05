@@ -1,17 +1,20 @@
 #include "sourceCodeSentence.h"
 #include "symbols.h"
+#include "codeByte.h"
 
 #define maxNumberOfCharactersForLabel 31
 #define maxNumberOfCharactersForInstructionName 7 // reserved word - max 7 characters - ".extern"
 
 int ic;
 int dc = 0;
+struct codeByte *previousCodeByte;
 
 void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSentence *sentence);
+void appendInstructionCodeBytesFromBinaryRepresantation(int binary32BitRepresentation[]);
 
 struct sourceCodeSentence *initNewSourceCodeSentenceAndLinkTo(struct sourceCodeSentence *previousSentence) {
     struct sourceCodeSentence *node = (struct sourceCodeSentence*) malloc(1 * sizeof(struct sourceCodeSentence));
@@ -158,6 +161,8 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
 void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass) {
     extern int ic;
     extern int dc;
+    extern struct codeByte *previousCodeByte;
+    previousCodeByte = NULL;
     ic = instructionCounter;
     dc = 0;
     struct sourceCodeSentence* tmp;
@@ -224,6 +229,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
+               if (pass == 2) {
+                   appendInstructionCodeBytesFromBinaryRepresantation(tmp->rInstruction->binary32BitCode);
+               }
            }
        } else if (isIInstruction) {
            parseIInstructionForTheFollowing(tmp, rWord, pass);
@@ -234,6 +242,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
+               if (pass == 2) {
+                   appendInstructionCodeBytesFromBinaryRepresantation(tmp->iInstruction->binary32BitCode);
+               }
            }    
        } else if (isJInstruction) {
            parseJInstructionForTheFollowing(tmp, rWord, pass);
@@ -244,6 +255,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                ic = ic + 4;
+               if (pass == 2) {
+                   appendInstructionCodeBytesFromBinaryRepresantation(tmp->jInstruction->binary32BitCode);
+               }
            }
        } else if (isDirectiveStatement) {
            parseDirectiveStatementForTheFollowing(tmp, rWord, pass);           
@@ -285,6 +299,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
     }
     if (pass ==2) {
         updateEntryTypeSymbolsValueBy();
+        printf("\ncode bytes:\n");
+        outputcodeBytesInHexadecimalBeginingAt(previousCodeByte->head);
+        printf("\n-----------\n");
     }
 }
 
@@ -441,4 +458,12 @@ int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSe
         dataIncrement = strlen(sentence->dStatement->stringInDirective) + 1;
     }
     return dataIncrement;
+}
+
+void appendInstructionCodeBytesFromBinaryRepresantation(int binary32BitRepresentation[]) {
+    extern struct codeByte *previousCodeByte;
+    previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousCodeByte);
+    previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 2, previousCodeByte);
+    previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 3, previousCodeByte);
+    previousCodeByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 4, previousCodeByte);
 }
