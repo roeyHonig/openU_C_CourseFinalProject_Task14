@@ -275,7 +275,9 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            if (tmp->error == noErrorsFound) {
                    dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
                    if (pass == 2) {
+                       printf("\nhere1\n");
                         appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(tmp, rWord);
+                        printf("\nhere2\n");
                     }
             }
            
