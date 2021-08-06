@@ -431,7 +431,8 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
     if (strcmp(rWord, ".db") == 0 || strcmp(rWord, ".dh") == 0 || strcmp(rWord, ".dw") == 0) {
         struct directiveStatementParameter *p = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(parameters[0], byteSizeOfParameter, NULL);
         struct directiveStatementParameter *tmpParameter;
-        for (int i = 1; i <= parametersArrayIndex; i++)
+        int i;
+        for (i = 1; i <= parametersArrayIndex; i++)
         {
             tmpParameter = p;
             p = initNewDirectiveStatementParameterWithNumberByteSizeAndLinkTo(parameters[i], byteSizeOfParameter, tmpParameter);
