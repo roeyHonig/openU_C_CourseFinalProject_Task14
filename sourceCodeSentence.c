@@ -512,6 +512,7 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
                     convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
                     printf("\ngor here2 \n");
                     previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);
+                    printf("\ngor here3 \n");
                 }
             }
         }
