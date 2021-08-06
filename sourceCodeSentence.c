@@ -274,7 +274,7 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            }
            if (tmp->error == noErrorsFound) {
                    dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
-                   if (pass == 2) {;
+                   if (pass == 2) {
                         appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(tmp, rWord);
                     }
             }
