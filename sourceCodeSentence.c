@@ -503,6 +503,7 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
             struct directiveStatementParameter* first = tmp->dStatement->parameter;
             while (first != NULL)
             {
+                printf("par add: %d", first);
                 tmpParameter = first;
                 first = first->next;
                 int parameterIndex;
