@@ -516,6 +516,8 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
                     printf("\ngor here3 \n");
                 }
             }
+            printf("\nleft parameters loop \n");
+            first = tmpParameter->head;
         }
         printf("\ngor here4 \n");
 }
