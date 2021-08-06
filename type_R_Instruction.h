@@ -28,7 +28,7 @@ void outputType_R_Instruction(struct type_R_Instruction *instruction);
 
 /* Declare the struct type_R_Instruction. */
 struct type_R_Instruction {
-    // registers are integers between 0-31
+    /* registers are integers between 0-31 */
     int registerRt;
     int registerRd;
     int registerRs;

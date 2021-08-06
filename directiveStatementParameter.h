@@ -14,7 +14,7 @@ struct directiveStatementParameter *initNewDirectiveStatementParameterWithNumber
 /* Declare the struct directiveStatementParameter which holds 1 signed integer and is used to instruct the assembler how much data should be reserved and what is the data itself */
 struct directiveStatementParameter {
     int number;
-    int byteSize; // 1 byte, 2 bytes (half word) or 4 byte (word)
+    int byteSize; /* 1 byte, 2 bytes (half word) or 4 byte (word) */
     struct directiveStatementParameter *head;
     struct directiveStatementParameter *next;
     struct directiveStatementParameter *previous; 

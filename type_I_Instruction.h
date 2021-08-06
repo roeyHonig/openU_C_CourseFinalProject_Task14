@@ -28,8 +28,8 @@ void outputType_I_Instruction(struct type_I_Instruction *instruction);
 
 /* Declare the struct type_I_Instruction. */
 struct type_I_Instruction {
-    // registers are integers between 0-31
-    // immediate are signed numeric values between INT16_MAX and INT16_MIN
+    /* registers are integers between 0-31 */
+    /* immediate are signed numeric values between INT16_MAX and INT16_MIN */
     int registerRt;
     short immed;
     int registerRs;

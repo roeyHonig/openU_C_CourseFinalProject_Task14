@@ -27,10 +27,10 @@ void outputType_J_Instruction(struct type_J_Instruction *instruction);
 
 /* Declare the struct type_J_Instruction. */
 struct type_J_Instruction {
-    // registers are integers between 0-31
-    // 25 bit unsigned int. if reg is 1, address is just the number of the register. if reg is 0 address is the number of the address of the label.
-    // if the label is external, the number is 0 (25 0's)
-    // reg is suppose to be 1 bit 0 or 1
+    /* registers are integers between 0-31 */
+    /* 25 bit unsigned int. if reg is 1, address is just the number of the register. if reg is 0 address is the number of the address of the label. */
+    /* if the label is external, the number is 0 (25 0's) */
+    /* reg is suppose to be 1 bit 0 or 1 */
     int address;
     int reg;
     struct operation *assemblyInstruction;

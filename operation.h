@@ -1,9 +1,10 @@
 /* Use this wrapper #ifndef encapsulation method to prevent duplicate redefinition errors of operation due to multiple files importing this header  */
 #ifndef FILE_OPERATION_SEEN
 #define FILE_OPERATION_SEEN
-// --------------------------------------------
-// code goes here
-// --------------------------------------------
+/* --------------------------------------------
+ code goes here
+ --------------------------------------------
+*/
 #include "commonHeaders.h"
 
 /*
@@ -60,14 +61,15 @@ void outputOperationsHashTable();
 struct operation {
     struct operation *next;
     struct operation *previous; 
-    char *opName; // Example: "Add"
-    char opType; // Example: 'R'
-    int base10Funct; // Example: 1
-    int base10opCode; // Example: 0
+    char *opName; /* Example: "Add" */
+    char opType; /* Example: 'R' */
+    int base10Funct; /* Example: 1 */
+    int base10opCode; /* Example: 0 */
 };
-// --------------------------------------------
-// code ends here
-// --------------------------------------------
+/* --------------------------------------------
+ code ends here
+ --------------------------------------------
+*/
 #endif 
 
 

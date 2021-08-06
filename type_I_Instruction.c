@@ -27,7 +27,7 @@ void outputType_I_Instruction(struct type_I_Instruction *instruction) {
 
 void setTheBinaryRepresentationOfInstructionI(struct type_I_Instruction *instruction) {
         int i;
-        // bit 0 : 15
+        /* bit 0 : 15 */
         int adress[15] = {0};
         int adressIn2Complement[16] = {0};
         if (instruction->immed >= 0) {
@@ -44,21 +44,21 @@ void setTheBinaryRepresentationOfInstructionI(struct type_I_Instruction *instruc
         {
             instruction->binary32BitCode[i] = adressIn2Complement[i];
         } 
-        // bit 16 : 20
+        /* bit 16 : 20 */
         int rt[5];
         convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRt,rt, 5);
         for (i =16; i < 21; i++)
         {
             instruction->binary32BitCode[i] = rt[i-16];
         }  
-        // bit 21 : 25
+        /* bit 21 : 25 */
         int rs[5];
         convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->registerRs,rs, 5);
         for (i =21; i < 26; i++)
         {
             instruction->binary32BitCode[i] = rs[i-21];
         }  
-        // bit 26 : 31
+        /* bit 26 : 31 */
         int opcode[6];
         convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10opCode,opcode, 6);
         for (i =26; i < 32; i++)

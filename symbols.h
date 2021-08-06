@@ -85,7 +85,7 @@ void updateEntryTypeSymbolsValueBy();
 struct symbol {
     struct symbol *next;
     struct symbol *previous; 
-    char *name; // Example: "MAIN"
-    enum labelLocationInSourceCode location; // for example - instructionStatement
-    int value;  // Based on the location, the value will be the data counter or instruction counter.
+    char *name; /* Example: "MAIN" */
+    enum labelLocationInSourceCode location; /* for example - instructionStatement */
+    int value;  /* Based on the location, the value will be the data counter or instruction counter. */
 };

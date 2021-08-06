@@ -28,8 +28,8 @@ void outputDirectiveStatement(struct directiveStatement *statement);
 
 /* Declare the struct directiveStatement. */
 struct directiveStatement {
-    char *name; // ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"
-    struct directiveStatementParameter *parameter; // for ".dh", ".dw", ".db" we have a linked list of parameters which are integer numbers
-    char *stringInDirective; // for ".asciz"
-    char *labelInDirective;  // for ".entry", ".extern"
+    char *name; /* ".dh", ".dw", ".db", ".asciz", ".entry", ".extern" */
+    struct directiveStatementParameter *parameter; /* for ".dh", ".dw", ".db" we have a linked list of parameters which are integer numbers */
+    char *stringInDirective; /* for ".asciz" */
+    char *labelInDirective;  /* for ".entry", ".extern" */
 };

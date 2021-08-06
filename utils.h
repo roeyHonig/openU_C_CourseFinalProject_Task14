@@ -1,9 +1,9 @@
-#define HASHSIZE 101 // size of hash tables for operations and symbols
+#define HASHSIZE 101 /* size of hash tables for operations and symbols */
 typedef int boolean;
 #define true 1
 #define false 0
 
-boolean errorsFound; // flag indicating if compilation errors were found. If so, no need to output the binary code for the corrput source code FILE.
+boolean errorsFound; /* flag indicating if compilation errors were found. If so, no need to output the binary code for the corrput source code FILE. */
 
 /*
  * Function:  printLineBeginingAt 

@@ -16,41 +16,41 @@ struct symbol *initSymbol(char *nameOfSymbol, enum labelLocationInSourceCode loc
 int setSymbol(struct symbol *sm) {
     unsigned int index = hash(sm->name, HASHSIZE);
     struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
-    // check if position is free
+    /* check if position is free */
     if (existingElement == NULL)
     {
         symbolHashTable[index] = sm;
         return noErrorsFound;
     } else {
-        // loop over all elements in existing position until you reach the last one
-        // Append sm to the last element
-        // If any elements name is similar to sm.name and they have the same location (meaning they're both labels or both data variables) we don't append!
+        /* loop over all elements in existing position until you reach the last one
+         Append sm to the last element
+         If any elements name is similar to sm.name and they have the same location (meaning they're both labels or both data variables) we don't append! */
         struct symbol *tmp;
         do
         {
             tmp = existingElement;
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == tmp->location)
-                return duplicateLabel; // Duplicate record
+                return duplicateLabel; /* Duplicate record */
 
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == instructionStatement)
-                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement */
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == directiveStatement)
-                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement */
 
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == instructionStatement && tmp->location == external)
-                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement */
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == directiveStatement && tmp->location == external)
-                return duplicateLabel; // Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have external label with same name to label at the begining of directive statement or instruction statement */
 
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == directiveStatement && tmp->location == instructionStatement)
-                return duplicateLabel; // Duplicate record. cann't have same label at the begining of directive statement and instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have same label at the begining of directive statement and instruction statement */
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == instructionStatement && tmp->location == directiveStatement)
-                return duplicateLabel; // Duplicate record. cann't have same label at the begining of directive statement and instruction statement
+                return duplicateLabel; /* Duplicate record. cann't have same label at the begining of directive statement and instruction statement */
 
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == entry && tmp->location == external)
-                return duplicateLabel; // Duplicate record, entry labels can't be the same as external labels
+                return duplicateLabel; /* Duplicate record, entry labels can't be the same as external labels */
             if (strcmp(tmp->name, sm->name) == 0 && sm->location == external && tmp->location == entry)
-                return duplicateLabel; // Duplicate record, entry labels can't be the same as external labels
+                return duplicateLabel; /* Duplicate record, entry labels can't be the same as external labels */
 
             existingElement = existingElement->next;
         } while (existingElement != NULL);
@@ -67,7 +67,7 @@ struct symbol *getSymbolWithName(char *symbolName) {
     struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
     if (existingElement != NULL)
     {
-        // loop over all elements in existing position until you reach an element with same name or the last one.
+        /* loop over all elements in existing position until you reach an element with same name or the last one. */
         struct symbol *tmp;
         do
         {
@@ -87,7 +87,7 @@ struct symbol *getSymbolWithNameAndLocation(char *symbolName, enum labelLocation
     struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
     if (existingElement != NULL)
     {
-        // loop over all elements in existing position until you reach an element with same name or the last one.
+        /* loop over all elements in existing position until you reach an element with same name or the last one. */
         struct symbol *tmp;
         do
         {

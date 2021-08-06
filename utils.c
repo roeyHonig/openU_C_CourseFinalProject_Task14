@@ -12,7 +12,7 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
 char *reservedWords[numOfReservedWords] = {"add", "sub", "and", "or", "nor", "move", "mvhi", "mvlo", "addi", "subi", "andi", "ori", "nori", "bne", "beq", "blt", "bgt", "lb", "sb", "lw", "sw", "lh", "sh", "jmp", "la", "call", "stop", ".dh", ".dw", ".db", ".asciz", ".entry", ".extern"};
 
 void printLineBeginingAt(char *t) {
-   // Base case
+   /* Base case */
    if (*t == '\0') 
        return;
    printf("%c", *t);
@@ -92,11 +92,11 @@ boolean getLabelInto(char *label, char* str) {
     if (locationOfColon == NULL) {
         return false;
     }   
-    // ':' is the 1st 
+    /* ':' is the 1st  */
     if (locationOfColon == str) {
         return false;
     }  
-    // too long label, more then 31 characters  
+    /* too long label, more then 31 characters   */
     if (locationOfColon - str > 31) {
         return false;
     }
@@ -206,9 +206,9 @@ boolean parseRegistersForRType(char *scTextLine, char *name, int *firstRegister,
 }
 
 boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister) {
-           // get 1st register
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           /* get 1st register */
+           /* scsCh === source code sentence character  */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
@@ -216,28 +216,28 @@ boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firs
            }
            scsCh++;
            char firstRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return false;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return false;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return false;
            }
 
-           // get 2nd register
+           /* get 2nd register */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -251,28 +251,28 @@ boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firs
            }
            scsCh++;
            char secondRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return false;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return false;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return false;
            }
 
-           // get 3nd register
+           /* get 3nd register */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -286,25 +286,25 @@ boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firs
            }
            scsCh++;
            char thirdRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                thirdRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return false;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                thirdRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
-               // No need to do anything
+               /* No need to do anything */
            } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-                // No need to do anything
+                /* No need to do anything */
            } else {
                return false;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return false;
            }
@@ -327,9 +327,9 @@ boolean parseRegistersForRTypeArithmetic(char *scTextLine, char *name, int *firs
 }
 
 boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegister, int *secondRegister, int *thirdRegister) {
-           // get 1st register
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           /* get 1st register */
+           /* scsCh === source code sentence character */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
@@ -337,28 +337,28 @@ boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegis
            }
            scsCh++;
            char firstRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return false;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return false;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return false;
            }
 
-           // get 2nd register
+           /* get 2nd register */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -372,25 +372,25 @@ boolean parseRegistersForRTypeCopy(char *scTextLine, char *name, int *firstRegis
            }
            scsCh++;
            char secondRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return false;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
-               // No need to do anything
+               /* No need to do anything */
            } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-                // No need to do anything
+                /* No need to do anything */
            } else {
                return false;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return false;
            }
@@ -420,11 +420,11 @@ int parseRegistersAndImmediateForIType(char *scTextLine, char *name, int *firstR
     } else return parseRegistersForITypeArithmetic(scTextLine, name, firstRegister, secondRegister, immed);
 
 }
-// This is also valid for I Type loading and saving in memory
+/* This is also valid for I Type loading and saving in memory */
 int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed) {
-           // get 1st register
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           /* get 1st register */
+           /* scsCh === source code sentence character  */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
@@ -432,28 +432,28 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
            }
            scsCh++;
            char firstRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return wrongRegisterNumber;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return wrongRegisterNumber;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return wrongRegisterNumber;
            }
 
-           // get the immediate 
+           /* get the immediate  */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -477,7 +477,7 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
                scsCh++; 
                immediateStringLength++;
            }
-           // Any other character except these is not allowed!
+           /* Any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return badImmediateFormat;
            }
@@ -490,7 +490,7 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
                immeidateAsString[j] = *(scsCh-immediateStringLength+j);
            }
            
-           // get 3nd register
+           /* get 3nd register */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -504,25 +504,25 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
            }
            scsCh++;
            char thirdRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                thirdRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return wrongRegisterNumber;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                thirdRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
-               // No need to do anything
+               /* No need to do anything */
            } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-                // No need to do anything
+                /* No need to do anything */
            } else {
                return wrongRegisterNumber;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return wrongRegisterNumber;
            }
@@ -549,9 +549,9 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
 }
 
 int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegister, int *secondRegister, short *immed, char *labelWithinTheInstruction) {
-           // get 1st register
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           /* get 1st register */
+           /* scsCh === source code sentence character  */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
@@ -559,28 +559,28 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
            }
            scsCh++;
            char firstRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return wrongRegisterNumber;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return wrongRegisterNumber;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return wrongRegisterNumber;
            }
 
-           // get 2nd register
+           /* get 2nd register */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -594,28 +594,28 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
            }
            scsCh++;
            char secondRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return wrongRegisterNumber;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                secondRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return wrongRegisterNumber;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',')) {
                return wrongRegisterNumber;
            }
 
-           // get The label
+           /* get The label */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, ',')) {
@@ -631,25 +631,25 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
            while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
            {
                if (isNotDigit(scsCh) && isNotAlphabeticCharacter(scsCh)) {
-                   // label can't have characters except digits and letters;
+                   /* label can't have characters except digits and letters; */
                    return badLabelFormat;
                }
                if (*(labelWithinTheInstruction+labelIndex) == '\0') {
-                   // label in the instruction is too long
+                   /* label in the instruction is too long */
                    return badLabelFormat;
                }
                *(labelWithinTheInstruction+labelIndex) = *scsCh;
                scsCh++;
                labelIndex++;
            }
-           // fill in the rest of the label array with '\0'
+           /* fill in the rest of the label array with '\0' */
            while (*(labelWithinTheInstruction+labelIndex) != '\0')
            {
                *(labelWithinTheInstruction+labelIndex) = '\0';
                labelIndex++;
            }
 
-           // Any other character except these is not allowed!
+           /* Any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return badLabelFormat;
            }
@@ -709,18 +709,18 @@ void negateSignedBitArrayOfSize(int *a, int size) {
 }
 
 int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {               
                scsCh++; 
            }
            if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
                    if (strcmp(name, "stop") == 0) {
-                       // stop instruction is simple to code
+                       /* stop instruction is simple to code */
                        *registerFlag = 0;
                        *address = 0;
                         return noErrorsFound;
                    } else {
-                       // only stop instruction should have no arguments
+                       /* only stop instruction should have no arguments */
                        return notRecognizableAssemblyLanguageStatement;
                    }
                }
@@ -735,12 +735,12 @@ int parseRegistersOrLabelForJType(char *scTextLine, char *name, int *registerFla
 
 int parseRegistersForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
             if (strcmp(name, "jmp") != 0) {
-                // only jmp instruction can use register
+                /* only jmp instruction can use register */
                 return notRecognizableAssemblyLanguageStatement;
             }
-           // get 1st register
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+           /* get 1st register */
+           /* scsCh === source code sentence character */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isCharacterNotEquals(scsCh, '$')) {
@@ -748,25 +748,25 @@ int parseRegistersForJType(char *scTextLine, char *name, int *registerFlag, int 
            }
            scsCh++;
            char firstRegisterString[3] = {0};
-           // did we reached 1st digit?
+           /* did we reached 1st digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[0] = *scsCh;
                scsCh++;
            } else {
                return wrongRegisterNumber;
            }
-           // did we reached 2nd digit?
+           /* did we reached 2nd digit? */
            if (isDigit(scsCh)) {
                firstRegisterString[1] = *scsCh;
                scsCh++;
            } else if (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) {
-               // No need to do anything
+               /* No need to do anything */
            } else if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-               // No need to do anything
+               /* No need to do anything */
            } else {
                return wrongRegisterNumber;
            }
-           // a third digit or any other character except these is not allowed!
+           /* a third digit or any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return wrongRegisterNumber;
            }
@@ -788,9 +788,9 @@ int parseRegistersForJType(char *scTextLine, char *name, int *registerFlag, int 
 }
 
 int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *address, char* labelWithinTheInstruction) {
-           // scsCh === source code sentence character 
-           char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
-           // get The label
+           /* scsCh === source code sentence character  */
+           char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
+           /* get The label */
            while (isCharacterEqualsOrCondition(scsCh, ' ', '\t')) 
                 scsCh++; 
            if (isNotAlphabeticCharacter(scsCh)) {
@@ -800,25 +800,25 @@ int parseLabelForJType(char *scTextLine, char *name, int *registerFlag, int *add
            while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
            {
                if (isNotDigit(scsCh) && isNotAlphabeticCharacter(scsCh)) {
-                   // label can't have characters except digits and letters;
+                   /* label can't have characters except digits and letters; */
                    return badLabelFormat;
                }
                if (*(labelWithinTheInstruction+labelIndex) == '\0') {
-                   // label in the instruction is too long
+                   /* label in the instruction is too long */
                    return badLabelFormat;
                }
                *(labelWithinTheInstruction+labelIndex) = *scsCh;
                scsCh++;
                labelIndex++;
            }
-           // fill in the rest of the label array with '\0'
+           /* fill in the rest of the label array with '\0' */
            while (*(labelWithinTheInstruction+labelIndex) != '\0')
            {
                *(labelWithinTheInstruction+labelIndex) = '\0';
                labelIndex++;
            }
 
-           // Any other character except these is not allowed!
+           /* Any other character except these is not allowed! */
            if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
                return badLabelFormat;
            }
@@ -853,8 +853,8 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
     } else {
         *byteSizeOfEachParameter = 4;
     }
-    // scsCh === source code sentence character 
-    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    /* scsCh === source code sentence character  */
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
     if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
                 return noParametersInDirectiveStatement;
     }
@@ -872,7 +872,7 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
             }
         }
         if (extractingParmeterLoopIndex > 0) {
-            // 1st parameter don't need to have a ',' before it
+            /* 1st parameter don't need to have a ',' before it */
             if (isCharacterNotEquals(scsCh, ',')) {
                 return badDirectiveStatementParameterFormat;
             }
@@ -895,7 +895,7 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
             scsCh++; 
             immediateStringLength++;
         }
-        // Any other character except these is not allowed!
+        /* Any other character except these is not allowed! */
         if (isCharacterNotEqualsTrippleOrCondition(scsCh, ' ', '\t', ',') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
             return badDirectiveStatementParameterFormat;
         }
@@ -908,17 +908,15 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
             *(currentParameterAsString+j) = *(scsCh-immediateStringLength+j);
         }
         parametersAsString[extractingParmeterLoopIndex] = currentParameterAsString;
-        // check if this was the last parmeter
+        /* check if this was the last parmeter */
         char *tmp = scsCh;
         boolean seemsWeHave1MoreParameterToExtract = false;
         while (isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
         {
             if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t')) {
                 if (isCharacterEquals(scsCh, ',')) {
-                    // seems we have 1 more parameter
+                    /* seems we have 1 more parameter */
                     scsCh = tmp;
-                    //printf("we got here");
-                    //printf("before %c and current %c", *(scsCh-1), *scsCh);
                     seemsWeHave1MoreParameterToExtract = true;
                     break;
                 }
@@ -945,8 +943,8 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
 }
 
 int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name, char *str) {
-    // scsCh === source code sentence character 
-    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    /* scsCh === source code sentence character  */
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
     int iteratingIndex = -1;
     if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
                 return noParametersInDirectiveStatement;
@@ -963,7 +961,7 @@ int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name
     scsCh++;
     iteratingIndex++;
     if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-        // No 2nd "
+        /* No 2nd " */
         return badDirectiveStatementAscizFormat;
     }
     while (isCharacterNotEquals(scsCh, '\"'))
@@ -976,7 +974,7 @@ int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name
     {
         scsCh++;
         if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
-            // after the closing " , no other character is allowed
+            /* after the closing " , no other character is allowed */
             return badDirectiveStatementAscizFormat;
         }
     }
@@ -984,8 +982,8 @@ int parseParametersForDirectiveStatementOfTypeAnsii(char *scTextLine, char *name
 }
 
 int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, char *name, char *label) {
-    // scsCh === source code sentence character
-    char *scsCh = (strstr(scTextLine, name) + strlen(name)); // init to 1st character after the name
+    /* scsCh === source code sentence character */
+    char *scsCh = (strstr(scTextLine, name) + strlen(name)); /* init to 1st character after the name */
     int iteratingIndex = -1;
     if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
                 return noParametersInDirectiveStatement;
@@ -998,7 +996,7 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
     }
     iteratingIndex++;
     if (isCharacterEqualsOrCondition(scsCh, '\n', '\0')) {
-        // No label
+        /* No label */
         return noParametersInDirectiveStatement;
     }
     while (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0'))
@@ -1011,12 +1009,12 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
     {
         scsCh++;
         if (isCharacterNotEqualsOrCondition(scsCh, ' ', '\t') && isCharacterNotEqualsOrCondition(scsCh, '\n', '\0')) {
-            // after the label, no other character is allowed
+            /* after the label, no other character is allowed */
             return badDirectiveStatementLabelFormat;
         }
     }
-    // validate the label
-    // too long label, more then 31 charcters
+    /* validate the label */
+    /* too long label, more then 31 charcters */
     int k = 0;
     while (isCharacterNotEqualsOrCondition(label+k, '\n', '\0'))
     {
@@ -1026,7 +1024,7 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
         }
     }
     k = 0;
-    // first letter doesn't start with letter
+    /* first letter doesn't start with letter */
     boolean isFirstCharacterInTheLabelNotLetter = !((*label >= 'a' && *label <= 'z') || (*label >= 'A' && *label <= 'Z'));
     if (isFirstCharacterInTheLabelNotLetter) {
         return badDirectiveStatementLabelFormat;

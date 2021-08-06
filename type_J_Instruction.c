@@ -27,17 +27,17 @@ void outputType_J_Instruction(struct type_J_Instruction *instruction) {
 
 void setTheBinaryRepresentationOfInstructionJ(struct type_J_Instruction *instruction) {
     int i;
-        // bit 0 : 24
+        /* bit 0 : 24 */
         int adress[25] = {0};
         convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->address,adress, 25);
         for (i = 0; i < 25; i++)
         {
             instruction->binary32BitCode[i] = adress[i];
         } 
-        // bit 25 
+        /* bit 25 */
         instruction->binary32BitCode[25] = (instruction->reg == 1) ? 1: 0;
         
-        // bit 26 : 31
+        /* bit 26 : 31 */
         int opcode[6];
         convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(instruction->assemblyInstruction->base10opCode,opcode, 6);
         for (i =26; i < 32; i++)
