@@ -73,6 +73,7 @@ void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte) {
 void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(int memAddress, struct codeByte *firstCodeByte, struct codeByte *firstDataByte) {
     int numberOfCodeBytes = computeTotalNumberOfBytesFor(firstCodeByte);
     int numberOfDataBytes = computeTotalNumberOfBytesFor(firstDataByte);
+    printf("\n---object file----\n");
     printf("\t\t%d %d\n",numberOfCodeBytes,  numberOfDataBytes);
     
     struct codeByte* tmp;

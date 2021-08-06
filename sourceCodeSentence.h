@@ -89,6 +89,16 @@ int getCurrentInstructionCounter();
  */
 int errorsFoundDuringCompilation(struct sourceCodeSentence *firstSentence);
 
+/* 
+ * Function:  outputCodeAndDataImageBeginingAtMemorryAddress 
+ * --------------------
+ * Method to output to the screen the content of the object file.
+ * 
+ * memAddress: the initial memory address of the code and data image.
+ * 
+ */
+void outputCodeAndDataImageBeginingAtMemorryAddress(int memAddress);
+
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;

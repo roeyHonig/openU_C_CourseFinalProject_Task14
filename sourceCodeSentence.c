@@ -309,15 +309,6 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
     }
     if (pass ==2) {
         updateEntryTypeSymbolsValueBy();
-        printf("\ncode bytes:\n");
-        outputcodeBytesInHexadecimalBeginingAt(previousCodeByte->head);
-        printf("\n-----------\n");
-        printf("\ndata bytes:\n");
-        outputcodeBytesBeginingAt(previousDataByte->head);
-        printf("\n-----------\n");
-        printf("\n---object file----\n");
-        outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(100, previousCodeByte->head, previousDataByte->head);
-        printf("\n-------------\n");
     }
 }
 
@@ -530,4 +521,10 @@ int errorsFoundDuringCompilation(struct sourceCodeSentence *firstSentence) {
     }
     firstSentence = tmp->head;
     return false;
+}
+
+void outputCodeAndDataImageBeginingAtMemorryAddress(int memAddress) {
+    extern struct codeByte *previousCodeByte;
+    extern struct codeByte *previousDataByte;
+    outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(memAddress, previousCodeByte->head, previousDataByte->head);
 }

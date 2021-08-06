@@ -1,9 +1,10 @@
 #include "assembler.h"
+#define initialMemmoryAddressForStoringOutputCodeAndDataImage 100
 
 int main(int argc, char *argv[])
 {
     initOperationsHashTable();
-    /* Loop ove command line arguments */
+    /* Loop over command line arguments to process source code text files */
     int i;
     for (i = 1; i < argc; i++)
     {
@@ -12,17 +13,19 @@ int main(int argc, char *argv[])
         fclose(ifp);
         printf("\nCompiling the following assembly source code:\n");
         outputSourceCodeSentencesBeginingAt(firstSentence);
-        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, 100, 1); /* 1st pass of compiler */
-        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, 100, 2); /* 2nd pass of compiler */
+        /* 1st pass of compiler */
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 1); 
+        /* 2nd pass of compiler */
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 2); 
         errorsFound = errorsFoundDuringCompilation(firstSentence);
         printf("%s", errorsFound ? "\n\nThese are the errors found:\n" : "");
         if (errorsFound) {
             outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
         } else {
-            /* output the obhect file */
+            outputCodeAndDataImageBeginingAtMemorryAddress(initialMemmoryAddressForStoringOutputCodeAndDataImage);
+            printf("\n----------Symbols Table-----------\n");
+            outputSymbolsHashTable();
         }
-        printf("----------Symbols Table-----------\n");
-        outputSymbolsHashTable();
         nullifySymbolsHashTable();
     }   
     return 0;
