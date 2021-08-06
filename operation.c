@@ -50,7 +50,7 @@ struct operation *initAnOperation(char *name, char type, int funct, int code) {
 void setOperation(struct operation *op) {
     unsigned int index = hash(op->opName, HASHSIZE);
     struct operation *existingElement = ((struct operation *)operationsHashTable[index]);
-    * check if position is free */
+    /* check if position is free */
     if (existingElement == NULL)
     {
         operationsHashTable[index] = op;
@@ -109,7 +109,7 @@ struct operation *getOperationWithOpName(char *name) {
     struct operation *existingElement = ((struct operation *)operationsHashTable[index]);
     if (existingElement != NULL)
     {
-        * loop over all elements in existing position until you reach an element with same name or the last one. */
+        /* loop over all elements in existing position until you reach an element with same name or the last one. */
         struct operation *tmp;
         do
         {
