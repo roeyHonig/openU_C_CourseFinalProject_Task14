@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
         if (errorsFound) {
             outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
         } else {
-            // output the obhect file
+            /* output the obhect file */
         }
         printf("----------Symbols Table-----------\n");
         outputSymbolsHashTable();
