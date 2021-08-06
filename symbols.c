@@ -126,7 +126,8 @@ void symbolToString(struct symbol *sm) {
 }
 
 void outputSymbolsHashTable() {
-    for (int index = 0; index < HASHSIZE; index++)
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
     {
         struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
         if (existingElement != NULL) {
@@ -142,12 +143,14 @@ void outputSymbolsHashTable() {
 }
 
 void nullifySymbolsHashTable() {
-    for (int index = 0; index < HASHSIZE; index++)
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
         symbolHashTable[index] = NULL;
 }
 
 void incrementDirectiveTypeSymbolsValueBy(int increment) {
-    for (int index = 0; index < HASHSIZE; index++)
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
     {
         struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
         if (existingElement != NULL) {
@@ -165,7 +168,8 @@ void incrementDirectiveTypeSymbolsValueBy(int increment) {
 }
 
 void updateEntryTypeSymbolsValueBy() {
-    for (int index = 0; index < HASHSIZE; index++)
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
     {
         struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
         if (existingElement != NULL) {

@@ -15,7 +15,8 @@ struct codeByte *initNewCodeByteFrom32BitArrayInPositionAndLinkTo(int binaryRepr
     }
     if (position >= 1 && position <= 4) {
         int startIndex = position * 8 - 8;
-        for (int i = 0; i < 8; i++)
+        int i;
+        for (i = 0; i < 8; i++)
         {
             node->binary8BitCode[i] = binaryRepresentation[startIndex + i];
         }
@@ -30,7 +31,8 @@ void outputcodeBytesBeginingAt(struct codeByte *firstCodeByte) {
     {
        tmp = firstCodeByte;
        firstCodeByte = firstCodeByte->next;
-       for (int i = 7; i >= 0; i--)
+       int i;
+       for (i = 7; i >= 0; i--)
        {
            printf("%d", tmp->binary8BitCode[i]);
        }
@@ -51,7 +53,8 @@ void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte) {
        tmp = firstCodeByte;
        firstCodeByte = firstCodeByte->next;
        int decimalNumber = 0;
-       for (int i = 7; i >= 0; i--)
+       int i;
+       for (i = 7; i >= 0; i--)
        {
            decimalNumber = decimalNumber + ((int)(pow(2, i) * tmp->binary8BitCode[i]));
        }
@@ -84,7 +87,8 @@ void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstC
        tmp = firstCodeByte;
        firstCodeByte = firstCodeByte->next;
        int decimalNumber = 0;
-       for (int i = 7; i >= 0; i--)
+       int i;
+       for (i = 7; i >= 0; i--)
        {
            decimalNumber = decimalNumber + ((int)(pow(2, i) * tmp->binary8BitCode[i]));
        }
@@ -113,7 +117,8 @@ void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstC
        tmpData = firstDataByte;
        firstDataByte = firstDataByte->next;
        int decimalNumber = 0;
-       for (int i = 7; i >= 0; i--)
+       int i;
+       for (i = 7; i >= 0; i--)
        {
            decimalNumber = decimalNumber + ((int)(pow(2, i) * tmpData->binary8BitCode[i]));
        }

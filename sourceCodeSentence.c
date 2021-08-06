@@ -486,7 +486,8 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
     int binary32BitRepresentation[32];
         if (strcmp(rWord, ".asciz") == 0) {
             // append String bytes
-            for (int strIndex = 0; strIndex < strlen(tmp->dStatement->stringInDirective); strIndex++)
+            int strIndex;
+            for (strIndex = 0; strIndex < strlen(tmp->dStatement->stringInDirective); strIndex++)
             {
                 convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(*(tmp->dStatement->stringInDirective+strIndex), binary32BitRepresentation);
                 previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, 1, previousDataByte);
@@ -501,7 +502,8 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
             {
                 tmpParameter = first;
                 first = first->next;
-                for (int parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
+                int parameterIndex;
+                for (parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
                 {
                     convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
                     previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);

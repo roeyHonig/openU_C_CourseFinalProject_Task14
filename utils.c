@@ -29,35 +29,40 @@ unsigned int hash(char *key, unsigned int hSize) {
 }
 
 boolean isOneOfTheAssemblyLanguageReservedWordsEqualsTo(char *str) {
-    for (int i = 0; i < numOfReservedWords; i++)
+    int i;
+    for (i = 0; i < numOfReservedWords; i++)
         if (strcmp(reservedWords[i], str) == 0) 
             return true;
     return false;
 }
 
 boolean isRTypeKeywordsPresentInFollowingText(char *str) {
-      for (int i = 0; i < 8; i++)
+    int i;
+      for (i = 0; i < 8; i++)
         if (strcmp(reservedWords[i], str) == 0) 
             return true;
     return false;
 }
 
 boolean isITypeKeywordsPresentInFollowingText(char *str) {
-      for (int i = 8; i < 23; i++)
+    int i;
+      for (i = 8; i < 23; i++)
         if (strcmp(reservedWords[i], str) == 0) 
             return true;
     return false;
 }
 
 boolean isJTypeKeywordsPresentInFollowingText(char *str) {
-    for (int i = 23; i < 27; i++)
+    int i;
+    for (i = 23; i < 27; i++)
         if (strcmp(reservedWords[i], str) == 0) 
             return true;
     return false;
 }
 
 boolean isDirectiveTypeKeywordsPresentInFollowingText(char *str) {
-    for (int i = 27; i < numOfReservedWords; i++)
+    int i;
+    for (i = 27; i < numOfReservedWords; i++)
         if (strcmp(reservedWords[i], str) == 0) 
             return true;
     return false;
@@ -95,7 +100,8 @@ boolean getLabelInto(char *label, char* str) {
     if (locationOfColon - str > 31) {
         return false;
     }
-    for (int i = 0; i < (locationOfColon - str); i++)
+    int i;
+    for (i = 0; i < (locationOfColon - str); i++)
     {
         *(label + i) = *(str + i);
     }
@@ -120,7 +126,8 @@ boolean getLabelInto(char *label, char* str) {
 
 char *initAnEmptyStringOfSize(int size) {
     char *pointer = malloc(sizeof(char) * (size + 1));
-       for (int k = 0; k < size + 1; k++)
+    int k;
+       for (k = 0; k < size + 1; k++)
        {
            *(pointer + k) = '\0';
        }
@@ -129,7 +136,8 @@ char *initAnEmptyStringOfSize(int size) {
 
 char *initAnEmptyStringOfSizeAndFillWithChacter(int size, char ch) {
     char *pointer = malloc(sizeof(char) * (size + 1));
-       for (int k = 0; k < size; k++)
+    int k;
+       for (k = 0; k < size; k++)
        {
            *(pointer + k) = ch;
        }
@@ -474,7 +482,8 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
                return badImmediateFormat;
            }
            char immeidateAsString[/*immediateStringLength + 1*/100] = {0};
-           for (int j = 0; j < /*immediateStringLength*/99; j++)
+           int j;
+           for (j = 0; j < /*immediateStringLength*/99; j++)
            {
                if (j >= immediateStringLength) 
                     break;
@@ -681,13 +690,15 @@ void convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(int *a, int size, int *
 }
 
 void negateSignedBitArrayOfSize(int *a, int size) {
-    for (int i = 0; i < size; i++)
+    int i;
+    for (i = 0; i < size; i++)
     {
         if (a[i] == 1)
             a[i] = 0;
         else a[i] = 1; 
     }
-    for (int j = 0; j < size; j++)
+    int j;
+    for (j = 0; j < size; j++)
     {
         if (a[j] == 0) {
             a[j] = 1;
@@ -889,7 +900,8 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
             return badDirectiveStatementParameterFormat;
         }
         char *currentParameterAsString = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharacters, '\0');
-        for (int j = 0; j < maxNumberOfCharacters; j++)
+        int j;
+        for (j = 0; j < maxNumberOfCharacters; j++)
         {
             if (j >= immediateStringLength) 
                 break;
@@ -916,8 +928,8 @@ int parseParametersForDirectiveStatementOfTypeD(char *scTextLine, char *name, in
         }
         moreParametersToExtract = seemsWeHave1MoreParameterToExtract;
     } while (moreParametersToExtract);
-
-    for (int k = 0; k <= extractingParmeterLoopIndex; k++)
+    int k;
+    for (k = 0; k <= extractingParmeterLoopIndex; k++)
     {
         *(firstPa+k) = atoi(parametersAsString[k]);
         *indexOfParametersArray = k;
@@ -1036,7 +1048,8 @@ int parseParametersForDirectiveStatementOfTypeEnteryOrExtern(char *scTextLine, c
 }
 
 void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int number, int arr[32]) {
-    for (int i = 0; i < 32; i++)
+    int i;
+    for (i = 0; i < 32; i++)
     {
         arr[i] = 0;
     }
@@ -1045,7 +1058,8 @@ void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int numb
     } else {
         int unInt = number * -1;
         int unSignedArray[31];
-        for (int j = 0; j < 31; j++)
+        int j;
+        for (j = 0; j < 31; j++)
         {
             unSignedArray[j] = 0;
         }

@@ -17,7 +17,8 @@ void outputType_J_Instruction(struct type_J_Instruction *instruction) {
     (instruction->reg == 0) ? "is referenced to label with address" : "is reference to register #",
     instruction->address);
     printf("The binary 32 bit representation for this instruction is: ");
-    for (int j = 32-1; j >= 0; j=j-8)
+    int j;
+    for (j = 32-1; j >= 0; j=j-8)
     {
         printf("%d%d%d%d%d%d%d%d ", instruction->binary32BitCode[j],instruction->binary32BitCode[j-1],instruction->binary32BitCode[j-2],instruction->binary32BitCode[j-3],instruction->binary32BitCode[j-4],instruction->binary32BitCode[j-5],instruction->binary32BitCode[j-6],instruction->binary32BitCode[j-7]);
     }

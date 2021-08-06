@@ -8,7 +8,8 @@ int main(int argc, char *argv[])
     initOperationsHashTable();
     outputOperationsHashTable();
     // Loop ove command line arguments 
-    for (int i = 1; i < argc; i++)
+    int i;
+    for (i = 1; i < argc; i++)
     {
         errorsFound = false;
         FILE *ifp = fopen(argv[i], "r");
