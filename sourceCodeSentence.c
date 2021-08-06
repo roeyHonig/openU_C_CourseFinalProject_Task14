@@ -275,9 +275,7 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            if (tmp->error == noErrorsFound) {
                    dc = dc + computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(tmp); 
                    if (pass == 2) {
-                       printf("\nhere1\n");
                         appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperationName(tmp, rWord);
-                        printf("\nhere2\n");
                     }
             }
            
@@ -503,21 +501,15 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
             struct directiveStatementParameter* first = tmp->dStatement->parameter;
             while (first != NULL)
             {
-                printf("par add: %d", first);
                 tmpParameter = first;
                 first = first->next;
                 int parameterIndex;
                 for (parameterIndex = 1; parameterIndex <= tmpParameter->byteSize; parameterIndex++)
                 {
-                    printf("\ngor here \n");
                     convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(tmpParameter->number, binary32BitRepresentation);
-                    printf("\ngor here2 \n");
                     previousDataByte = initNewCodeByteFrom32BitArrayInPositionAndLinkTo(binary32BitRepresentation, parameterIndex, previousDataByte);
-                    printf("\ngor here3 \n");
                 }
             }
-            printf("\nleft parameters loop \n");
             first = tmpParameter->head;
         }
-        printf("\ngor here4 \n");
 }
