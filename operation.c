@@ -1,6 +1,6 @@
 #include "operation.h"
-// Operations in our assembly language.
-// -1 in the funct field (3rd column) is a non relevent value for this specific operation
+/* Operations in our assembly language.*/
+/* -1 in the funct field (3rd column) is a non relevent value for this specific operation */
 #define addOperation "add", 'R', 1, 0
 #define subOperation "sub", 'R', 2, 0
 #define andOperation "and", 'R', 3, 0
@@ -50,20 +50,20 @@ struct operation *initAnOperation(char *name, char type, int funct, int code) {
 void setOperation(struct operation *op) {
     unsigned int index = hash(op->opName, HASHSIZE);
     struct operation *existingElement = ((struct operation *)operationsHashTable[index]);
-    // check if position is free
+    * check if position is free */
     if (existingElement == NULL)
     {
         operationsHashTable[index] = op;
     } else {
-        // loop over all elements in existing position until you reach the last one
-        // Append op to the last element
-        // If any elements opName is similar to op.opName, we don't append!
+        /* loop over all elements in existing position until you reach the last one
+         Append op to the last element
+         If any elements opName is similar to op.opName, we don't append! */
         struct operation *tmp;
         do
         {
             tmp = existingElement;
             if (strcmp(tmp->opName, op->opName) == 0)
-                return; // Duplicate record
+                return; /* Duplicate record */
             existingElement = existingElement->next;
         } while (existingElement != NULL);
         tmp->next = (struct operation*) malloc(1 * sizeof(struct operation));
@@ -109,7 +109,7 @@ struct operation *getOperationWithOpName(char *name) {
     struct operation *existingElement = ((struct operation *)operationsHashTable[index]);
     if (existingElement != NULL)
     {
-        // loop over all elements in existing position until you reach an element with same name or the last one.
+        * loop over all elements in existing position until you reach an element with same name or the last one. */
         struct operation *tmp;
         do
         {
@@ -132,7 +132,8 @@ void toString(struct operation *op) {
 }
 
 void outputOperationsHashTable() {
-    for (int index = 0; index < HASHSIZE; index++)
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
     {
         struct operation *existingElement = ((struct operation *)operationsHashTable[index]);
         if (existingElement != NULL) {
