@@ -672,7 +672,8 @@ int parseRegistersForITypeBranching(char *scTextLine, char *name, int *firstRegi
 }
 
 void convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int size) {
-    for(int i=0;n>0, i < size;i++)    
+    int i;
+    for (i=0;n>0, i < size;i++)    
     {    
         *(a+i) = n%2;    
         n=n/2;    
@@ -681,7 +682,8 @@ void convertUnsignedDecimalNumberIntoBitBinaryArrayOfSize(int n, int *a, int siz
 }
 
 void convertUnsignedBinaryNumberArrayOfBitSizeIntoSigned(int *a, int size, int *b) {
-    for(int i=0;i < size;i++)    
+    int i;
+    for (i=0;i < size;i++)    
     {    
         b[i] = a[i];    
     } 
