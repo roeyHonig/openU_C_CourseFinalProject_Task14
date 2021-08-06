@@ -3,7 +3,7 @@
 #include "type_R_Instruction.h"
 #include "type_I_Instruction.h"
 #include "type_J_Instruction.h"
-#import "directiveStatement.h"
+#include "directiveStatement.h"
 
 /*
  * Function:  initNewSourceCodeSentenceAndLinkTo 

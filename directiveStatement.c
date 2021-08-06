@@ -1,4 +1,4 @@
-#import "directiveStatement.h"
+#include "directiveStatement.h"
 
 struct directiveStatement *initNewDirectiveStatementWithHeadParameterAndNameAndStringAndLabel(struct directiveStatementParameter *headParameter, char *na, char *strInDirective, char *labInDirective) {
     struct directiveStatement *node = (struct directiveStatement*) malloc(1 * sizeof(struct directiveStatement));
