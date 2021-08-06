@@ -43,6 +43,7 @@ void outputcodeBytesBeginingAt(struct codeByte *firstCodeByte) {
            printf(" ");
        }  
     }
+    firstCodeByte = tmp->head;
 }
 
 void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte) {
@@ -66,6 +67,7 @@ void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte) {
            printf(" ");
        }  
     }
+    firstCodeByte = tmp->head;
 }
 
 void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(int memAddress, struct codeByte *firstCodeByte, struct codeByte *firstDataByte) {

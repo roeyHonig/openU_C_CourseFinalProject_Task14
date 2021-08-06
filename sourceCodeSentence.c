@@ -63,6 +63,7 @@ void outputSourceCodeSentencesBeginingAt(struct sourceCodeSentence *firstSentenc
        printf("%d%c  ", tmp->currentTextLineNumber, '.');
        printLineBeginingAt(tmp->currentTextLine);
     }
+    firstSentence = tmp->head;
 }
 
 struct sourceCodeSentence *readAssemblySourceCode(FILE *input) {
@@ -158,6 +159,7 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
        firstSentence = firstSentence->next;
        printErrorDescriptionFor(tmp->currentTextLineNumber, tmp->error);
     }
+    firstSentence = tmp->head;
 }
 
 void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass) {
@@ -301,6 +303,7 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
            tmp->error = notRecognizableAssemblyLanguageStatement;
        }
     }
+    firstSentence = tmp->head;
     if (pass == 1) {
         incrementDirectiveTypeSymbolsValueBy(getCurrentInstructionCounter());
     }
@@ -467,6 +470,7 @@ int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSe
         firstParmater = firstParmater->next;
         dataIncrement= dataIncrement + tmp->byteSize;
     }
+    firstParmater = tmp->head;
     /* asciz */
     if (sentence->dStatement->stringInDirective != NULL) {
         dataIncrement = strlen(sentence->dStatement->stringInDirective) + 1;

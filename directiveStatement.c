@@ -20,6 +20,7 @@ void outputDirectiveStatement(struct directiveStatement *statement) {
             first = first->next;
             printf("%d ", tmp->number);
         }
+        first = tmp->head;
         printf("\n");
     } else if (strcmp(statement->name, ".asciz") == 0) {
         int consequentialBytes = strlen(statement->stringInDirective) + 1;
