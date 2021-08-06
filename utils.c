@@ -541,7 +541,7 @@ int parseRegistersForITypeArithmetic(char *scTextLine, char *name, int *firstReg
           if (isThereOutOfBoundsRegisterNumberInOneOfTheFollowing(*firstRegister, *secondRegister, 1)) {
               return wrongRegisterNumber;
           }
-          if (immediateAsInt >= INT16_MIN && immediateAsInt <= INT16_MAX) 
+          if (immediateAsInt >= -32768 && immediateAsInt <= 32767) 
                 *immed = (short)immediateAsInt;
           else return immediateOverflow;
 

@@ -26,7 +26,7 @@ void printErrorDescriptionFor(int lineNumber, enum parsingError error) {
         printf("Wrong register number on line #%d.\n", lineNumber); 
         break; 
     case immediateOverflow:
-        printf("On line #%d, immediate value too big or too small. Should be between %d and %d.\n", lineNumber, INT16_MIN, INT16_MAX); 
+        printf("On line #%d, immediate value too big or too small. Should be between %d and %d.\n", lineNumber, -32768, 32767); 
         break; 
     case badImmediateFormat:
         printf("Bad format for immediate on line #%d.\n", lineNumber);
