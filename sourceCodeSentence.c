@@ -340,7 +340,7 @@ void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_R_Instruction *r_Instruction = initNewType_R_InstructionWith(rs, rt, rd, ope);
            tmp->rInstruction = r_Instruction;
            if (pass == 2) {
-               outputType_R_Instruction(tmp->rInstruction);
+               /* outputType_R_Instruction(tmp->rInstruction); */
            }
 }
 
@@ -378,7 +378,7 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_I_Instruction *i_Instruction = initNewType_I_InstructionWith(firstRegister, secondRegister, immediate, ope);
            tmp->iInstruction = i_Instruction;
            if (pass == 2) {
-               outputType_I_Instruction(tmp->iInstruction);
+               /* outputType_I_Instruction(tmp->iInstruction); */
            }
 }
 
@@ -417,7 +417,7 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_J_Instruction *j_Instruction = initNewType_J_InstructionWith(address, registerFlag, ope);
            tmp->jInstruction = j_Instruction;
            if (pass == 2) {
-               outputType_J_Instruction(tmp->jInstruction);
+               /* Type_J_Instruction(tmp->jInstruction); */
            }
 }
 
@@ -450,7 +450,7 @@ void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char
         tmp->dStatement = d_Statement;
     }
     if (pass == 2) {
-        outputDirectiveStatement(tmp->dStatement);
+        /* outputDirectiveStatement(tmp->dStatement); */
     }
 }
 
@@ -470,7 +470,6 @@ int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSe
         firstParmater = firstParmater->next;
         dataIncrement= dataIncrement + tmp->byteSize;
     }
-    firstParmater = tmp->head;
     /* asciz */
     if (sentence->dStatement->stringInDirective != NULL) {
         dataIncrement = strlen(sentence->dStatement->stringInDirective) + 1;
@@ -516,4 +515,19 @@ void appendDirectiveStatmentDataBytesForSourceCodeSenteneWithFollowingOpperation
             }
             first = tmpParameter->head;
         }
+}
+
+int errorsFoundDuringCompilation(struct sourceCodeSentence *firstSentence) {
+    struct sourceCodeSentence* tmp;
+   while (firstSentence != NULL)
+    {
+       tmp = firstSentence;
+       firstSentence = firstSentence->next;
+       if (tmp->error != noErrorsFound && tmp->error != comment) {
+           return true;
+       }
+       
+    }
+    firstSentence = tmp->head;
+    return false;
 }

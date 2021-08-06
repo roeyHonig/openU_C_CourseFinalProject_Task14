@@ -78,6 +78,17 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
  */
 int getCurrentInstructionCounter();
 
+/* 
+ * Function:  errorsFoundDuringCompilation 
+ * --------------------
+ * Method to iterate over the linked list of sentences to find if any errors were reported.
+ * 
+ * * firstSentence: the initial sourceCodeSentence which will be examine.
+ * 
+ * retruns: integer 1 for true and 0 for false
+ */
+int errorsFoundDuringCompilation(struct sourceCodeSentence *firstSentence);
+
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;
