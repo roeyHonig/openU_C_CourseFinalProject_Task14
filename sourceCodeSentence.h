@@ -99,6 +99,17 @@ int errorsFoundDuringCompilation(struct sourceCodeSentence *firstSentence);
  */
 void outputCodeAndDataImageBeginingAtMemorryAddress(int memAddress);
 
+/* 
+ * Function:  outputCodeAndDataImageBeginingAtMemorryAddress 
+ * --------------------
+ * Method to output the object file.
+ * 
+ * memAddress: the initial memory address of the code and data image.
+ * objectFileName: String representing the object file name, such as "example.ob"
+ * 
+ */
+void outputCodeAndDataImageBeginingAtMemorryAddressIntoAnObjectFileName(int memAddress, char *objectFileName);
+
 /* Declare the struct sourceCodeSentence which holds 1 line of assembly language source code text. */
 struct sourceCodeSentence {
     char *currentTextLine;

@@ -151,3 +151,71 @@ int computeTotalNumberOfBytesFor(struct codeByte *firstByte) {
     firstByte = tmp->head;
     return numberOfCodeBytes;
 }
+
+void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressToObjectFileName(int memAddress, struct codeByte *firstCodeByte, struct codeByte *firstDataByte, char *objectFileName) {
+    FILE *fp = fopen (objectFileName, "w");
+    int numberOfCodeBytes = computeTotalNumberOfBytesFor(firstCodeByte);
+    int numberOfDataBytes = computeTotalNumberOfBytesFor(firstDataByte);
+    fprintf(fp, "\t\t%d %d\n",numberOfCodeBytes,  numberOfDataBytes);
+    
+    struct codeByte* tmp;
+    int posIndex = 0;
+    boolean newLine = true;
+   while (firstCodeByte != NULL)
+    {
+        if (newLine) {
+            fprintf(fp, "%d ", memAddress);
+            memAddress = memAddress + 4;
+            newLine = false;
+        }
+        
+       tmp = firstCodeByte;
+       firstCodeByte = firstCodeByte->next;
+       int decimalNumber = 0;
+       int i;
+       for (i = 7; i >= 0; i--)
+       {
+           decimalNumber = decimalNumber + ((int)(pow(2, i) * tmp->binary8BitCode[i]));
+       }
+       fprintf(fp, "%02X",decimalNumber);
+       posIndex++;
+       if ((posIndex % 4 ) == 0) {
+           fprintf(fp, "\n");
+           newLine = true;
+       } else {
+           fprintf(fp, " ");
+       }  
+    }
+    firstCodeByte = tmp->head;
+
+    struct codeByte* tmpData;
+    posIndex = 0;
+    newLine = true;
+   while (firstDataByte != NULL)
+    {
+        if (newLine) {
+            fprintf(fp, "%d ", memAddress);
+            memAddress = memAddress + 4;
+            newLine = false;
+        }
+        
+       tmpData = firstDataByte;
+       firstDataByte = firstDataByte->next;
+       int decimalNumber = 0;
+       int i;
+       for (i = 7; i >= 0; i--)
+       {
+           decimalNumber = decimalNumber + ((int)(pow(2, i) * tmpData->binary8BitCode[i]));
+       }
+       fprintf(fp, "%02X",decimalNumber);
+       posIndex++;
+       if ((posIndex % 4 ) == 0) {
+           fprintf(fp, "\n");
+           newLine = true;
+       } else {
+           fprintf(fp, " ");
+       }  
+    }
+    firstDataByte = tmp->head;
+    fclose(fp);
+}

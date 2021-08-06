@@ -528,3 +528,9 @@ void outputCodeAndDataImageBeginingAtMemorryAddress(int memAddress) {
     extern struct codeByte *previousDataByte;
     outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(memAddress, previousCodeByte->head, previousDataByte->head);
 }
+
+void outputCodeAndDataImageBeginingAtMemorryAddressIntoAnObjectFileName(int memAddress, char *objectFileName) {
+    extern struct codeByte *previousCodeByte;
+    extern struct codeByte *previousDataByte;
+    outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressToObjectFileName(memAddress, previousCodeByte->head, previousDataByte->head, objectFileName);
+}

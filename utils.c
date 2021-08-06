@@ -1068,3 +1068,16 @@ void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int numb
         negateSignedBitArrayOfSize(arr, 32);
     }
 }
+
+char *getObjectFileNameForSourceCodeFileName(char *name) {
+    char *objectFileName = initAnEmptyStringOfSizeAndFillWithChacter(1000, '\0');
+    int i = 0;
+    while (*(name+i) != '\0')
+    {
+        *(objectFileName+i) = *(name+i);
+        i++;
+    }
+    *(objectFileName+i-1) = 'b';
+    *(objectFileName+i-2) = 'o';
+    return objectFileName;
+}

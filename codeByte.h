@@ -45,6 +45,19 @@ void outputcodeBytesInHexadecimalBeginingAt(struct codeByte *firstCodeByte);
  */
 void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressAndFirstCodeByteAndFirstDataByteint(int memAddress, struct codeByte *firstCodeByte, struct codeByte *firstDataByte);
 
+/*
+ * Function:  outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressToObjectFileName 
+ * --------------------
+ * Method to output the Object file.
+ * 
+ * memAddress: integer, memory address for the 1st instruction.
+ * firstCodeByte: the initial codeByte which will be output.
+ * firstDataByte: the initial dataByte which will be output immediately after all the code bytes.
+ * If firstCodeByte->previous is NULL (The 1st element of the list) the entire list is outputted.
+ * objectFileName: String representing the object file name, such as "example.ob"
+ */
+void outputCompleteCodeAndDataBytesInHexadecimalBeginingAtMemoryAddressToObjectFileName(int memAddress, struct codeByte *firstCodeByte, struct codeByte *firstDataByte, char *objectFileName);
+
 /* Declare the struct codeByte which represents a 1/4 part of the instruction statement in assembly language. */
 struct codeByte {
     struct codeByte *head;
