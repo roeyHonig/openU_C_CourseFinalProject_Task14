@@ -81,6 +81,15 @@ void incrementDirectiveTypeSymbolsValueBy(int increment);
  */
 void updateEntryTypeSymbolsValueBy();
 
+/* 
+ * Function:  writeToEntryFileNamed 
+ * --------------------
+ * Method to out append the entry symbols to the entry file name.
+ * 
+ * entryFileName: String representing the entry file name.
+ */
+void writeToEntryFileNamed(char *entryFileName);
+
 /* Declare the struct symbol which holds 1 record of a symbol. such as a label and is part of a linked List. */
 struct symbol {
     struct symbol *next;

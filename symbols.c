@@ -194,3 +194,23 @@ void updateEntryTypeSymbolsValueBy() {
     }
 
 }
+
+void writeToEntryFileNamed(char *entryFileName) {
+    remove(entryFileName);
+    int index;
+    for (index = 0; index < HASHSIZE; index++)
+    {
+        struct symbol *existingElement = ((struct symbol *)symbolHashTable[index]);
+        if (existingElement != NULL) {
+            struct symbol *tmp;
+            do
+            {
+                tmp = existingElement;
+                existingElement = existingElement->next;
+                if (tmp->location == entry) {
+                    appendEntryLabelInAddressToTheEntryFileName(tmp->name, tmp->value, entryFileName);
+                } 
+            } while (existingElement != NULL);
+        }
+    }
+}

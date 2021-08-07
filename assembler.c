@@ -13,9 +13,10 @@ int main(int argc, char *argv[])
         FILE *ifp = fopen(sourceCodeFileName, "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         fclose(ifp);
-        /* Prepere the output files names. The external and entry files are auto generated so they will be removed if errors are found */
+        /* Prepere the output files names. The external file is auto generated so it will be removed if errors are found */
         char *objectFileName = getObjectFileNameForSourceCodeFileName(sourceCodeFileName);
         char *externalFileName = getExternalFileNameForSourceCodeFileName(sourceCodeFileName);
+        char *entryFileName = getEntryFileNameForSourceCodeFileName(sourceCodeFileName);
         /* Try to compile the source code */
         printf("\nCompiling the following assembly source code:\n");
         outputSourceCodeSentencesBeginingAt(firstSentence);
@@ -31,8 +32,7 @@ int main(int argc, char *argv[])
             remove(externalFileName);
         } else {
             outputCodeAndDataImageBeginingAtMemorryAddressIntoAnObjectFileName(initialMemmoryAddressForStoringOutputCodeAndDataImage, objectFileName);
-            printf("\n----------Symbols Table-----------\n");
-            outputSymbolsHashTable();
+            writeToEntryFileNamed(entryFileName);
         }
         nullifySymbolsHashTable();
     }   

@@ -1101,3 +1101,23 @@ void appendExternalLabelInAddressToTheExternalFileName(char *labelName ,int memA
     fprintf(fp, "%s %d\n",labelName,  memAddress);
     fclose(fp);
 }
+
+char *getEntryFileNameForSourceCodeFileName(char *name) {
+    char *objectFileName = initAnEmptyStringOfSizeAndFillWithChacter(1000, '\0');
+    int i = 0;
+    while (*(name+i) != '\0')
+    {
+        *(objectFileName+i) = *(name+i);
+        i++;
+    }
+    *(objectFileName+i) = 't';
+    *(objectFileName+i-1) = 'n';
+    *(objectFileName+i-2) = 'e';
+    return objectFileName;
+}
+
+void appendEntryLabelInAddressToTheEntryFileName(char *labelName ,int memAddress, char *entryFileName) {
+    FILE *fp = fopen (entryFileName, "a");
+    fprintf(fp, "%s %d\n",labelName,  memAddress);
+    fclose(fp);
+}

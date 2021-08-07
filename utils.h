@@ -384,7 +384,7 @@ char *getObjectFileNameForSourceCodeFileName(char *name);
 /* 
  * Function:  getExternalFileNameForSourceCodeFileName  
  * --------------------
- * This is a function to return the external file name based on the source code file name. If the source code file name is "example.ext" the object file will be "example.ob"
+ * This is a function to return the external file name based on the source code file name. If the source code file name is "example.as" the object file will be "example.ext"
  * 
  * name: The source code file name. 
  * 
@@ -397,8 +397,30 @@ char *getExternalFileNameForSourceCodeFileName(char *name);
  * --------------------
  * Method to output the external file.
  * 
- * labelName: iExternal variable name.
+ * labelName: External variable name.
  * memAddress: Memory address of the jump instruction which originally called the external variable.
  * externalFileName: String representing the external file name.
  */
 void appendExternalLabelInAddressToTheExternalFileName(char *labelName ,int memAddress, char *externalFileName);
+
+/* 
+ * Function:  getEntryFileNameForSourceCodeFileName  
+ * --------------------
+ * This is a function to return the entry file name based on the source code file name. If the source code file name is "example.as" the entry file will be "example.ent"
+ * 
+ * name: The source code file name. 
+ * 
+ * returns: Pointer to a 1st char of the complete external file name 
+ */
+char *getEntryFileNameForSourceCodeFileName(char *name);
+
+/*
+ * Function:  appendEntryLabelInAddressToTheEntryFileName 
+ * --------------------
+ * Method to output the entry file.
+ * 
+ * labelName: Entry variable name.
+ * memAddress: Memory address in which the entry is located in the source code.
+ * entryFileName: String representing the entry file name.
+ */
+void appendEntryLabelInAddressToTheEntryFileName(char *labelName ,int memAddress, char *entryFileName);
