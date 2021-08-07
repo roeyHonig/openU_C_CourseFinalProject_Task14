@@ -1121,3 +1121,23 @@ void appendEntryLabelInAddressToTheEntryFileName(char *labelName ,int memAddress
     fprintf(fp, "%s %d\n",labelName,  memAddress);
     fclose(fp);
 }
+
+int isInvalidSuffixForFileName(char *name) {
+    char *objectFileName = initAnEmptyStringOfSizeAndFillWithChacter(1000, '\0');
+    int i = 0;
+    while (*(name+i) != '\0')
+    {
+        *(objectFileName+i) = *(name+i);
+        i++;
+    }
+    if (*(objectFileName+i-1) != 's') {
+        return true;
+    }
+    if (*(objectFileName+i-2) != 'a') {
+        return true;
+    }
+    if (*(objectFileName+i-3) != '.') {
+        return true;
+    }
+    return false;
+}

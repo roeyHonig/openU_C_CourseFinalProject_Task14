@@ -424,3 +424,14 @@ char *getEntryFileNameForSourceCodeFileName(char *name);
  * entryFileName: String representing the entry file name.
  */
 void appendEntryLabelInAddressToTheEntryFileName(char *labelName ,int memAddress, char *entryFileName);
+
+/* 
+ * Function:  isInvalidSuffixForFileName  
+ * --------------------
+ * This is a function to check if the input source code text file ends with .as
+ * 
+ * name: The source code file name. 
+ * 
+ * returns: 1 for true or 0 for false
+ */
+int isInvalidSuffixForFileName(char *name);

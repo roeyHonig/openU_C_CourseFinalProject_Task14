@@ -8,9 +8,14 @@ int main(int argc, char *argv[])
     int i;
     for (i = 1; i < argc; i++)
     {
-        /* Open and read the next source code file */
+        /* Open the next source code file */
         char *sourceCodeFileName = argv[i];
         FILE *ifp = fopen(sourceCodeFileName, "r");
+        /* Check The file exists and ends with .as */
+        if (ifp == NULL || isInvalidSuffixForFileName(sourceCodeFileName) == true) {
+            continue;
+        }
+        /* Read the source code file */
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         fclose(ifp);
         /* Prepere the output files names. The external file is auto generated so it will be removed if errors are found */
