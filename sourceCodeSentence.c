@@ -163,6 +163,7 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
 }
 
 void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass, char *externalFileName) {
+    remove(externalFileName);
     extern int ic;
     extern int dc;
     extern struct codeByte *previousCodeByte;
