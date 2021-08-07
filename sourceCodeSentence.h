@@ -66,8 +66,9 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
  * If firstSentence->previous is NULL (The 1st element of the list) the entire list is parsed.
  * instructionCounter: integer representing the 1st available space in memory for the code output
  * pass: integer representing which pass of parsing the source code this is
+ * externalFileName: String representing the external file name
  */
-void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass);
+void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass, char *externalFileName);
 
 /* 
  * Function:  getCurrentInstructionCounter 

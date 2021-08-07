@@ -1081,3 +1081,23 @@ char *getObjectFileNameForSourceCodeFileName(char *name) {
     *(objectFileName+i-2) = 'o';
     return objectFileName;
 }
+
+char *getExternalFileNameForSourceCodeFileName(char *name) {
+    char *objectFileName = initAnEmptyStringOfSizeAndFillWithChacter(1000, '\0');
+    int i = 0;
+    while (*(name+i) != '\0')
+    {
+        *(objectFileName+i) = *(name+i);
+        i++;
+    }
+    *(objectFileName+i) = 't';
+    *(objectFileName+i-1) = 'x';
+    *(objectFileName+i-2) = 'e';
+    return objectFileName;
+}
+
+void appendExternalLabelInAddressToTheExternalFileName(char *labelName ,int memAddress, char *externalFileName) {
+    FILE *fp = fopen (externalFileName, "a");
+    fprintf(fp, "%s %d\n",labelName,  memAddress);
+    fclose(fp);
+}

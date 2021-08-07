@@ -13,20 +13,23 @@ int main(int argc, char *argv[])
         FILE *ifp = fopen(sourceCodeFileName, "r");
         struct sourceCodeSentence *firstSentence = readAssemblySourceCode(ifp);
         fclose(ifp);
+        /* Prepere the output files names. The external and entry files are auto generated so they will be removed if errors are found */
+        char *objectFileName = getObjectFileNameForSourceCodeFileName(sourceCodeFileName);
+        char *externalFileName = getExternalFileNameForSourceCodeFileName(sourceCodeFileName);
         /* Try to compile the source code */
         printf("\nCompiling the following assembly source code:\n");
         outputSourceCodeSentencesBeginingAt(firstSentence);
         /* 1st pass of compiler */
-        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 1); 
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 1, externalFileName); 
         /* 2nd pass of compiler */
-        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 2);
+        parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(firstSentence, initialMemmoryAddressForStoringOutputCodeAndDataImage, 2, externalFileName);
         /* Check for errors */
         errorsFound = errorsFoundDuringCompilation(firstSentence);
         printf("%s", errorsFound ? "\n\nThese are the errors found:\n" : "");
         if (errorsFound) {
             outputSourceCodeSentencesErrorsBeginingAt(firstSentence);
+            remove(externalFileName);
         } else {
-            char *objectFileName = getObjectFileNameForSourceCodeFileName(sourceCodeFileName);
             outputCodeAndDataImageBeginingAtMemorryAddressIntoAnObjectFileName(initialMemmoryAddressForStoringOutputCodeAndDataImage, objectFileName);
             printf("\n----------Symbols Table-----------\n");
             outputSymbolsHashTable();

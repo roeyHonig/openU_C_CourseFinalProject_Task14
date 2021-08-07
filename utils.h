@@ -380,3 +380,25 @@ void convertSignedNumberInto32Bit2ComplimentAndPlaceInside32BitIntArray(int numb
  * returns: Pointer to a 1st char of the complete object file name 
  */
 char *getObjectFileNameForSourceCodeFileName(char *name);
+
+/* 
+ * Function:  getExternalFileNameForSourceCodeFileName  
+ * --------------------
+ * This is a function to return the external file name based on the source code file name. If the source code file name is "example.ext" the object file will be "example.ob"
+ * 
+ * name: The source code file name. 
+ * 
+ * returns: Pointer to a 1st char of the complete external file name 
+ */
+char *getExternalFileNameForSourceCodeFileName(char *name);
+
+/*
+ * Function:  appendExternalLabelInAddressToTheExternalFileName 
+ * --------------------
+ * Method to output the external file.
+ * 
+ * labelName: iExternal variable name.
+ * memAddress: Memory address of the jump instruction which originally called the external variable.
+ * externalFileName: String representing the external file name.
+ */
+void appendExternalLabelInAddressToTheExternalFileName(char *labelName ,int memAddress, char *externalFileName);

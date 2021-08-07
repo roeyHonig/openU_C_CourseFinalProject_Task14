@@ -12,7 +12,7 @@ struct codeByte *previousDataByte;
 
 void parseRInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
-void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass, char *externalFileName);
 void parseDirectiveStatementForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass);
 int computeTheDataCounterIncrementDueToDataOrAscizStatmentIn(struct sourceCodeSentence *sentence);
 void appendInstructionCodeBytesFromBinaryRepresantation(int binary32BitRepresentation[]);
@@ -162,7 +162,7 @@ void outputSourceCodeSentencesErrorsBeginingAt(struct sourceCodeSentence *firstS
     firstSentence = tmp->head;
 }
 
-void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass) {
+void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sourceCodeSentence *firstSentence, int instructionCounter, int pass, char *externalFileName) {
     extern int ic;
     extern int dc;
     extern struct codeByte *previousCodeByte;
@@ -253,7 +253,7 @@ void parseSourceCodeSentencesBeginingAtWithInitialInstructionCounter(struct sour
                }
            }    
        } else if (isJInstruction) {
-           parseJInstructionForTheFollowing(tmp, rWord, pass);
+           parseJInstructionForTheFollowing(tmp, rWord, pass, externalFileName);
            if (shouldSetLabel && tmp->error == noErrorsFound){
                if (pass == 1) {
                    tmp->error = setSymbol(initSymbol(currentLabel, instructionStatement, ic)); 
@@ -373,7 +373,8 @@ void parseIInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            }
 }
 
-void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass) {
+void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWord, int pass, char *externalFileName) {
+           extern int ic;
            int registerFlag; 
            int address;
            char *labelInTheInstruction = initAnEmptyStringOfSizeAndFillWithChacter(maxNumberOfCharactersForLabel,'0');
@@ -387,10 +388,10 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
                return;
            } 
            /* check if this is a J instruction with a label */
-           if (*labelInTheInstruction != '0') {
-               struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
-               struct symbol *externalLabel = getSymbolWithNameAndLocation(labelInTheInstruction, external);
-               struct symbol *directiveLabel = getSymbolWithNameAndLocation(labelInTheInstruction, directiveStatement);
+           struct symbol *branchingLabel = getSymbolWithNameAndLocation(labelInTheInstruction, instructionStatement);
+            struct symbol *externalLabel = getSymbolWithNameAndLocation(labelInTheInstruction, external);
+            struct symbol *directiveLabel = getSymbolWithNameAndLocation(labelInTheInstruction, directiveStatement);
+           if (*labelInTheInstruction != '0') {   
                if (branchingLabel != NULL) {
                    address = branchingLabel->value;
                } else if (externalLabel != NULL) {
@@ -408,7 +409,9 @@ void parseJInstructionForTheFollowing(struct sourceCodeSentence *tmp, char *rWor
            struct type_J_Instruction *j_Instruction = initNewType_J_InstructionWith(address, registerFlag, ope);
            tmp->jInstruction = j_Instruction;
            if (pass == 2) {
-               /* Type_J_Instruction(tmp->jInstruction); */
+               if (tmp->error == noErrorsFound && externalLabel != NULL) {
+                   appendExternalLabelInAddressToTheExternalFileName(externalLabel->name, ic, externalFileName);
+                } 
            }
 }
 
